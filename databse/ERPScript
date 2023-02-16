@@ -1,0 +1,452 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.0
+-- Dumped by pg_dump version 14.0
+
+-- Started on 2022-03-18 21:37:04
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+DROP DATABASE erp;
+--
+-- TOC entry 3357 (class 1262 OID 25875)
+-- Name: erp; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE erp WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE = 'Spanish_Bolivia.1252';
+
+
+ALTER DATABASE erp OWNER TO postgres;
+
+\connect erp
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 3358 (class 0 OID 0)
+-- Name: erp; Type: DATABASE PROPERTIES; Schema: -; Owner: postgres
+--
+
+ALTER DATABASE erp SET "TimeZone" TO 'America/La_Paz';
+
+
+\connect erp
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 218 (class 1259 OID 34072)
+-- Name: cuenta; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.cuenta (
+    idcuenta integer NOT NULL,
+    codigo character varying(30),
+    nombre character varying(50),
+    nivel smallint,
+    tipocuenta smallint,
+    idusuario integer,
+    idempresa integer,
+    idcuentapadre integer default NULL
+);
+
+
+ALTER TABLE public.cuenta OWNER TO postgres;
+
+--
+-- TOC entry 217 (class 1259 OID 34071)
+-- Name: cuenta_idcuenta_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.cuenta_idcuenta_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.cuenta_idcuenta_seq OWNER TO postgres;
+
+--
+-- TOC entry 3359 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: cuenta_idcuenta_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.cuenta_idcuenta_seq OWNED BY public.cuenta.idcuenta;
+
+
+--
+-- TOC entry 212 (class 1259 OID 25893)
+-- Name: empresa; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.empresa (
+    idempresa integer NOT NULL,
+    nombre character varying(100),
+    nit integer,
+    sigla character varying(15),
+    telefono character varying(20),
+    correo character varying(50),
+    direccion text,
+    niveles smallint DEFAULT 3,
+    estado smallint DEFAULT 1,
+    idusuario integer
+);
+
+
+ALTER TABLE public.empresa OWNER TO postgres;
+
+--
+-- TOC entry 211 (class 1259 OID 25892)
+-- Name: empresa_idempresa_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.empresa_idempresa_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.empresa_idempresa_seq OWNER TO postgres;
+
+--
+-- TOC entry 3360 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: empresa_idempresa_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.empresa_idempresa_seq OWNED BY public.empresa.idempresa;
+
+
+--
+-- TOC entry 214 (class 1259 OID 25909)
+-- Name: gestion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.gestion (
+    idgestion integer NOT NULL,
+    nombre character varying(50),
+    fechainicio date,
+    fechafin date,
+    estado smallint DEFAULT 1,
+    idusuario integer,
+    idempresa integer
+);
+
+
+ALTER TABLE public.gestion OWNER TO postgres;
+
+--
+-- TOC entry 213 (class 1259 OID 25908)
+-- Name: gestion_idgestion_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.gestion_idgestion_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.gestion_idgestion_seq OWNER TO postgres;
+
+--
+-- TOC entry 3361 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: gestion_idgestion_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.gestion_idgestion_seq OWNED BY public.gestion.idgestion;
+
+
+--
+-- TOC entry 216 (class 1259 OID 25927)
+-- Name: periodo; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.periodo (
+    idperiodo integer NOT NULL,
+    nombre character varying(50),
+    fechainicio date,
+    fechafin date,
+    estado smallint DEFAULT 1,
+    idusuario integer,
+    idgestion integer
+);
+
+
+ALTER TABLE public.periodo OWNER TO postgres;
+
+--
+-- TOC entry 215 (class 1259 OID 25926)
+-- Name: periodo_idperiodo_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.periodo_idperiodo_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.periodo_idperiodo_seq OWNER TO postgres;
+
+--
+-- TOC entry 3362 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: periodo_idperiodo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.periodo_idperiodo_seq OWNED BY public.periodo.idperiodo;
+
+
+--
+-- TOC entry 210 (class 1259 OID 25885)
+-- Name: usuario; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.usuario (
+    idusuario integer NOT NULL,
+    nombre character varying(50) NOT NULL,
+    usuario character varying(90) NOT NULL,
+    pass character varying(100) NOT NULL,
+    tipo smallint DEFAULT 1
+);
+
+
+ALTER TABLE public.usuario OWNER TO postgres;
+
+--
+-- TOC entry 209 (class 1259 OID 25884)
+-- Name: usuario_idusuario_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.usuario_idusuario_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.usuario_idusuario_seq OWNER TO postgres;
+
+--
+-- TOC entry 3363 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: usuario_idusuario_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.usuario_idusuario_seq OWNED BY public.usuario.idusuario;
+
+
+--
+-- TOC entry 3193 (class 2604 OID 34075)
+-- Name: cuenta idcuenta; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cuenta ALTER COLUMN idcuenta SET DEFAULT nextval('public.cuenta_idcuenta_seq'::regclass);
+
+
+--
+-- TOC entry 3186 (class 2604 OID 25896)
+-- Name: empresa idempresa; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.empresa ALTER COLUMN idempresa SET DEFAULT nextval('public.empresa_idempresa_seq'::regclass);
+
+
+--
+-- TOC entry 3189 (class 2604 OID 25912)
+-- Name: gestion idgestion; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.gestion ALTER COLUMN idgestion SET DEFAULT nextval('public.gestion_idgestion_seq'::regclass);
+
+
+--
+-- TOC entry 3191 (class 2604 OID 25930)
+-- Name: periodo idperiodo; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.periodo ALTER COLUMN idperiodo SET DEFAULT nextval('public.periodo_idperiodo_seq'::regclass);
+
+
+--
+-- TOC entry 3184 (class 2604 OID 25888)
+-- Name: usuario idusuario; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuario ALTER COLUMN idusuario SET DEFAULT nextval('public.usuario_idusuario_seq'::regclass);
+
+
+--
+-- TOC entry 3204 (class 2606 OID 34078)
+-- Name: cuenta cuenta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cuenta
+    ADD CONSTRAINT cuenta_pkey PRIMARY KEY (idcuenta);
+
+
+--
+-- TOC entry 3198 (class 2606 OID 25902)
+-- Name: empresa empresa_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.empresa
+    ADD CONSTRAINT empresa_pkey PRIMARY KEY (idempresa);
+
+
+--
+-- TOC entry 3200 (class 2606 OID 25915)
+-- Name: gestion gestion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.gestion
+    ADD CONSTRAINT gestion_pkey PRIMARY KEY (idgestion);
+
+
+--
+-- TOC entry 3202 (class 2606 OID 25933)
+-- Name: periodo periodo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.periodo
+    ADD CONSTRAINT periodo_pkey PRIMARY KEY (idperiodo);
+
+
+--
+-- TOC entry 3196 (class 2606 OID 25891)
+-- Name: usuario usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuario
+    ADD CONSTRAINT usuario_pkey PRIMARY KEY (idusuario);
+
+
+--
+-- TOC entry 3212 (class 2606 OID 34089)
+-- Name: cuenta cuenta_idcuentapadre_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cuenta
+    ADD CONSTRAINT cuenta_idcuentapadre_fkey FOREIGN KEY (idcuentapadre) REFERENCES public.cuenta(idcuenta);
+
+
+--
+-- TOC entry 3211 (class 2606 OID 34084)
+-- Name: cuenta cuenta_idempresa_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cuenta
+    ADD CONSTRAINT cuenta_idempresa_fkey FOREIGN KEY (idempresa) REFERENCES public.empresa(idempresa);
+
+
+--
+-- TOC entry 3210 (class 2606 OID 34079)
+-- Name: cuenta cuenta_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cuenta
+    ADD CONSTRAINT cuenta_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3205 (class 2606 OID 25903)
+-- Name: empresa empresa_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.empresa
+    ADD CONSTRAINT empresa_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3207 (class 2606 OID 25921)
+-- Name: gestion gestion_idempresa_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.gestion
+    ADD CONSTRAINT gestion_idempresa_fkey FOREIGN KEY (idempresa) REFERENCES public.empresa(idempresa);
+
+
+--
+-- TOC entry 3206 (class 2606 OID 25916)
+-- Name: gestion gestion_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.gestion
+    ADD CONSTRAINT gestion_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+--
+-- TOC entry 3209 (class 2606 OID 25939)
+-- Name: periodo periodo_idgestion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.periodo
+    ADD CONSTRAINT periodo_idgestion_fkey FOREIGN KEY (idgestion) REFERENCES public.gestion(idgestion);
+
+
+--
+-- TOC entry 3208 (class 2606 OID 25934)
+-- Name: periodo periodo_idusuario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.periodo
+    ADD CONSTRAINT periodo_idusuario_fkey FOREIGN KEY (idusuario) REFERENCES public.usuario(idusuario);
+
+
+-- Completed on 2022-03-18 21:37:04
+
+--
+-- PostgreSQL database dump complete
+--
+
+
+INSERT INTO public.usuario(nombre, usuario, pass, tipo)
+	VALUES ( 'Mauricio Justiniano Añez', 'mauricio', 'mauricio123', '1');
