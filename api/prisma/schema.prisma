@@ -1,0 +1,253 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model articulo {
+  idarticulo        Int                 @id @default(autoincrement())
+  nombre            String?             @db.VarChar(50)
+  descripcion       String?             @db.VarChar(100)
+  cantidad          Int?
+  precioventa       Decimal?            @db.Decimal(10, 2)
+  idempresa         Int?
+  idusuario         Int?
+  empresa           empresa?            @relation(fields: [idempresa], references: [idempresa], onDelete: NoAction, onUpdate: NoAction)
+  usuario           usuario?            @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction)
+  articulocategoria articulocategoria[]
+  detalle           detalle[]
+  lote              lote[]
+}
+
+model articulocategoria {
+  idarticulo  Int
+  idcategoria Int
+  articulo    articulo  @relation(fields: [idarticulo], references: [idarticulo], onDelete: NoAction, onUpdate: NoAction)
+  categoria   categoria @relation(fields: [idcategoria], references: [idcategoria], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([idarticulo, idcategoria])
+}
+
+model categoria {
+  idcategoria       Int                 @id @default(autoincrement())
+  nombre            String?             @db.VarChar(50)
+  descripcion       String?             @db.VarChar(100)
+  idempresa         Int?
+  idusuario         Int?
+  idcategoriapadre  Int?
+  articulocategoria articulocategoria[]
+  categoria         categoria?          @relation("categoriaTocategoria", fields: [idcategoriapadre], references: [idcategoria], onDelete: NoAction, onUpdate: NoAction)
+  other_categoria   categoria[]         @relation("categoriaTocategoria")
+  empresa           empresa?            @relation(fields: [idempresa], references: [idempresa], onDelete: NoAction, onUpdate: NoAction)
+  usuario           usuario?            @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model comprobante {
+  idcomprobante      Int                  @id @default(autoincrement())
+  serie              Int?
+  glosa              String?              @db.VarChar(100)
+  fecha              DateTime?            @db.Date
+  tc                 Decimal?             @db.Decimal(10, 2)
+  estado             Int?                 @default(2) @db.SmallInt
+  tipocomprobante    Int?                 @db.SmallInt
+  idusuario          Int?
+  idmoneda           Int?
+  idempresa          Int?
+  empresa            empresa?             @relation(fields: [idempresa], references: [idempresa], onDelete: NoAction, onUpdate: NoAction)
+  moneda             moneda?              @relation(fields: [idmoneda], references: [idmoneda], onDelete: NoAction, onUpdate: NoAction)
+  usuario            usuario?             @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction)
+  detallecomprobante detallecomprobante[]
+  nota               nota[]
+}
+
+model cuenta {
+  idcuenta           Int                  @id @default(autoincrement())
+  codigo             String?              @db.VarChar(30)
+  nombre             String?              @db.VarChar(50)
+  nivel              Int?                 @db.SmallInt
+  tipocuenta         Int?                 @db.SmallInt
+  idusuario          Int?
+  idempresa          Int?
+  idcuentapadre      Int?
+  cuenta             cuenta?              @relation("cuentaTocuenta", fields: [idcuentapadre], references: [idcuenta], onDelete: NoAction, onUpdate: NoAction)
+  other_cuenta       cuenta[]             @relation("cuentaTocuenta")
+  empresa            empresa?             @relation(fields: [idempresa], references: [idempresa], onDelete: Cascade, onUpdate: NoAction)
+  usuario            usuario?             @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction)
+  detallecomprobante detallecomprobante[]
+
+  @@index([idempresa], map: "fki_cuenta_idempresa_fkey")
+}
+
+model detalle {
+  idarticulo  Int
+  nrolote     Int
+  idnota      Int
+  cantidad    Int?
+  precioventa Decimal? @db.Decimal(10, 2)
+  estado      Int?     @default(1) @db.SmallInt
+  articulo    articulo @relation(fields: [idarticulo], references: [idarticulo], onDelete: NoAction, onUpdate: NoAction)
+  nota        nota     @relation(fields: [idnota], references: [idnota], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([idarticulo, nrolote, idnota])
+}
+
+model detallecomprobante {
+  iddetallecomprobante Int          @id @default(autoincrement())
+  numero               Int?
+  glosa                String?      @db.VarChar(100)
+  montodebe            Decimal?     @db.Decimal(10, 2)
+  montohaber           Decimal?     @db.Decimal(10, 2)
+  montodebealt         Decimal?     @db.Decimal(10, 2)
+  montohaberalt        Decimal?     @db.Decimal(10, 2)
+  idusuario            Int?
+  idcomprobante        Int?
+  idcuenta             Int?
+  comprobante          comprobante? @relation(fields: [idcomprobante], references: [idcomprobante], onDelete: NoAction, onUpdate: NoAction)
+  cuenta               cuenta?      @relation(fields: [idcuenta], references: [idcuenta], onDelete: NoAction, onUpdate: NoAction)
+  usuario              usuario?     @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model empresa {
+  idempresa     Int             @id @default(autoincrement())
+  nombre        String?         @db.VarChar(100)
+  nit           String?         @db.VarChar(10)
+  sigla         String?         @db.VarChar(15)
+  telefono      String?         @db.VarChar(20)
+  correo        String?         @db.VarChar(50)
+  direccion     String?
+  niveles       Int?            @default(3) @db.SmallInt
+  estado        Int?            @default(1) @db.SmallInt
+  idusuario     Int?
+  articulo      articulo[]
+  categoria     categoria[]
+  comprobante   comprobante[]
+  cuenta        cuenta[]
+  usuario       usuario?        @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction)
+  empresamoneda empresamoneda[]
+  gestion       gestion[]
+  integracion   integracion?
+  nota          nota[]
+}
+
+model empresamoneda {
+  idempresamoneda                                  Int       @id @default(autoincrement())
+  cambio                                           Decimal?  @db.Decimal(10, 2)
+  activo                                           Int?      @default(1) @db.SmallInt
+  fecharegistro                                    DateTime? @db.Timestamp(6)
+  idempresa                                        Int?
+  idmonedaprincipal                                Int?
+  idmonedaalternativa                              Int?
+  idusuario                                        Int?
+  empresa                                          empresa?  @relation(fields: [idempresa], references: [idempresa], onDelete: Cascade, onUpdate: NoAction)
+  moneda_empresamoneda_idmonedaalternativaTomoneda moneda?   @relation("empresamoneda_idmonedaalternativaTomoneda", fields: [idmonedaalternativa], references: [idmoneda], onDelete: NoAction, onUpdate: NoAction)
+  moneda_empresamoneda_idmonedaprincipalTomoneda   moneda?   @relation("empresamoneda_idmonedaprincipalTomoneda", fields: [idmonedaprincipal], references: [idmoneda], onDelete: NoAction, onUpdate: NoAction)
+  usuario                                          usuario?  @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([idempresa], map: "fki_empresamoneda_idempresa_fkey")
+}
+
+model gestion {
+  idgestion   Int       @id @default(autoincrement())
+  nombre      String?   @db.VarChar(50)
+  fechainicio DateTime? @db.Date
+  fechafin    DateTime? @db.Date
+  estado      Int?      @default(1) @db.SmallInt
+  idusuario   Int?
+  idempresa   Int?
+  empresa     empresa?  @relation(fields: [idempresa], references: [idempresa], onDelete: NoAction, onUpdate: NoAction)
+  usuario     usuario?  @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction)
+  periodo     periodo[]
+}
+
+model integracion {
+  idempresa     Int     @id
+  caja          Int?
+  creditofiscal Int?
+  debitofiscal  Int?
+  compras       Int?
+  ventas        Int?
+  it            Int?
+  itxpagar      Int?
+  estado        Int?    @default(0) @db.SmallInt
+  empresa       empresa @relation(fields: [idempresa], references: [idempresa], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model lote {
+  idarticulo       Int
+  nrolote          Int
+  fechaingreso     DateTime? @db.Date
+  fechavencimiento DateTime? @db.Date
+  cantidad         Int?
+  preciocompra     Decimal?  @db.Decimal(10, 2)
+  stock            Int?
+  idnota           Int?
+  estado           Int?      @db.SmallInt
+  articulo         articulo  @relation(fields: [idarticulo], references: [idarticulo], onDelete: NoAction, onUpdate: NoAction)
+  nota             nota?     @relation(fields: [idnota], references: [idnota], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([idarticulo, nrolote])
+}
+
+model moneda {
+  idmoneda                                                Int             @id @default(autoincrement())
+  nombre                                                  String?         @db.VarChar(30)
+  descripcion                                             String?         @db.VarChar(50)
+  abreviatura                                             String?         @db.VarChar(5)
+  idusuario                                               Int?
+  comprobante                                             comprobante[]
+  empresamoneda_empresamoneda_idmonedaalternativaTomoneda empresamoneda[] @relation("empresamoneda_idmonedaalternativaTomoneda")
+  empresamoneda_empresamoneda_idmonedaprincipalTomoneda   empresamoneda[] @relation("empresamoneda_idmonedaprincipalTomoneda")
+  usuario                                                 usuario?        @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model nota {
+  idnota        Int          @id @default(autoincrement())
+  nronota       Int?
+  fecha         DateTime?    @db.Date
+  descripcion   String?      @db.VarChar(100)
+  total         Decimal?     @db.Decimal(10, 2)
+  tipo          Int?         @db.SmallInt
+  idempresa     Int?
+  idusuario     Int?
+  idcomprobante Int?
+  estado        Int?         @db.SmallInt
+  detalle       detalle[]
+  lote          lote[]
+  comprobante   comprobante? @relation(fields: [idcomprobante], references: [idcomprobante], onDelete: NoAction, onUpdate: NoAction)
+  empresa       empresa?     @relation(fields: [idempresa], references: [idempresa], onDelete: NoAction, onUpdate: NoAction)
+  usuario       usuario?     @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model periodo {
+  idperiodo   Int       @id @default(autoincrement())
+  nombre      String?   @db.VarChar(50)
+  fechainicio DateTime? @db.Date
+  fechafin    DateTime? @db.Date
+  estado      Int?      @default(1) @db.SmallInt
+  idusuario   Int?
+  idgestion   Int?
+  gestion     gestion?  @relation(fields: [idgestion], references: [idgestion], onDelete: NoAction, onUpdate: NoAction)
+  usuario     usuario?  @relation(fields: [idusuario], references: [idusuario], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model usuario {
+  idusuario          Int                  @id @default(autoincrement())
+  nombre             String               @db.VarChar(50)
+  usuario            String               @db.VarChar(90)
+  pass               String               @db.VarChar(100)
+  tipo               Int?                 @default(1) @db.SmallInt
+  articulo           articulo[]
+  categoria          categoria[]
+  comprobante        comprobante[]
+  cuenta             cuenta[]
+  detallecomprobante detallecomprobante[]
+  empresa            empresa[]
+  empresamoneda      empresamoneda[]
+  gestion            gestion[]
+  moneda             moneda[]
+  nota               nota[]
+  periodo            periodo[]
+}
