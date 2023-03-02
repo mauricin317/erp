@@ -1,24 +1,19 @@
 import Head from 'next/head';
-import {useState} from 'react';
+import { useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import useStorage from '../utils/storageHook'
 import { useRouter } from "next/router";
 import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import { ToastContainer,toast } from 'react-toastify';
+
+import { loginUser } from '../services/Usuarios'
+
 import 'react-toastify/dist/ReactToastify.min.css';
 
-async function loginUser(credentials) {
- return fetch('http://localhost:3000/api/login', {
-   method: 'POST',
-   headers: {
-     'Content-Type': 'application/json'
-   },
-   body: JSON.stringify(credentials)
- })
-   .then(data => data.json())
-}
-
 export default function Login() {
+
+  const { getItem, setItem } = useStorage();
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -40,12 +35,20 @@ export default function Login() {
     onSubmit:async values => {
       let login = await loginUser(values);
       if(login.ok){
-        router.push('/')
+        if(setItem('token', login.token)) router.push('/')
       }else{
         toast.error("Usuario o  Contraseña Incorrectos",{theme: "colored"});
       }
     }
   });
+
+
+  useEffect(() => {
+    const token = getItem('token');
+    if(token != undefined){
+      router.push('/')
+    }
+  }, []);
 
 
   return(
