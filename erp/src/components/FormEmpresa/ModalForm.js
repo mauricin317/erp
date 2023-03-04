@@ -2,8 +2,6 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import FormEmpresa from './FormEmpresa';
 
-import { ToastContainer } from 'react-toastify';
-
 const style = {
   position: 'absolute',
   top: '50%',
@@ -28,10 +26,9 @@ export default function ModalForm(props) {
         sx={{overflow: 'auto'}}
       >
         <Box sx={style}>
-        <FormEmpresa close={props.close} tipo={props.tipo} datos={props.datos} submit={props.submit} monedas={props.monedas} />
+        <FormEmpresa close={props.close} tipo={props.tipo} datos={props.datos} submit={props.submit} monedas={props.monedas} jwt={props.jwt} />
         </Box>
       </Modal>
-      <ToastContainer position="top-right" autoClose={2000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover />
     </div>
   );
 }

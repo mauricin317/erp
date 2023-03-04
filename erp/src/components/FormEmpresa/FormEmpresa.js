@@ -5,37 +5,16 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Grid';
-import { toast } from 'react-toastify';
-
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-async function crearEmpresa(datos) {
-  return fetch('http://localhost:3000/api/empresas', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(datos)
-  })
-    .then(result => result.json())
- }
-
- async function editarEmpresa(datos, idempresa) {
-  return fetch(`http://localhost:3000/api/empresas/${idempresa}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(datos)
-  })
-    .then(result => result.json())
- }
+import { crearEmpresa, editarEmpresa } from '../../services/Empresas';
 
 export default function FormEmpresa(props){
 
     let empresa = props.datos;
-
+    console.log(empresa)
     const formik = useFormik({
         initialValues: {
           nombre: empresa!=null ? empresa.nombre : '',
@@ -45,11 +24,11 @@ export default function FormEmpresa(props){
           correo: empresa!=null ? empresa.correo : '',
           direccion: empresa!=null ? empresa.direccion : '',
           niveles: empresa!=null ? empresa.niveles : '3',
-          moneda: empresa!=null ? empresa.idmonedaprincipal : '1'
+          moneda: empresa!=null ? empresa.empresamoneda[0].idmonedaprincipal : '1'
         },
         validationSchema: Yup.object({
           nombre: Yup.string().min(2,'Demasiado Corto').max(80, 'Demasiado Largo').required('Requerido'),
-          nit:  Yup.number().typeError('Debe ser numérico').required('Requerido').positive('Debe ser un número positivo').integer('Debe ser un número entero').min(10000000,'Muy corto'),
+          nit:  Yup.number().typeError('Debe ser numérico').required('Requerido').positive('Debe ser un número positivo').integer('Debe ser un número entero').min(1000000,'Muy corto'),
           sigla:  Yup.string().min(2,'Demasiado Corto').max(15, 'Demasiado Largo').required('Requerido'),
           telefono:  Yup.number().typeError('Debe ser numérico').positive('Debe ser un número positivo').integer('Debe ser un número entero').max(10000000000000,'Muy largo'),
           correo:  Yup.string().email('Correo Inválido').max(50, 'Demasiado Largo'),
@@ -57,9 +36,10 @@ export default function FormEmpresa(props){
         }),
         onSubmit: async values => {
           if(props.tipo === "nuevo"){
-            let crear = await crearEmpresa(values);
+            let crear = await crearEmpresa(values, props.jwt);
             if(crear.ok){
               props.submit();
+              toast.success('Empresa creada con éxito',{theme: "colored"});
               props.close();
             }else{
               toast.error(crear.mensaje,{theme: "colored"});
@@ -67,7 +47,7 @@ export default function FormEmpresa(props){
             
           }
           if(props.tipo === "editar"){
-            let editar = await editarEmpresa(values,empresa.idempresa);
+            let editar = await editarEmpresa(values,empresa.idempresa,props.jwt);
             if(editar.ok){
               props.submit();
               props.close();
@@ -173,7 +153,7 @@ export default function FormEmpresa(props){
                   name="moneda"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  disabled={props.tipo === "editar" && empresa.idmonedaalternativa != null}
+                  disabled={props.tipo === "editar" && empresa.empresamoneda[0].idmonedaalternativa != null}
                   select
                   value={formik.values.moneda}
                   variant="outlined"

@@ -44,11 +44,11 @@ function Home() {
   const cargarDatos = async () =>{
       let emp = await obtenerEmpresas(jwt);
       if(emp.ok){
+        if(emp.data.length > 0) setIdEmpresa(emp.data[emp.data.length-1].idempresa)
         setEmpresas({
           data: emp.data,
           monedas: emp.monedas
         });
-        if(emp.data.length > 0) setIdEmpresa(emp.data[emp.data.length-1].idempresa)
       }else{
         console.log(emp.mensaje)
       }
@@ -68,7 +68,7 @@ function Home() {
         router.push('/login')
         return (<div>Loading...</div>)
       }else{
-        cargarUsuario(jwt)
+        cargarUsuario()
         cargarDatos();
       }
   }, []);
@@ -98,11 +98,7 @@ function Home() {
     });
   }
   const handleSubmit = () =>{
-    setEmpresas({
-      data: empresas.data,
-      monedas: empresas.monedas
-    })
-    setIdEmpresa('')
+    cargarDatos();
   }
 
   const handleEliminar= async () =>{
@@ -172,9 +168,9 @@ function Home() {
         </Container>
         /*: <Container maxWidth="sm">Loading...</Container>*/}
       </Box>
-      <ModalForm open={modalform.open} tipo={modalform.tipo} datos={modalform.datos} monedas={empresas.monedas} close={handleCloseModal} submit={handleSubmit}></ModalForm>
+      <ModalForm open={modalform.open} tipo={modalform.tipo} datos={modalform.datos} monedas={empresas.monedas} close={handleCloseModal} submit={handleSubmit} jwt={jwt} ></ModalForm>
       <AlertDialog open={openDialog} title={"¿Seguro que desea eliminar esta empresa?"} body={"La empresa no se podrá volver a recuperar"} btnText={"Eliminar"} close={() => setOpenDialog(false)} confirm={handleEliminar} />
-      <ToastContainer position="top-right" autoClose={2000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover />
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover />
     </div>
   )
 }

@@ -113,7 +113,7 @@ model detallecomprobante {
 model empresa {
   idempresa     Int             @id @default(autoincrement())
   nombre        String?         @db.VarChar(100)
-  nit           String?         @db.VarChar(10)
+  nit           String?         @db.VarChar(20)
   sigla         String?         @db.VarChar(15)
   telefono      String?         @db.VarChar(20)
   correo        String?         @db.VarChar(50)
@@ -136,7 +136,7 @@ model empresamoneda {
   idempresamoneda                                  Int       @id @default(autoincrement())
   cambio                                           Decimal?  @db.Decimal(10, 2)
   activo                                           Int?      @default(1) @db.SmallInt
-  fecharegistro                                    DateTime? @db.Timestamp(6)
+  fecharegistro                                    DateTime? @db.Timestamp(6) @default(now())
   idempresa                                        Int?
   idmonedaprincipal                                Int?
   idmonedaalternativa                              Int?

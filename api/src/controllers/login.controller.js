@@ -28,9 +28,9 @@ module.exports = {
         } catch (error) {
             console.log("Error: ", error.message);
             if(error.message === "No usuario found")
-                res.json({ok:false, message:'Login incorrecto'})
+                res.json({ok:false, mensaje:'Login incorrecto'})
             else
-                res.status(400).json({ok:false, message:'Bad Request'})
+                res.status(400).json({ok:false, mensaje:'Bad Request'})
         }
     }
 }
