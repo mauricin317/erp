@@ -236,7 +236,7 @@ model periodo {
 model usuario {
   idusuario          Int                  @id @default(autoincrement())
   nombre             String               @db.VarChar(50)
-  usuario            String               @db.VarChar(90)
+  usuario            String               @db.VarChar(90) @unique
   pass               String               @db.VarChar(100)
   tipo               Int?                 @default(1) @db.SmallInt
   articulo           articulo[]

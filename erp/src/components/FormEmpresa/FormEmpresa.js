@@ -28,7 +28,7 @@ export default function FormEmpresa(props){
         },
         validationSchema: Yup.object({
           nombre: Yup.string().min(2,'Demasiado Corto').max(80, 'Demasiado Largo').required('Requerido'),
-          nit:  Yup.number().typeError('Debe ser numérico').required('Requerido').positive('Debe ser un número positivo').integer('Debe ser un número entero').min(1000000,'Muy corto'),
+          nit:  Yup.string().required('Requerido').min(5,'Muy corto').max(20, 'Demasiado Largo'),
           sigla:  Yup.string().min(2,'Demasiado Corto').max(15, 'Demasiado Largo').required('Requerido'),
           telefono:  Yup.number().typeError('Debe ser numérico').positive('Debe ser un número positivo').integer('Debe ser un número entero').max(10000000000000,'Muy largo'),
           correo:  Yup.string().email('Correo Inválido').max(50, 'Demasiado Largo'),
@@ -39,7 +39,7 @@ export default function FormEmpresa(props){
             let crear = await crearEmpresa(values, props.jwt);
             if(crear.ok){
               props.submit();
-              toast.success('Empresa creada con éxito',{theme: "colored"});
+              toast.success(crear.mensaje,{theme: "colored"});
               props.close();
             }else{
               toast.error(crear.mensaje,{theme: "colored"});
@@ -50,6 +50,7 @@ export default function FormEmpresa(props){
             let editar = await editarEmpresa(values,empresa.idempresa,props.jwt);
             if(editar.ok){
               props.submit();
+              toast.success(editar.mensaje,{theme: "colored"});
               props.close();
             }else{
               toast.error(editar.mensaje,{theme: "colored"});
@@ -62,11 +63,11 @@ export default function FormEmpresa(props){
       <Container maxWidth="md">
         <form onSubmit={formik.handleSubmit}>   
             <Box sx={{pb: 1,pt: 3}}>
-              <Typography align="center" color="textSecondary" variant="h5">
+              <Typography align="center" color="textSecondary" variant="h3">
                 {props.tipo === "nuevo" ? "Nueva" : "Editar"} Empresa
               </Typography>
             </Box>
-            <Grid container spacing={2}>
+            <Grid container spacing={1}>
               <Grid item md={12} xs={12}>
                 <TextField
                   error={Boolean(formik.touched.nombre && formik.errors.nombre)}
@@ -99,7 +100,7 @@ export default function FormEmpresa(props){
                   value={formik.values.nit}
                   variant="outlined"
                   inputProps={
-                    {maxLength: 10}
+                    {maxLength: 20}
                   }
                 />
               </Grid>
@@ -226,7 +227,7 @@ export default function FormEmpresa(props){
               
             </Grid>
             <Box sx={{ py: 2,display:'flex',justifyContent:'end' }}>
-              <Button sx={{mx: 3}} size="large" color="primary" disabled={formik.isSubmitting} type="submit" variant="contained">
+              <Button sx={{mx: 3}} size="large" color="success" disabled={formik.isSubmitting} type="submit" variant="contained">
                 Guardar
               </Button>
               <Button sx={{mx: 3}} size="large" color="error" variant="contained" disabled={formik.isSubmitting}  onClick={props.close}>Cancelar</Button>
