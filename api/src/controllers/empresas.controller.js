@@ -40,11 +40,29 @@ module.exports = {
         }else{
           res.json({ok:true, data:[], monedas:[], mensaje:"No se encontraron monedas"})
         }
-          res.json(allUsers);
       } catch (error) {
         console.log("Error: ", error.message);
         res.status(400).json({ok:false, mensaje:'Bad Request'})
       }
+  },
+  getEmpresa: async (req,res)=>{
+    try {
+      const { idempresa } = req.params;
+      const {idusuario} = req.user
+      const findEmpresa = await prisma.empresa.findUnique({
+        where: {
+          idempresa:Number(idempresa),
+        },
+      })
+      if(findEmpresa){
+        return res.json({ok:true, data:findEmpresa});
+      }else{
+          return res.json({ok:true, data:[], mensaje:"No se encontró la empresa"})
+      }
+    } catch (error) {
+      console.log("Error: ", error.message);
+      res.status(400).json({ok:false, mensaje:'Bad Request'})
+    }
   },
   createEmpresa: async (req,res)=>{
     try {

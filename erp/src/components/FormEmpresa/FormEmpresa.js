@@ -14,7 +14,7 @@ import { crearEmpresa, editarEmpresa } from '../../services/Empresas';
 export default function FormEmpresa(props){
 
     let empresa = props.datos;
-    console.log(empresa)
+    
     const formik = useFormik({
         initialValues: {
           nombre: empresa!=null ? empresa.nombre : '',

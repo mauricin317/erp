@@ -9,6 +9,16 @@ export async function obtenerEmpresas(jwt) {
     .then(res => res.json())
  }
 
+ export async function obtenerEmpresa(idempresa, jwt) {
+  return fetch(`http://localhost:4000/api/empresas/${idempresa}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': jwt
+    },
+  })
+    .then(res => res.json())
+ }
  export async function crearEmpresa(data, jwt) {
   return fetch('http://localhost:4000/api/empresas', {
     method: 'POST',

@@ -16,7 +16,7 @@ module.exports = {
     getSession: async (req, res) => {
         try {
             const tokenData = req.user;
-            res.json({ok:true, token:tokenData});
+            res.json({ok:true, data:tokenData});
         } catch (error) {
             console.log(error.message);
             res.status(400).json({ok:false})

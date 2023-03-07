@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useState, useEffect} from "react";
 import FeatherIcon from "feather-icons-react";
 import { AppBar, Box, IconButton, Toolbar } from "@mui/material";
 import PropTypes from "prop-types";
+import useStorage from "../../utils/storageHook";
+
+import { obtenerSesion } from "../../services/Usuarios";
 // Dropdown Component
 import SearchDD from "./SearchDD";
 import ProfileDD from "./ProfileDD";
 
 const Header = ({ sx, customClass, toggleMobileSidebar, position }) => {
+
+  const { getItem } = useStorage();
+  const jwt = getItem('token');
+  const [sesionData, setSesionData] = useState(null);
+
+  const cargarUsuario = async() =>{
+    let sesionData = await obtenerSesion( jwt);
+    if(sesionData.ok){
+      setSesionData(sesionData.data);
+    }
+  }
+
+  useEffect(()=>{
+    cargarUsuario();
+  },[])
+
   return (
     <AppBar sx={sx} position={position} elevation={0} className={customClass}>
       <Toolbar>
@@ -27,12 +46,12 @@ const Header = ({ sx, customClass, toggleMobileSidebar, position }) => {
         {/* ------------------------------------------- */}
         {/* Search Dropdown */}
         {/* ------------------------------------------- */}
-        <SearchDD />
+        <SearchDD sesion={sesionData} jwt={jwt} />
         {/* ------------ End Menu icon ------------- */}
 
         <Box flexGrow={1} />
 
-        <ProfileDD />
+        <ProfileDD sesion={sesionData} jwt={jwt} />
         {/* ------------------------------------------- */}
         {/* Profile Dropdown */}
         {/* ------------------------------------------- */}

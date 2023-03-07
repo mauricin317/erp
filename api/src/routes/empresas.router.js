@@ -5,6 +5,7 @@ const controller = require('../controllers/empresas.controller');
 
 //GET
 router.get("/",jwt.ensureToken,controller.getEmpresas);
+router.get("/:idempresa",jwt.ensureToken,controller.getEmpresa);
 //POST
 router.post("/",jwt.ensureToken,controller.createEmpresa);
 //PUT

@@ -1,37 +1,28 @@
-import React, { useState } from "react";
-import FeatherIcon from "feather-icons-react";
-import { IconButton, Input, Box, Drawer } from "@mui/material";
-import useSWR from 'swr';
+import React, { useEffect, useState } from "react";
 
-async function obtenerEmpresa(idempresa) {
-  return fetch(`http://localhost:3000/api/empresas/${idempresa}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'User-Agent': 'some browser'
-    },
-  })
-    .then(data => data.json())
- }
-const fetcher = (...args) => fetch(...args).then(res => res.json());
+import { obtenerEmpresa } from "../../services/Empresas";
 
-const SearchDD = () => {
+const SearchDD = (props) => {
 
   const [nombre, setNombre] = useState("");
-  let { data, error } = useSWR('/api/usuarios/session', fetcher);
-  const cargarEmpresa = async(idempresa) =>{
-    let empresa = await obtenerEmpresa(idempresa);
+
+
+  const cargarEmpresa = async() =>{
+    let empresa = await obtenerEmpresa(props.sesion.idempresa, props.jwt);
     if(empresa.ok){
-      setNombre(empresa.data[0].nombre);
+      setNombre(empresa.data.nombre);
     }
   }
-  if(data){
-    cargarEmpresa(data.user.idempresa);
-  }
+
+  useEffect(()=>{
+    if(props.sesion){
+      cargarEmpresa();
+    }
+  },[props.sesion])
   
   return (
     <>
-      <h3>Empresa: {nombre}</h3>
+      <h2>Empresa: {nombre}</h2>
     </>
   );
 };

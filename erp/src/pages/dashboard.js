@@ -1,46 +1,44 @@
 import Head from 'next/head';
+import { useState, useEffect } from 'react';
 import FullLayout from "../layouts/FullLayout";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import DashboarGrid from '../components/DashboardGrid';
+//import DashboarGrid from '../components/DashboardGrid';
+import { useRouter } from "next/router";
+import useStorage from '../utils/storageHook';
+import { obtenerSesion } from '../services/Usuarios';
 import theme from "../theme/theme";
-import { withIronSessionSsr } from "iron-session/next";
 
-export const getServerSideProps = withIronSessionSsr(
-  async function getServerSideProps({ req }) {
-    const user = req.session.user;
+export default function Dashboard() {
 
-    if(!user) return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      }
-    
+  const { getItem } = useStorage();
+  const jwt = getItem('token');
+  const router = useRouter();
+  const [usuario, setUsuario] = useState(null)
+
+  const cargarUsuario = async () =>{
+    let sesion = await obtenerSesion(jwt);
+    if(sesion.ok){
+      setUsuario(sesion.data);
     }
-    return {
-      props: {
-        user: user,
-      },
-    };
-  },
-  {
-    cookieName: "myapp_cookiename",
-    password: "complex_password_at_least_32_characters_long",
-    // secure: true should be used in production (HTTPS) but can't be used in development (HTTP)
-    cookieOptions: {
-      secure: process.env.NODE_ENV === "production",
-    },
-  },
-);
+  }
 
-export default function Dashboard({user}) {
+  useEffect(() => {
+      if(jwt == undefined){
+        router.push('/login')
+        return (<div>Loading...</div>)
+      }else{
+        cargarUsuario()
+      }
+  }, []);
+
   return (
     <>
         <Head>
             <title>Dashboard | ERP</title>
         </Head>
-          <h2>Dashboard - Bienvenido {user.nombre}</h2>
-          <DashboarGrid />
+          <h2>Dashboard - Bienvenido {usuario?.nombre}</h2>
+          {/* <DashboarGrid /> */}
     </>
   );
 }

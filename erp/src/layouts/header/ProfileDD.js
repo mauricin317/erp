@@ -2,7 +2,7 @@ import React from "react";
 import FeatherIcon from "feather-icons-react";
 import Image from "next/image";
 import userimg from "../../../assets/images/users/7.jpg";
-import useSWR from 'swr';
+import useStorage from "../../utils/storageHook";
 import {
   Box,
   Menu,
@@ -17,30 +17,16 @@ import {
 import { useRouter } from "next/router";
 
 
-async function logoutUser(credentials) {
-  return fetch('http://localhost:3000/api/logout', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
- }
 
+const ProfileDD = (props) => {
 
-const fetcher = (...args) => fetch(...args).then(res => res.json());
-
-const ProfileDD = () => {
+  const { removeItem } = useStorage();
   const router = useRouter();
   const [anchorEl4, setAnchorEl4] = React.useState(null);
-  const { data, error } = useSWR('/api/usuarios/session', fetcher);
 
   const logout = async () => {
-    let logout = await logoutUser();
-      if(logout.ok){
-        router.push('/')
-      }
+    removeItem('token')
+    router.push('/')
   };
 
   const handleClick4 = (event) => {
@@ -83,7 +69,7 @@ const ProfileDD = () => {
                 ml: 1,
               }}
             >
-              {data?data.user.nombre:"-"}
+              {props.sesion? props.sesion.nombre:""}
             </Typography>
             <FeatherIcon icon="chevron-down" width="20" height="20" />
           </Box>

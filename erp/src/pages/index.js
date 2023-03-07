@@ -15,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ModalForm from '../components/FormEmpresa/ModalForm';
 import AlertDialog from '../components/AlertDialog';
 import { useRouter } from "next/router";
-import useStorage from '../utils/storageHook'
+import useStorage from '../utils/storageHook';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { obtenerSesion, actualizarEmpresaSesion } from '../services/Usuarios';
@@ -57,9 +57,7 @@ function Home() {
   const cargarUsuario = async () =>{
     let sesion = await obtenerSesion(jwt);
     if(sesion.ok){
-      setUsuario(sesion.token);
-    }else{
-      console.log(sesion.mensaje)
+      setUsuario(sesion.data);
     }
 }
 
