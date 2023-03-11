@@ -25,7 +25,7 @@ export default function FormDetalleNotaCompra(props){
     const [articulo, setArticulo] = useState(edit_detalle == null ? null : props.articulos[pos]);
     const formik = useFormik({
         initialValues: {
-          fechavencimiento: edit_detalle == null ? '' : edit_detalle.fechavencimiento != '' ? formatInTimeZone(edit_detalle.fechavencimiento, 'America/La_Paz', 'yyy-MM-dd') : '',
+          fechavencimiento: edit_detalle == null ? '' : edit_detalle.fechavencimiento != '' ? formatInTimeZone(edit_detalle.fechavencimiento, 'UTC', 'yyy-MM-dd') : '',
           cantidad: edit_detalle == null ? '' : edit_detalle.cantidad,
           preciocompra: edit_detalle == null ? '' : edit_detalle.preciocompra,
         },

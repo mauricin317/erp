@@ -22,10 +22,10 @@ const PageWrapper = experimentalStyled("div")(({ theme }) => ({
   overflow: "hidden",
 
   backgroundColor: theme.palette.background.default,
-  [theme.breakpoints.up("lg")]: {
+  [theme.breakpoints.up("xl")]: {
     paddingTop: "64px",
   },
-  [theme.breakpoints.down("lg")]: {
+  [theme.breakpoints.down("xl")]: {
     paddingTop: "64px",
   },
 }));
@@ -33,12 +33,12 @@ const PageWrapper = experimentalStyled("div")(({ theme }) => ({
 const FullLayout = ({ children }) => {
   const [isSidebarOpen, setSidebarOpen] = React.useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = React.useState(false);
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+  const xlUp = useMediaQuery((theme) => theme.breakpoints.up("xl"));
   return (
     <MainWrapper>
       <Header
         sx={{
-          paddingLeft: isSidebarOpen && lgUp ? "265px" : "",
+          paddingLeft: isSidebarOpen && xlUp ? "265px" : "",
           backgroundColor: "#fbfbfb",
         }}
         toggleMobileSidebar={() => setMobileSidebarOpen(true)}
@@ -53,7 +53,7 @@ const FullLayout = ({ children }) => {
           maxWidth={false}
           sx={{
             paddingTop: "10px",
-            paddingLeft: isSidebarOpen && lgUp ? "280px!important" : "",
+            paddingLeft: isSidebarOpen && xlUp ? "280px!important" : "",
           }}
         >
           <Box sx={{ minHeight: "calc(100vh - 170px)" }}>{children}</Box>

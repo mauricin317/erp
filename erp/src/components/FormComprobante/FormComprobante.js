@@ -63,7 +63,7 @@ export default function FormComprobante(props){
     const formik = useFormik({
       initialValues: {
         serie: formData.nro_serie,
-        fecha: props.readOnly == true ? formatInTimeZone(formData.fecha, 'America/La_Paz', 'yyy-MM-dd') : formatInTimeZone(new Date(), 'America/La_Paz', 'yyy-MM-dd'),
+        fecha: props.readOnly == true ? formatInTimeZone(formData.fecha, 'UTC', 'yyy-MM-dd') : formatInTimeZone(new Date(), 'UTC', 'yyy-MM-dd'),
         tipo_comprobante: props.readOnly == true ? formData.tipocomprobante : "",
         tipo_cambio: formData.tipo_cambio == undefined ? '': formData.tipo_cambio,
         moneda: props.readOnly == true ? formData.idmoneda : formData.monedas[0].idmoneda,

@@ -43,7 +43,6 @@ export default function LowStockChart() {
           categorias: datos.categorias
         })
       }else{
-        console.log(datos.mensaje)
         setState({
           datos:datos.data,
           categorias: datos.categorias

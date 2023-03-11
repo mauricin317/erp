@@ -10,27 +10,7 @@ import { formatInTimeZone } from 'date-fns-tz';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-async function crearGestion(datos) {
-  return fetch('http://localhost:3000/api/gestiones', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(datos)
-  })
-    .then(result => result.json())
- }
-
- async function editarGestion(datos, idgestion) {
-  return fetch(`http://localhost:3000/api/gestiones/${idgestion}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(datos)
-  })
-    .then(result => result.json())
- }
+import { crearGestion, editarGestion } from '../../services/Gestiones';
 
 export default function FormGestion(props){
 
@@ -40,8 +20,8 @@ export default function FormGestion(props){
     const formik = useFormik({
         initialValues: {
           nombre: gestion!=null?gestion.nombre:'',
-          fechainicio: gestion!=null?formatInTimeZone(gestion.fechainicio, 'America/La_Paz', 'yyy-MM-dd'):'',
-          fechafin: gestion!=null?formatInTimeZone(gestion.fechafin, 'America/La_Paz', 'yyy-MM-dd'):'',
+          fechainicio: gestion!=null?formatInTimeZone(gestion.fechainicio, 'UTC', 'yyy-MM-dd'):'',
+          fechafin: gestion!=null?formatInTimeZone(gestion.fechafin, 'UTC', 'yyy-MM-dd'):'',
         },
         validationSchema: Yup.object({
           nombre: Yup.string().min(2,'Demasiado Corto').max(30, 'Demasiado Largo').required('Requerido'),
@@ -51,7 +31,7 @@ export default function FormGestion(props){
         onSubmit: async values => {
           if(values.fechainicio < values.fechafin){
             if(props.tipo === "nuevo"){
-              let crear = await crearGestion(values);
+              let crear = await crearGestion(values, props.jwt);
               if(crear.ok){
                 props.submit();
                 props.close();
@@ -61,7 +41,7 @@ export default function FormGestion(props){
               
             }
             if(props.tipo === "editar"){
-              let editar = await editarGestion(values,gestion.id);
+              let editar = await editarGestion(values,gestion.idgestion,props.jwt);
               if(editar.ok){
                 props.submit();
                 props.close();

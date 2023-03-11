@@ -8,23 +8,17 @@ import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import { useRouter } from "next/router";
 import { useState } from 'react';
 import { formatInTimeZone } from 'date-fns-tz';
+import useStorage from '../../utils/storageHook';
+import { obtenerGestion } from '../../services/Gestiones'
 
-import PeriodosDataGrid from "../../components/PeriodosDataGrid"
+import PeriodosDataGrid from "../../components/PeriodosDataGrid";
 
 
-async function obtenerGestion(idgestion) {
-  return fetch(`http://localhost:3000/api/gestiones/${idgestion}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'User-Agent': 'some browser'
-    },
-  })
-    .then(data => data.json())
- }
 
-export default function Periodos(props) {
+export default function Periodos() {
   const router = useRouter();
+  const { getItem } = useStorage();
+  const jwt = getItem('token');
   const { idgestion } = router.query
   const [gestion, setGestion] = useState({
     datos: null,
@@ -32,7 +26,7 @@ export default function Periodos(props) {
   });
 
   const cargarGestion = async () => {
-    let gest = await obtenerGestion(idgestion);
+    let gest = await obtenerGestion(idgestion, jwt);
     if(gest.ok){
       setGestion({
         datos: gest.data,
@@ -57,7 +51,7 @@ export default function Periodos(props) {
             <Button onClick={() => router.back()} sx={{display: 'inline-block'}}><ArrowBackRoundedIcon/></Button>
             <h2 style={{display: 'inline-block'}}>Configuracion de Periodos - {gestion.datos!==null?gestion.datos.nombre:""}</h2>
           </div>
-          <PeriodosDataGrid idgestion={idgestion} mindate={gestion.datos!==null?formatInTimeZone(gestion.datos.fechainicio, 'America/La_Paz', 'yyy-MM-dd'):""} maxdate={gestion.datos!==null?formatInTimeZone(gestion.datos.fechafin, 'America/La_Paz', 'yyy-MM-dd'):""} />
+          <PeriodosDataGrid idgestion={idgestion} mindate={gestion.datos!==null?formatInTimeZone(gestion.datos.fechainicio, 'UTC', 'yyy-MM-dd'):""} maxdate={gestion.datos!==null?formatInTimeZone(gestion.datos.fechafin, 'UTC', 'yyy-MM-dd'):""} jwt={jwt}/>
           
           </>
   );

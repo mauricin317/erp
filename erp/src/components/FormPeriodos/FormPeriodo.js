@@ -10,38 +10,16 @@ import * as Yup from 'yup';
 import { formatInTimeZone } from 'date-fns-tz';
 import { toast } from 'react-toastify';
 
-async function crearPeriodo(datos) {
-  return fetch('http://localhost:3000/api/periodos', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(datos)
-  })
-    .then(result => result.json())
- }
-
- async function editarPeriodo(datos, idperiodo) {
-  return fetch(`http://localhost:3000/api/periodos/${idperiodo}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(datos)
-  })
-    .then(result => result.json())
- }
+import { crearPeriodo, editarPeriodo } from '../../services/Periodos'
 
 export default function FormPeriodo(props){
     let periodo = props.datos
-    
-
     const formik = useFormik({
         initialValues: {
           idgestion: props.idgestion,
           nombre: periodo!=null?periodo.nombre:'',
-          fechainicio: periodo!=null?formatInTimeZone(periodo.fechainicio, 'America/La_Paz', 'yyy-MM-dd'):'',
-          fechafin: periodo!=null?formatInTimeZone(periodo.fechafin, 'America/La_Paz', 'yyy-MM-dd'):'',
+          fechainicio: periodo!=null?formatInTimeZone(periodo.fechainicio, 'UTC', 'yyy-MM-dd'):'',
+          fechafin: periodo!=null?formatInTimeZone(periodo.fechafin, 'UTC', 'yyy-MM-dd'):'',
         },
         validationSchema: Yup.object({
           nombre: Yup.string().min(2,'Demasiado Corto').max(30, 'Demasiado Largo').required('Requerido'),
@@ -51,7 +29,7 @@ export default function FormPeriodo(props){
         onSubmit: async values => {
           if(values.fechainicio < values.fechafin){
             if(props.tipo === "nuevo"){
-              let crear = await crearPeriodo(values);
+              let crear = await crearPeriodo(values, props.jwt);
               if(crear.ok){
                 props.submit();
                 props.close();
@@ -61,7 +39,7 @@ export default function FormPeriodo(props){
               
             }
             if(props.tipo === "editar"){
-              let editar = await editarPeriodo(values,periodo.id);
+              let editar = await editarPeriodo(values, periodo.idperiodo, props.jwt);
               if(editar.ok){
                 props.submit();
                 props.close();

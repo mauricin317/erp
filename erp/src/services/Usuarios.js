@@ -1,7 +1,7 @@
 
 
 export async function loginUser(credentials) {
-  return fetch('http://localhost:4000/api/login', {
+  return fetch(process.env.NEXT_PUBLIC_BACKEND_API + `/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -12,7 +12,7 @@ export async function loginUser(credentials) {
  }
 
  export async function actualizarEmpresaSesion(data, jwt) {
-  return fetch('http://localhost:4000/api/usuarios/session', {
+  return fetch(process.env.NEXT_PUBLIC_BACKEND_API + `/usuarios/session`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ export async function loginUser(credentials) {
  }
 
  export async function obtenerSesion(jwt) {
-  return fetch('http://localhost:4000/api/usuarios/session', {
+  return fetch(process.env.NEXT_PUBLIC_BACKEND_API + `/usuarios/session`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

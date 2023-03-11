@@ -61,7 +61,7 @@ export default function FormNotaVenta(props){
     const formik = useFormik({
       initialValues: {
         nronota: formData.nro_nota,
-        fecha: props.readOnly == true ? formatInTimeZone(formData.fecha, 'America/La_Paz', 'yyy-MM-dd') : formatInTimeZone(new Date(), 'America/La_Paz', 'yyy-MM-dd'),
+        fecha: props.readOnly == true ? formatInTimeZone(formData.fecha, 'UTC', 'yyy-MM-dd') : formatInTimeZone(new Date(), 'UTC', 'yyy-MM-dd'),
         descripcion:  props.readOnly == true ? formData.descripcion : ""
       },
       validationSchema: Yup.object({

@@ -23,8 +23,6 @@ function FormLibroMayor(props) {
           idmoneda: Yup.number().required('Requerido')
         }),
         onSubmit: async values => {
-          console.log("Values",values)
-          console.log("Periodos",props.periodos)
           if(values.idperiodo!=0){
             openReportP(0,values.idperiodo ,values.idmoneda)
           }else{

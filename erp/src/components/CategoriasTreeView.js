@@ -93,7 +93,6 @@ export default function CategoriasTreeView(){
         _arrNodeIds.map((n, i) =>{
           return n.toString();
         })
-        console.log("Expanded", expanded);
         setExpanded((oldExpanded) =>
           oldExpanded.length === 1 ? _.concat(_arrNodeIds,["0"]) : ["0"],
         );
@@ -110,7 +109,6 @@ export default function CategoriasTreeView(){
         }else{
           node = undefined;
         }
-        console.log(node)
         setModalform({
           open:true,
           tipo:'nuevo',

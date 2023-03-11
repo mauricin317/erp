@@ -28,7 +28,7 @@ export default function ModalForm(props) {
         sx={{overflow: 'auto'}}
       >
         <Box sx={style}>
-        <FormGestion close={props.close} tipo={props.tipo} datos={props.datos} submit={props.submit} />
+        <FormGestion close={props.close} tipo={props.tipo} datos={props.datos} submit={props.submit} jwt={props.jwt} />
         </Box>
       </Modal>
       <ToastContainer position="top-right" autoClose={2000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover />

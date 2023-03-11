@@ -202,7 +202,7 @@ export default function ComprobantesDataGrid(){
           type: 'date',
           minWidth:100,
           valueFormatter: (params) => {
-            const valueFormatted =formatInTimeZone(params.value, 'America/La_Paz', 'dd/MM/yyy')
+            const valueFormatted =formatInTimeZone(params.value, 'UTC', 'dd/MM/yyy')
             return valueFormatted;
           },
         },

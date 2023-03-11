@@ -75,38 +75,69 @@ const ProfileDD = (props) => {
           </Box>
         </Box>
       </Button>
+      <Button
+        aria-label="menu"
+        aria-controls="profile-menu"
+        aria-haspopup="true"
+        variant="contained" color="danger" style={{color:"white"}} onClick={logout}
+      >
+        <Box display="flex" alignItems="center">
+       <FeatherIcon icon="power" width="15" height="15" />
+          <Box
+            sx={{
+              display: {
+                xs: "none",
+                sm: "flex",
+              },
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              variant="h5"
+              fontWeight="700"
+              sx={{
+                ml: 1,
+              }}
+            >
+              Cerrar Sesion
+            </Typography>
+          </Box>
+        </Box>
+      </Button>
       <Menu
         id="profile-menu"
         anchorEl={anchorEl4}
         keepMounted
         open={Boolean(anchorEl4)}
         onClose={handleClose4}
-        sx={{
-          "& .MuiMenu-paper": {
-            width: "385px",
-          },
-        }}
+        // sx={{
+        //   "& .MuiMenu-paper": {
+        //     width: "385px",
+        //   },
+        // }}
       >
-        <Box>
-          <Box p={2} pt={0}>
+        <Box p={0}>
+          <Box p={0}>
             <List
               component="nav"
               aria-label="secondary mailbox folder"
               onClick={handleClose4}
+              sx={{p:0}}
             >
               <ListItemButton>
-                <Link href="/" style={{textDecoration: 'none'}}>
-                <ListItemText primary="Cambiar Empresa" />
+                <Link href="/" style={{textDecoration: 'none', display:'flex', alignItems:'center', flexWrap: 'wrap'}} >
+                <FeatherIcon icon="refresh-ccw" width="20" height="20" />
+                <ListItemText sx={{ml:1}} primary={'Cambiar empresa'} 
+                />
                 </Link>
               </ListItemButton>
             </List>
           </Box>
-          <Divider />
-          <Box p={2}>
+          {/* <Box p={2}>
               <Button fullWidth variant="contained" color="danger" style={{color:"white"}} onClick={logout}>
                 Cerrar Sesion
               </Button>
-          </Box>
+            </Box> */}
         </Box>
       </Menu>
     </>

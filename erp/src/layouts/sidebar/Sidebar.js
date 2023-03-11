@@ -28,7 +28,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
 
 
 
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+  const xlUp = useMediaQuery((theme) => theme.breakpoints.up("xl"));
 
   const handleClick = (index) => {
     if (open === index) {
@@ -257,7 +257,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
 
     </Box>
   );
-  if (lgUp) {
+  if (xlUp) {
     return (
       <Drawer
         anchor="left"

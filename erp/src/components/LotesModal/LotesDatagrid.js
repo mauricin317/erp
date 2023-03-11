@@ -56,7 +56,7 @@ export default function LotesDataGrid(props){
         width:200,
         valueFormatter: (params) => {
           if(params.value != '' && params.value != null){
-            let valueFormatted =formatInTimeZone(params.value, 'America/La_Paz', 'dd/MM/yyy') 
+            let valueFormatted =formatInTimeZone(params.value, 'UTC', 'dd/MM/yyy') 
             return valueFormatted; 
           }else{
             return '';
@@ -70,7 +70,7 @@ export default function LotesDataGrid(props){
         width:200,
         valueFormatter: (params) => {
           if(params.value != '' && params.value != null){
-            let valueFormatted =formatInTimeZone(params.value, 'America/La_Paz', 'dd/MM/yyy') 
+            let valueFormatted =formatInTimeZone(params.value, 'UTC', 'dd/MM/yyy') 
             return valueFormatted; 
           }else{
             return '';

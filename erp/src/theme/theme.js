@@ -8,10 +8,9 @@ import { esES } from '@mui/material/locale';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#6a1b9a',
-      light: '#f3e5f5',
-      dark: '#4a148c',
-      contrastText: '#ffffff',
+      main: '#546e7a',
+      light: '#78909c',
+      dark: '#37474f',
     },
     secondary: {
       main: '#0277bd',

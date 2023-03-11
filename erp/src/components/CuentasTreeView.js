@@ -96,11 +96,9 @@ export default function CuentasTreeView(){
       const handleExpandClick = () => {
         let objNodeIds = state.cuentas[0]._nodeById
         let _arrNodeIds = _.keys(objNodeIds);
-        console.log("ARR",_arrNodeIds);
         _arrNodeIds.map((n, i) =>{
           return n.toString();
         })
-        console.log("Expanded", expanded);
         setExpanded((oldExpanded) =>
           oldExpanded.length === 1 ? _.concat(_arrNodeIds,["0"]) : ["0"],
         );

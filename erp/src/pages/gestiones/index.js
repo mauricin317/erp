@@ -3,9 +3,13 @@ import FullLayout from "../../layouts/FullLayout";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "../../theme/theme";
+import useStorage from '../../utils/storageHook';
 import GestionesDataGrid from "../../components/GestionesDataGrid";
 
 export default function Gestiones(props) {
+
+  const { getItem } = useStorage();
+  const jwt = getItem('token');
 
   return (
     <>
@@ -13,7 +17,7 @@ export default function Gestiones(props) {
               <title>Gestiones | ERP</title>
           </Head>
           <h2>Configuracion de Gestiones</h2>
-          <GestionesDataGrid/>
+          <GestionesDataGrid jwt={jwt} />
           </>
   );
 }

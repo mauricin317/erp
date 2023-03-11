@@ -30,7 +30,7 @@ export default function ModalForm(props) {
         sx={{overflow: 'auto'}}
       >
         <Box sx={style}>
-        <FormPeriodo close={props.close} tipo={props.tipo} datos={props.datos} submit={props.submit} idgestion={props.idgestion} mindate={props.mindate} maxdate={props.maxdate}/>
+        <FormPeriodo close={props.close} tipo={props.tipo} datos={props.datos} submit={props.submit} idgestion={props.idgestion} mindate={props.mindate} maxdate={props.maxdate} jwt={props.jwt} />
         </Box>
       </Modal>
       <ToastContainer position="top-right" autoClose={2000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover />

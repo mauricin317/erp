@@ -36,7 +36,7 @@ const Header = ({ sx, customClass, toggleMobileSidebar, position }) => {
           onClick={toggleMobileSidebar}
           sx={{
             display: {
-              lg: "none",
+              xl: "none",
               xs: "flex",
             },
           }}

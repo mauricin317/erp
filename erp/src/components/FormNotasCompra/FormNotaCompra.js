@@ -63,7 +63,7 @@ export default function FormNotaCompra(props){
     const formik = useFormik({
       initialValues: {
         nronota: formData.nro_nota,
-        fecha: props.readOnly == true ? formatInTimeZone(formData.fecha, 'America/La_Paz', 'yyy-MM-dd') : formatInTimeZone(new Date(), 'America/La_Paz', 'yyy-MM-dd'),
+        fecha: props.readOnly == true ? formatInTimeZone(formData.fecha, 'UTC', 'yyy-MM-dd') : formatInTimeZone(new Date(), 'UTC', 'yyy-MM-dd'),
         descripcion:  props.readOnly == true ? formData.descripcion : ""
       },
       validationSchema: Yup.object({
@@ -203,7 +203,7 @@ export default function FormNotaCompra(props){
           width:150,
           valueFormatter: (params) => {
             if(params.value != '' && params.value != null){
-              let valueFormatted =formatInTimeZone(params.value, 'America/La_Paz', 'dd/MM/yyy') 
+              let valueFormatted =formatInTimeZone(params.value, 'UTC', 'dd/MM/yyy') 
               return valueFormatted; 
             }else{
               return '';

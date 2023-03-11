@@ -16,31 +16,11 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { useRouter } from "next/router";
 
-async function obtenerGestiones() {
-  return fetch('http://localhost:3000/api/gestiones', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(result => result.json())
- }
-
- async function eliminarGestion(idgestion) {
-  return fetch(`http://localhost:3000/api/gestiones/${idgestion}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(result => result.json())
- }
-
+import { obtenerGestiones, eliminarGestion } from '../services/Gestiones'
 
 
 export default function GestionesDataGrid(props){
 
-  
   const router = useRouter();
   const [state, setState] = useState({
     gestiones:[],
@@ -77,7 +57,7 @@ export default function GestionesDataGrid(props){
     });
   };
   const handleEliminar = async (idgestion) => {
-    let eliminar = await eliminarGestion(idgestion);
+    let eliminar = await eliminarGestion(idgestion, props.jwt);
     if(eliminar.ok){
       handleSubmit();
       setOpenDialog({state:false, id:0})
@@ -98,7 +78,7 @@ export default function GestionesDataGrid(props){
   }
 
   const cargarDatos= async () =>{
-    let gestiones = await obtenerGestiones();
+    let gestiones = await obtenerGestiones(props.jwt);
     if(gestiones.ok){
       let data = gestiones.data;
       let count = 0
@@ -151,7 +131,7 @@ export default function GestionesDataGrid(props){
       type: 'date',
       minWidth:200,
       valueFormatter: (params) => {
-        const valueFormatted =formatInTimeZone(params.value, 'America/La_Paz', 'dd/MM/yyy')
+        const valueFormatted =formatInTimeZone(params.value, 'UTC', 'dd/MM/yyy')
         return valueFormatted;
       },
     },
@@ -161,7 +141,7 @@ export default function GestionesDataGrid(props){
       type: 'date',
       minWidth:200,
       valueFormatter: (params) => {
-        const valueFormatted =formatInTimeZone(params.value, 'America/La_Paz', 'dd/MM/yyy')
+        const valueFormatted =formatInTimeZone(params.value, 'UTC', 'dd/MM/yyy')
         return valueFormatted;
       },
     },
@@ -231,10 +211,11 @@ export default function GestionesDataGrid(props){
       <DataGrid
         rows={state.gestiones}
         columns={columns}
+        getRowId={(row) => row.idgestion}
         localeText={esES.components.MuiDataGrid.defaultProps.localeText}
       />
       <AlertDialog open={openDialog.state} title={"¿Seguro que desea eliminar esta gestión?"} body={"La gestión se eliminará de forma permanente"} btnText={"Eliminar"} close={() => setOpenDialog({state:false,id:0})} confirm={()=>{handleEliminar(openDialog.id)}} />
-      <ModalForm open={modalform.open} tipo={modalform.tipo} datos={modalform.datos} close={handleCloseModal} submit={handleSubmit}></ModalForm>
+      <ModalForm open={modalform.open} tipo={modalform.tipo} datos={modalform.datos} close={handleCloseModal} submit={handleSubmit} jwt={props.jwt} />
     </Box>
     )
 }

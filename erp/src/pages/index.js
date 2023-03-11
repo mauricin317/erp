@@ -49,8 +49,6 @@ function Home() {
           data: emp.data,
           monedas: emp.monedas
         });
-      }else{
-        console.log(emp.mensaje)
       }
   }
 

@@ -15,25 +15,7 @@ import { useRouter } from "next/router";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-async function obtenerPeriodos(idgestion) {
-  return fetch(`http://localhost:3000/api/gestiones/periodos/${idgestion}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(result => result.json())
- }
-
- async function eliminarPeriodo(idperiodo) {
-  return fetch(`http://localhost:3000/api/periodos/${idperiodo}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(result => result.json())
- }
+import { obtenerPeriodos, eliminarPeriodo } from '../services/Periodos'
 
 
 
@@ -73,7 +55,7 @@ export default function PeriodosDataGrid(props){
     });
   };
   const handleEliminar = async (idperiodo) => {
-    let eliminar = await eliminarPeriodo(idperiodo);
+    let eliminar = await eliminarPeriodo(idperiodo, props.jwt);
     if(eliminar.ok){
       handleSubmit();
       setOpenDialog({state:false, id:0});
@@ -89,7 +71,7 @@ export default function PeriodosDataGrid(props){
   }
 
   const cargarDatos= async () =>{
-    let periodos = await obtenerPeriodos(props.idgestion);
+    let periodos = await obtenerPeriodos(props.idgestion, props.jwt);
     if(periodos.ok){
       let data = periodos.data;
       let count = 0
@@ -121,7 +103,7 @@ export default function PeriodosDataGrid(props){
       type: 'date',
       minWidth:200,
       valueFormatter: (params) => {
-        const valueFormatted =formatInTimeZone(params.value, 'America/La_Paz', 'dd/MM/yyy')
+        const valueFormatted =formatInTimeZone(params.value, 'UTC', 'dd/MM/yyy')
         return valueFormatted;
       },
     },
@@ -131,7 +113,7 @@ export default function PeriodosDataGrid(props){
       type: 'date',
       minWidth:200,
       valueFormatter: (params) => {
-        const valueFormatted =formatInTimeZone(params.value, 'America/La_Paz', 'dd/MM/yyy')
+        const valueFormatted =formatInTimeZone(params.value, 'UTC', 'dd/MM/yyy')
         return valueFormatted;
       },
     },
@@ -201,13 +183,14 @@ export default function PeriodosDataGrid(props){
       <DataGrid
         rows={state.periodos}
         columns={columns}
+        getRowId={(row) => row.idperiodo}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         pageSize={pageSize}
         rowsPerPageOptions={[15,30]}
         localeText={esES.components.MuiDataGrid.defaultProps.localeText}
       />
       <AlertDialog open={openDialog.state} title={"¿Seguro que desea eliminar este periodo?"} body={"El periodo se eliminará de forma permanente"} btnText={"Eliminar"} close={() => setOpenDialog({state:false,id:0})} confirm={()=>{handleEliminar(openDialog.id)}} />
-      <ModalForm open={modalform.open} tipo={modalform.tipo} datos={modalform.datos} close={handleCloseModal} submit={handleSubmit} idgestion={props.idgestion} mindate={props.mindate} maxdate={props.maxdate}></ModalForm>
+      <ModalForm open={modalform.open} tipo={modalform.tipo} datos={modalform.datos} close={handleCloseModal} submit={handleSubmit} idgestion={props.idgestion} mindate={props.mindate} maxdate={props.maxdate} jwt={props.jwt} />
     </Box>
     )
 }

@@ -59,7 +59,7 @@ function MonedasDatarid() {
           type: 'date',
           minWidth:200,
           valueFormatter: (params) => {
-            const valueFormatted =formatInTimeZone(params.value, 'America/La_Paz', 'dd/MM/yyy HH:mm:ss')
+            const valueFormatted =formatInTimeZone(params.value, 'UTC', 'dd/MM/yyy HH:mm:ss')
             return valueFormatted;
           },
         },
