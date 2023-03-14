@@ -4,18 +4,21 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "../theme/theme";
 import CuentasTreeView from '../components/CuentasTreeView';
+import useStorage from './../utils/storageHook';
 
 
 export default function Cuentas() {
 
+  const { getItem } = useStorage();
+  const jwt = getItem('token');
 
   return (
     <>
       <Head>
-          <title>Gestiones | ERP</title>
+          <title>Cuentas | ERP</title>
       </Head>
           <h2>Plan de Cuentas</h2>
-          <CuentasTreeView  />
+          <CuentasTreeView jwt={jwt}  />
     </>
   );
 }

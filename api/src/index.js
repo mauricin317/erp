@@ -7,6 +7,7 @@ var usuariosRouter = require('./routes/usuarios.router');
 var empresasRouter = require('./routes/empresas.router');
 var gestionesRouter = require('./routes/gestiones.router');
 var periodosRouter = require('./routes/periodos.router');
+var cuentasRouter = require('./routes/cuentas.router');
 
 const app = express();
 const PORT = 4000;
@@ -22,6 +23,7 @@ app.use('/api/usuarios',usuariosRouter);
 app.use('/api/empresas',empresasRouter);
 app.use('/api/gestiones',gestionesRouter);
 app.use('/api/periodos',periodosRouter);
+app.use('/api/cuentas',cuentasRouter);
 
 // 404: Not found
 app.use(function(req, res, next){

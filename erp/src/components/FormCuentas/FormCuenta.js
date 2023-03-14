@@ -7,29 +7,8 @@ import Grid from '@mui/material/Grid';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
+import { editarCuenta, crearCuenta } from '../../services/Cuentas';
 import 'react-toastify/dist/ReactToastify.min.css';
-
-async function crearCuenta(datos) {
-  return fetch('http://localhost:3000/api/cuentas', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(datos)
-  })
-    .then(result => result.json())
- }
-
- async function editarCuenta(datos, idcuenta) {
-  return fetch(`http://localhost:3000/api/cuentas/${idcuenta}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(datos)
-  })
-    .then(result => result.json())
- }
 
 export default function FormGestion(props){
 
@@ -72,7 +51,7 @@ export default function FormGestion(props){
         }),
         onSubmit: async values => {
             if(props.tipo === "nuevo"){
-              let crear = await crearCuenta(generarNuevo(values));
+              let crear = await crearCuenta(generarNuevo(values), props.jwt);
               if(crear.ok){
                 props.submit();
                 props.close();
@@ -82,7 +61,7 @@ export default function FormGestion(props){
             }
 
             if(props.tipo === "editar"){
-              let editar = await editarCuenta(values,cuenta.dataObj.idcuenta);
+              let editar = await editarCuenta(values,cuenta.dataObj.idcuenta, props.jwt);
               if(editar.ok){
                 props.submit();
                 props.close();

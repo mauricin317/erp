@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
-import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import Box from '@mui/system/Box';
 import AlertDialog from './AlertDialog';
 import clsx from 'clsx';
@@ -105,22 +105,6 @@ export default function GestionesDataGrid(props){
 
   const columns = [
     {
-      field: 'accions2',
-      type:'actions',
-      maxWidth:50,
-      getActions: (params) =>{
-        return(
-          [
-            <GridActionsCellItem key={params.id}
-              icon={<ArrowForwardRoundedIcon color='success'/>}
-              label="Entrar"
-              onClick={()=>{handleEntrar(params.id)}}
-            />
-          ]
-        )
-      } 
-    },
-    {
       field: 'nombre',
       headerName: 'Nombre',
       minWidth:200
@@ -166,10 +150,16 @@ export default function GestionesDataGrid(props){
       field: 'accions',
       headerName: 'Acciones',
       type:'actions',
+      minWidth:150,
       getActions: (params) =>{
         let disabled = params.row.estado === 0;
         return(
           [
+            <GridActionsCellItem key={params.id}
+              icon={<VisibilityIcon color='success'/>}
+              label="Entrar"
+              onClick={()=>{handleEntrar(params.id)}}
+            />,
             <GridActionsCellItem key={params.id}
               icon={<EditRoundedIcon color={!disabled?'info':''}/>}
               label="Editar"

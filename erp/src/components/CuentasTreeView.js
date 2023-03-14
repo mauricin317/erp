@@ -11,45 +11,19 @@ import TreeView from '@mui/lab/TreeView';
 import _ from 'lodash';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ModalForm from './FormCuentas/ModalForm';
 import { toast } from 'react-toastify';
+import { obtenerCuentas, eliminarCuenta } from '../services/Cuentas';
 import 'react-toastify/dist/ReactToastify.min.css';
-var tree_util = require('tree-util')
+import tree_util from 'tree-util'
 
-async function obtenerCuentas() {
-    return fetch('http://localhost:3000/api/cuentas', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(result => result.json())
-   }
+  var standardConfig =  { id : 'idcuenta', parentid : 'idcuentapadre'};
 
-async function eliminarCuenta(idcuenta) {
-    return fetch(`http://localhost:3000/api/cuentas/${idcuenta}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(result => result.json())
-   }
-
-   var standardConfig =  { id : 'idcuenta', parentid : 'idcuentapadre'};
-
-
-
-
-
-
-
-export default function CuentasTreeView(){
+export default function CuentasTreeView(props){
 
     const [state, setState] = useState({
         cuentas:[],
-        isfetched: false,
         niveles: 0,
         idempresa: 0
       });
@@ -69,19 +43,17 @@ export default function CuentasTreeView(){
 
 
       const cargarDatos= async () =>{
-        let cuentas = await obtenerCuentas();
+        let cuentas = await obtenerCuentas(props.jwt);
         if(cuentas.ok){
           var trees = tree_util.buildTrees(cuentas.data, standardConfig);
           setState({
             cuentas: trees,
-            isfetched: true,
             niveles: cuentas.niveles,
             idempresa: cuentas.idempresa
           })
         }else{
           setState({
             cuentas: [],
-            isfetched: true,
             niveles: cuentas.niveles,
             idempresa: cuentas.idempresa
           })
@@ -89,9 +61,9 @@ export default function CuentasTreeView(){
         }
       }
 
-      if(!state.isfetched){
+      useEffect(()=>{
         cargarDatos();
-      }
+      },[])
 
       const handleExpandClick = () => {
         let objNodeIds = state.cuentas[0]._nodeById
@@ -138,7 +110,7 @@ export default function CuentasTreeView(){
       };
       const handleEliminar = async () => {
         let node = state.cuentas[0].getNodeById(selected)
-        let eliminar = await eliminarCuenta(node.dataObj.idcuenta);
+        let eliminar = await eliminarCuenta(node.dataObj.idcuenta, props.jwt);
         if(eliminar.ok){
           handleSubmit();
         }else{
@@ -147,12 +119,7 @@ export default function CuentasTreeView(){
       }
 
       const handleSubmit = () =>{
-        setState({
-          cuentas:state.cuentas,
-          isfetched: false,
-          niveles: state.niveles,
-          idempresa: state.idempresa
-        })
+        cargarDatos();
         setOpenDialog(false);
       }
 
@@ -205,7 +172,7 @@ export default function CuentasTreeView(){
         </CustomTreeItem>
         </TreeView>
         <AlertDialog open={openDialog} title={"¿Seguro que desea eliminar esta cuenta?"} body={"La cuenta se eliminará de forma permanente"} btnText={"Eliminar"} close={() => setOpenDialog(false)} confirm={handleEliminar} />
-        <ModalForm open={modalform.open} tipo={modalform.tipo} datos={modalform.datos} niveles={state.niveles} close={handleCloseModal} submit={handleSubmit}></ModalForm>
+        <ModalForm open={modalform.open} tipo={modalform.tipo} datos={modalform.datos} niveles={state.niveles} close={handleCloseModal} submit={handleSubmit} jwt={props.jwt} />
     </Box>
     )
 };
