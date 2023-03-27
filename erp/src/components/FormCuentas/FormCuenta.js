@@ -53,7 +53,7 @@ export default function FormGestion(props){
             if(props.tipo === "nuevo"){
               let crear = await crearCuenta(generarNuevo(values), props.jwt);
               if(crear.ok){
-                props.submit();
+                props.submit(cuenta);
                 props.close();
               }else{
                 toast.error(crear.mensaje,{theme: "colored"});

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import TreeItem, { useTreeItem } from '@mui/lab/TreeItem';
+import TreeItem, { useTreeItem, treeItemClasses  } from '@mui/lab/TreeItem';
 import clsx from 'clsx';
+import { alpha, styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
 const CustomContent = React.forwardRef(function CustomContent(props, ref) {
@@ -57,8 +58,8 @@ const CustomContent = React.forwardRef(function CustomContent(props, ref) {
       </div>
       <Typography
         onClick={handleSelectionClick}
-        component="div"
-        className={classes.label}
+        variant="h3"
+        //className={classes.label}
       >
         {label}
       </Typography>
@@ -98,7 +99,25 @@ CustomContent.propTypes = {
 };
 
 const CustomTreeItem = (props) => (
-  <TreeItem ContentComponent={CustomContent} {...props} />
+  <StyledTreeItem ContentComponent={CustomContent} {...props} />
 );
 
 export default CustomTreeItem;
+
+
+
+
+const StyledTreeItem = styled((props) => (
+  <TreeItem {...props} />
+))(({ theme }) => ({
+  [`& .${treeItemClasses.iconContainer}`]: {
+    '& .close': {
+      opacity: 0.3,
+    },
+  },
+  [`& .${treeItemClasses.group}`]: {
+    marginLeft: 15,
+    paddingLeft: 23,
+    borderLeft: `1px dashed ${alpha(theme.palette.text.primary, 0.4)}`,
+  },
+}));

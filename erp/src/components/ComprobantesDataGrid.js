@@ -5,56 +5,38 @@ import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
 import Box from '@mui/system/Box';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { formatInTimeZone } from 'date-fns-tz';
 import FormComprobante from './FormComprobante/FormComprobante';
 import { ToastContainer, toast } from 'react-toastify';
+import { obtenerComprobantes } from '../services/Comprobantes';
+import { obtenerDetalleCuentas } from '../services/Cuentas';
 
-async function obtenerComprobantes() {
-  return fetch(`http://localhost:3000/api/comprobantes/`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(result => result.json())
- }
-
- async function obtenerCuentas() {
-  return fetch('http://localhost:3000/api/cuentas/detalle', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(result => result.json())
- }
-
-export default function ComprobantesDataGrid(){
+export default function ComprobantesDataGrid(props){
 
     const [pageSize, setPageSize] = useState(10);
     const [state, setState] = useState({
         comprobantes:[],
-        isfetched: false,
         showForm: false,
         formData:{
-          monedas:[],
+          monedas:null,
           nro_serie:1,
           tipo_cambio:0,
           cuentas: []
-        }
+        },
+        readOnly: false
       });
   
     const cargarDatos= async () =>{
-      let datos_comprobantes = await obtenerComprobantes();
-      let datos_cuentas = await obtenerCuentas();
-      if(datos_comprobantes.ok){
+      let datos_comprobantes = await obtenerComprobantes(props.jwt);
+      
+      if(datos_comprobantes && datos_comprobantes.ok){
+        let datos_cuentas = await obtenerDetalleCuentas(props.jwt);
         let cuentas= []
-        if(datos_cuentas.ok) cuentas = datos_cuentas.data
+        if(datos_cuentas.ok) cuentas = datos_cuentas.data;
         let serie = datos_comprobantes.data.length + 1;
           setState({
             comprobantes: datos_comprobantes.data,
-            isfetched:true,
             showForm:false,
             formData:{
               monedas: datos_comprobantes.monedas,
@@ -64,6 +46,8 @@ export default function ComprobantesDataGrid(){
             },
             readOnly: false
           });
+      }else{
+        toast.error('Bad Request', {theme: "colored"})
       }
     }
 
@@ -84,17 +68,15 @@ export default function ComprobantesDataGrid(){
 
       setState({
         comprobantes:state.comprobantes,
-        isfetched: state.isfetched,
         showForm: state.showForm,
         formData: newData,
         readOnly: true
       })
     }
 
-
-    if(!state.isfetched){
+    useEffect(()=>{  
         cargarDatos();
-    }
+    },[])
 
     const openForm = () =>{
       if(state.formData.monedas.length!=2){
@@ -107,7 +89,6 @@ export default function ComprobantesDataGrid(){
       }
       setState({
         comprobantes:state.comprobantes,
-        isfetched: state.isfetched,
         showForm: true,
         formData: {
           monedas: state.formData.monedas,
@@ -122,11 +103,9 @@ export default function ComprobantesDataGrid(){
     const closeForm = () =>{
       
       setState({
-        comprobantes:state.comprobantes,
-        isfetched: false,
+        ...state,
         showForm: false,
-        formData: state.formData,
-        readOnly: false
+        readOnly: false,
       })
     }
 
@@ -157,7 +136,6 @@ export default function ComprobantesDataGrid(){
       }
       setState({
         comprobantes:state.comprobantes,
-        isfetched: state.isfetched,
         showForm: true,
         formData: newData,
         readOnly: true
@@ -254,32 +232,33 @@ export default function ComprobantesDataGrid(){
             {!state.showForm ?
             <div>
               <h2>Comprobantes</h2>
-            <Stack sx={{ '& button': { m: 1 } }} direction="row">
-                <Button variant="contained" color="primary" onClick={openForm} disabled={!state.isfetched}><AddCircleRoundedIcon/></Button>
-            </Stack>
-            <Box sx={{ height: 500, width: 1,
-                        '& .estado.abierto': {
-                          backgroundColor: '#00c292',
-                          color: '#f9f9f9',
-                          fontWeight: '600',
-                        },
-                        '& .estado.cerrado': {
-                          backgroundColor: '#e46a76',
-                          color: '#f9f9f9',
-                          fontWeight: '600',
-                        } }} 
-            >
-            <DataGrid
-                rows={state.comprobantes}
-                columns={columns}
-                localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                pageSize={pageSize}
-                rowsPerPageOptions={[10,20,30]}
-            /></Box>
-            <ToastContainer position="top-right" autoClose={2500} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover />
+              <Stack sx={{ '& button': { m: 1 } }} direction="row">
+                  <Button variant="contained" color="primary" onClick={openForm} disabled={!Boolean(state.formData.monedas)}><AddCircleRoundedIcon/></Button>
+              </Stack>
+              <Box sx={{ height: 500, width: 1,
+                          '& .estado.abierto': {
+                            backgroundColor: '#00c292',
+                            color: '#f9f9f9',
+                            fontWeight: '600',
+                          },
+                          '& .estado.cerrado': {
+                            backgroundColor: '#e46a76',
+                            color: '#f9f9f9',
+                            fontWeight: '600',
+                          } }} 
+              >
+                <DataGrid
+                    rows={state.comprobantes}
+                    columns={columns}
+                    localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                    pageSize={pageSize}
+                    rowsPerPageOptions={[10,20,30]}
+                />
+              </Box>
             </div>
-            : <FormComprobante formData={state.formData} closeForm={closeForm} readOnly={state.readOnly} enableReadOnly={enableReadOnly} newForm={openForm}/>}
+            : <FormComprobante formData={state.formData} closeForm={closeForm} readOnly={state.readOnly} enableReadOnly={enableReadOnly} newForm={openForm} jwt={props.jwt} />}
+            <ToastContainer position="top-right" autoClose={2500} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover />
         </div>
         
     )

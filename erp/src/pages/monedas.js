@@ -5,10 +5,13 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "../theme/theme";
 import MonedasDataGrid from '../components/MonedasDataGrid';
+import useStorage from '../utils/storageHook';
 
 
 export default function Monedas() {
 
+  const { getItem } = useStorage();
+  const jwt = getItem('token');
 
   return (
     <>
@@ -16,7 +19,7 @@ export default function Monedas() {
           <title>Monedas | ERP</title>
       </Head>
           <h2>Configuracion de Monedas</h2>
-          <MonedasDataGrid/>
+          <MonedasDataGrid jwt={jwt}/>
     </>
   );
 }

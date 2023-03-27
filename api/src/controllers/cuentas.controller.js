@@ -10,8 +10,12 @@ module.exports = {
           where: {
             idempresa: idempresa
           },
-          include:{
-            cuenta: true
+          select:{
+            cuenta: {
+              orderBy:{
+                codigo: 'asc'
+              }
+            },
           }
           
         })
@@ -45,6 +49,7 @@ module.exports = {
   },
   getCuentaDetalle: async (req,res)=>{
     try {
+      const { idempresa, idusuario } = req.user
       const fidCuentasDetalle = await prisma.$queryRaw`
       SELECT idcuenta as id, *,concat(codigo,' - ', nombre) as label  FROM cuenta WHERE idempresa=${idempresa} AND tipocuenta=1 ORDER BY replace(codigo, '.', '')::int ASC;
       `
@@ -68,22 +73,53 @@ module.exports = {
             equals: nombre,
             mode: 'insensitive',
           },
+          idempresa,
         },
       })
       if(validarNombre){
         res.json({ok:false, mensaje:"Ya existe ese nombre de Cuenta"})
       }else{
+
+        let ultimaCuenta;
+        if(idcuentapadre != null){
+          ultimaCuenta = await prisma.cuenta.findFirst({
+            where:{
+              idcuentapadre: Number(idcuentapadre)
+            },
+            orderBy:{
+              codigo: 'desc'
+            }
+          })
+        }else{
+          ultimaCuenta = await prisma.cuenta.findFirst({
+            where:{
+              nivel: 1,
+              idempresa
+            },
+            orderBy:{
+              codigo: 'desc'
+            }
+          })
+        }
+        let codigoNuevo;
+        if(ultimaCuenta){
+          let codigoPadre = ultimaCuenta.codigo
+          codigoNuevo = (codigoPadre.split('.').map((num, i) => i==(nivel-1)? (parseInt(num)+1)+'' : num)).join('.')
+        }else{
+          codigoNuevo = codigo
+        }
+
         const crearCuenta = await prisma.empresa.update({
           where: { idempresa: idempresa },
           data:{
             cuenta:{
               create:{
-                codigo: codigo,
+                codigo: codigoNuevo,
                 nombre,
                 nivel: Number(nivel),
                 tipocuenta: Number(tipocuenta),
                 idusuario: idusuario,
-                idcuentapadre: Number(idcuentapadre)
+                idcuentapadre: idcuentapadre ? Number(idcuentapadre) : null
               }
             }
           }

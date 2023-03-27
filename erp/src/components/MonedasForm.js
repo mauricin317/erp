@@ -5,27 +5,18 @@ import { MenuItem } from '@mui/material';
 import Box from '@mui/system/Box';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import { useFormik } from 'formik';
+import { crearEmpresamoneda } from '../services/EmpresaMonedas';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-async function crearEmpresamoneda(datos) {
-  return fetch('http://localhost:3000/api/empresamonedas', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(datos)
-  })
-    .then(result => result.json())
- }
 
 function MonedasForm(props) {
     let datos = props.datos
     const formik = useFormik({
         initialValues: {
           monedaalternativa: datos.idmonedaalternativa != null ? datos.idmonedaalternativa : '',
-          cambio: datos != null ? datos.cambio : 0,
+          cambio: datos.cambio != null ? datos.cambio : 0,
         },
         validationSchema: Yup.object({
             monedaalternativa: Yup.number().required('Requerido'),
@@ -35,12 +26,12 @@ function MonedasForm(props) {
           if(values.monedaalternativa === datos.idmonedaalternativa && values.cambio === datos.cambio){
             toast.error("Debe modificar los datos para guardar un nuevo registro",{theme: "colored"});
           }else{
-            let d ={
+            let data ={
               idempresamoneda: datos.id,
               idmonedaalternativa: values.monedaalternativa,
               cambio: values.cambio
             }
-            let crear = await crearEmpresamoneda(d);
+            let crear = await crearEmpresamoneda(data, props.jwt);
               if(crear.ok){
                 props.submit();
                 toast.success("Creado con éxito",{theme: "colored"});
@@ -54,7 +45,7 @@ function MonedasForm(props) {
     return ( 
         <Box  textAlign={'center'} sx={{mb:2}}>
             <form onSubmit={formik.handleSubmit}>
-            <Stack direction="row" spacing={2} justifyContent={'center'}>
+            <Stack direction="row" spacing={2} justifyContent={'center'} alignItems={"flex-start"}>
                 <TextField 
                 sx={{margin:0}}
                 label="Moneda Principal"

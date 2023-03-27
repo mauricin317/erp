@@ -26,7 +26,7 @@ module.exports = {
         try {
             const {idempresa} = req.body;
             const user = req.user;
-            if(idempresa && user){
+            if(user){
                 tokenData = {
                     idusuario: user.idusuario,
                     nombre: user.nombre,

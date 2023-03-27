@@ -9,8 +9,9 @@ import CustomTreeItem from './CustomTreeItem'
 import Box from '@mui/system/Box';
 import TreeView from '@mui/lab/TreeView';
 import _ from 'lodash';
-import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
+import AddCircleTwoToneIcon from '@mui/icons-material/AddCircleTwoTone';
+import DoDisturbOnTwoToneIcon from '@mui/icons-material/DoDisturbOnTwoTone';
+import FiberManualRecordOutlinedIcon from '@mui/icons-material/FiberManualRecordOutlined';
 import { useState, useEffect } from 'react';
 import ModalForm from './FormCuentas/ModalForm';
 import { toast } from 'react-toastify';
@@ -118,9 +119,14 @@ export default function CuentasTreeView(props){
         }
       }
 
-      const handleSubmit = () =>{
+      const handleSubmit = (cuenta) =>{
         cargarDatos();
         setOpenDialog(false);
+        if(cuenta){
+          setExpanded((oldExpanded) =>
+            _.concat(oldExpanded,[(cuenta.id).toString()])
+          );
+        }
       }
 
       const handleSelect = (event, nodeId) => {
@@ -164,9 +170,9 @@ export default function CuentasTreeView(props){
             
         </Stack>
         <Button sx={{m:1}} variant="outlined" size="small" color="secondary" onClick={handleExpandClick}>
-          {expanded.length === 1 ? <><AddBoxOutlinedIcon />Expandir Todos</> : <><IndeterminateCheckBoxOutlinedIcon />Cerrar todos</>}
+          {expanded.length === 1 ? <><AddCircleTwoToneIcon />Expandir Todos</> : <><DoDisturbOnTwoToneIcon />Cerrar todos</>}
         </Button>
-        <TreeView aria-label="file system navigator" selected={selected} onNodeSelect={handleSelect} defaultCollapseIcon={<IndeterminateCheckBoxOutlinedIcon />} expanded={expanded} onNodeToggle={handleToggle} defaultExpandIcon={<AddBoxOutlinedIcon />} sx={{ maxHeight: 430, marginLeft: '50px', flexGrow: 1, maxWidth: '100%', overflowY: 'auto' }} >
+        <TreeView aria-label="file system navigator" selected={selected} onNodeSelect={handleSelect} defaultCollapseIcon={<DoDisturbOnTwoToneIcon color='error' />} expanded={expanded} onNodeToggle={handleToggle} defaultExpandIcon={<AddCircleTwoToneIcon color='secondary' />} sx={{ maxHeight:680, marginLeft: '50px', flexGrow: 1, maxWidth: '100%', overflowY: 'auto' }} defaultEndIcon={<FiberManualRecordOutlinedIcon color='info' />} >
         <CustomTreeItem key={"0"} nodeId={"0"} label={`Plan de Cuentas`}>
             {state.cuentas.map((tree) => renderTree(tree.rootNode))}
         </CustomTreeItem>

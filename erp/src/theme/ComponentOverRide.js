@@ -119,6 +119,27 @@ const components = {
       },
     },
   },
+  MuiDataGrid: {
+    styleOverrides: {
+      root: {
+        //backgroundColor: 'red',
+        '& .MuiDataGrid-columnHeaders': {
+          backgroundColor: '#37474f',
+          border: '1px',
+          color: 'white'
+
+        },
+        '& .MuiDataGrid-columnHeaderTitle':{
+          fontWeight : 'bold',
+          
+        },
+        '& .MuiDataGrid-row:nth-of-type(odd)': {
+          backgroundColor: '#eee',
+        }
+      }
+    }
+  }
+  
 };
 
 export default components;

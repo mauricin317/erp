@@ -5,17 +5,20 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "../theme/theme";
 import ComprobantesDataGrid from "../components/ComprobantesDataGrid";
+import useStorage from './../utils/storageHook';
 
 
 export default function Comprobantes() {
 
+  const { getItem } = useStorage();
+  const jwt = getItem('token');
 
   return (
     <>
       <Head>
           <title>Comprobantes | ERP</title>
       </Head>
-          <ComprobantesDataGrid />
+          <ComprobantesDataGrid jwt={jwt} />
     </>
   );
 }

@@ -8,6 +8,9 @@ var empresasRouter = require('./routes/empresas.router');
 var gestionesRouter = require('./routes/gestiones.router');
 var periodosRouter = require('./routes/periodos.router');
 var cuentasRouter = require('./routes/cuentas.router');
+var empresamonedasRouter = require('./routes/empresamonedas.router');
+var comprobantesRouter = require('./routes/comprobantes.router');
+
 
 const app = express();
 const PORT = 4000;
@@ -24,13 +27,14 @@ app.use('/api/empresas',empresasRouter);
 app.use('/api/gestiones',gestionesRouter);
 app.use('/api/periodos',periodosRouter);
 app.use('/api/cuentas',cuentasRouter);
+app.use('/api/comprobantes',comprobantesRouter);
 
 // 404: Not found
 app.use(function(req, res, next){
   res.status(404).json({ERROR: 'Not found.'});
 });
 
-// 500: Error reporing
+// 500: Error reporting
 app.use(function(err, req, res, next){
   console.error(err.stack);
   res.status(500).json({ERROR: 'Internal server error.'} );

@@ -13,7 +13,7 @@ import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import DoDisturbOnRoundedIcon from '@mui/icons-material/DoDisturbOnRounded';
 import AlertDialog from '../AlertDialog';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 import Box from '@mui/system/Box';
 import { formatInTimeZone } from 'date-fns-tz';
@@ -22,39 +22,7 @@ import * as Yup from 'yup';
 import ModalForm from './ModalForm';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-
-
-async function crearComrpobante(datos) {
-  return fetch('http://localhost:3000/api/comprobantes', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(datos)
-  })
-    .then(result => result.json())
- }
-
-async function obtenerDetalles(idcomprobante) {
-  return fetch(`http://localhost:3000/api/comprobantes/detalles/${idcomprobante}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(result => result.json())
-}
-
-async function anularComprobante(datos) {
-  return fetch(`http://localhost:3000/api/comprobantes/`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(datos)
-  })
-    .then(result => result.json())
-}
+import { obtenerDetalles, crearComrpobante, anularComprobante } from '../../services/Comprobantes';
 
 export default function FormComprobante(props){
 
@@ -94,7 +62,7 @@ export default function FormComprobante(props){
               idmoneda: values.moneda,
               detalles: detalles
             }
-            let resultado = await crearComrpobante(comprobante);
+            let resultado = await crearComrpobante(comprobante, props.jwt);
             if (resultado.ok){
               toast.success(resultado.mensaje,{theme: "colored"});
               values.serie=resultado.datos.serie;
@@ -124,15 +92,18 @@ export default function FormComprobante(props){
     const [detalles, setDetalles] = useState([]);
 
     const cargarDetalles = async () =>{
-      let traerDetalles = await obtenerDetalles(formData.idcomprobante)
+      let traerDetalles = await obtenerDetalles(formData.idcomprobante, props.jwt)
       if(traerDetalles.ok){
         setDetalles(traerDetalles.data);
       }
     }
 
-    if(props.readOnly && detalles.length == 0){
-      cargarDetalles();
-    }
+    useEffect(()=>{
+      if(props.readOnly && detalles.length == 0){
+        cargarDetalles();
+      }
+    },[])
+    
 
     let _cuentas = _.differenceBy(props.formData.cuentas,detalles, 'idcuenta');
 
@@ -191,7 +162,7 @@ export default function FormComprobante(props){
         idcomprobante: formData.idcomprobante,
         estado: -1
       }
-      let respuesta = await anularComprobante(data);
+      let respuesta = await anularComprobante(data, props.jwt);
       if (respuesta.ok){
         setEstado("Anulado");
         toast.success("Comprobante Anulado",{theme: "colored"});

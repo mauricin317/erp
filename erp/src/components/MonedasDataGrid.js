@@ -4,19 +4,11 @@ import MonedasForm from './MonedasForm';
 import { useState } from 'react';
 import { formatInTimeZone } from 'date-fns-tz';
 import { ToastContainer } from 'react-toastify';
+import { obtenerEmpresamonedas } from '../services/EmpresaMonedas';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-async function obtenerEmpresamonedas() {
-    return fetch(`http://localhost:3000/api/empresamonedas/`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(result => result.json())
-   }
 
-function MonedasDatarid() {
+function MonedasDatarid(props) {
 
     const [pageSize, setPageSize] = useState(5);
     const [state, setState] = useState({
@@ -36,7 +28,7 @@ function MonedasDatarid() {
       }
 
     const cargarDatos= async () =>{
-        let registros = await obtenerEmpresamonedas();
+        let registros = await obtenerEmpresamonedas(props.jwt);
         
         if(registros.ok){
             setState({
@@ -95,7 +87,7 @@ function MonedasDatarid() {
 
     return ( <Box>
             {state.isfetched ?
-                <MonedasForm monedas={state.monedas} datos={state.isfetched ? state.empresamonedas[0] : null} submit={handleSubmit} readOnly={state.tieneComprobante} /> : ''}
+                <MonedasForm monedas={state.monedas} datos={state.isfetched ? state.empresamonedas[0] : null} submit={handleSubmit} readOnly={state.tieneComprobante} jwt={props.jwt} /> : ''}
             <Box>
                 <DataGrid
                     autoHeight 
