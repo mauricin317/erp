@@ -2,29 +2,12 @@ import React, { useState, useEffect} from "react";
 import FeatherIcon from "feather-icons-react";
 import { AppBar, Box, IconButton, Toolbar } from "@mui/material";
 import PropTypes from "prop-types";
-import useStorage from "../../utils/storageHook";
 
-import { obtenerSesion } from "../../services/Usuarios";
 // Dropdown Component
 import SearchDD from "./SearchDD";
 import ProfileDD from "./ProfileDD";
 
-const Header = ({ sx, customClass, toggleMobileSidebar, position }) => {
-
-  const { getItem } = useStorage();
-  const jwt = getItem('token');
-  const [sesionData, setSesionData] = useState(null);
-
-  const cargarUsuario = async() =>{
-    let sesionData = await obtenerSesion( jwt);
-    if(sesionData.ok){
-      setSesionData(sesionData.data);
-    }
-  }
-
-  useEffect(()=>{
-    cargarUsuario();
-  },[])
+const Header = ({ sx, customClass, toggleMobileSidebar, position, sesionData, jwt}) => {
 
   return (
     <AppBar sx={sx} position={position} elevation={0} className={customClass}>
@@ -38,10 +21,11 @@ const Header = ({ sx, customClass, toggleMobileSidebar, position }) => {
             display: {
               xl: "none",
               xs: "flex",
+              color:"black"
             },
           }}
         >
-          <FeatherIcon icon="menu" width="20" height="20" />
+          <FeatherIcon icon="menu" width="40" height="40" />
         </IconButton>
         {/* ------------------------------------------- */}
         {/* Search Dropdown */}

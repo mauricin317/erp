@@ -14,16 +14,29 @@ import {
   Button,
   Divider,
 } from "@mui/material";
+import { actualizarEmpresaSesion } from '../../services/Usuarios';
 import { useRouter } from "next/router";
 
 
 
 const ProfileDD = (props) => {
 
-  const { removeItem } = useStorage();
+  const { removeItem, setItem } = useStorage();
   const router = useRouter();
   const [anchorEl4, setAnchorEl4] = React.useState(null);
 
+  const changeEmpresa = async () => {
+    let data = {
+      idempresa: null
+    }
+    let session = await actualizarEmpresaSesion(data, props.jwt);
+      if(session.ok){
+        setItem('token',session.token)
+        router.push('/')
+      }
+    
+  };
+  
   const logout = async () => {
     removeItem('token')
     router.push('/')
@@ -67,6 +80,7 @@ const ProfileDD = (props) => {
               fontWeight="700"
               sx={{
                 ml: 1,
+                color:'black'
               }}
             >
               {props.sesion? props.sesion.nombre:""}
@@ -75,35 +89,7 @@ const ProfileDD = (props) => {
           </Box>
         </Box>
       </Button>
-      <Button
-        aria-label="menu"
-        aria-controls="profile-menu"
-        aria-haspopup="true"
-        variant="contained" color="danger" style={{color:"white"}} onClick={logout}
-      >
-        <Box display="flex" alignItems="center">
-       <FeatherIcon icon="power" width="15" height="15" />
-          <Box
-            sx={{
-              display: {
-                xs: "none",
-                sm: "flex",
-              },
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              variant="h5"
-              fontWeight="700"
-              sx={{
-                ml: 1,
-              }}
-            >
-              Cerrar Sesion
-            </Typography>
-          </Box>
-        </Box>
-      </Button>
+  
       <Menu
         id="profile-menu"
         anchorEl={anchorEl4}
@@ -124,20 +110,18 @@ const ProfileDD = (props) => {
               onClick={handleClose4}
               sx={{p:0}}
             >
-              <ListItemButton>
-                <Link href="/" style={{textDecoration: 'none', display:'flex', alignItems:'center', flexWrap: 'wrap'}} >
-                <FeatherIcon icon="refresh-ccw" width="20" height="20" />
-                <ListItemText sx={{ml:1}} primary={'Cambiar empresa'} 
+              <ListItemButton onClick={changeEmpresa}>
+                {/* <Link href="/" style={{textDecoration: 'none', display:'flex', alignItems:'center', flexWrap: 'wrap'}} > */}
+                
+                <ListItemText sx={{ml:1,color:'black'}} primary={'Cambiar empresa'} 
                 />
-                </Link>
+              </ListItemButton>
+              <ListItemButton onClick={logout}>
+                <ListItemText sx={{ml:1,color:'black'}}  primary={'Cerrar Sesion'} />
               </ListItemButton>
             </List>
           </Box>
-          {/* <Box p={2}>
-              <Button fullWidth variant="contained" color="danger" style={{color:"white"}} onClick={logout}>
-                Cerrar Sesion
-              </Button>
-            </Box> */}
+          
         </Box>
       </Menu>
     </>

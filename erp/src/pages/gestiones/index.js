@@ -14,10 +14,10 @@ export default function Gestiones(props) {
   return (
     <>
           <Head>
-              <title>Gestiones | ERP</title>
+              <title>Gestiones</title>
           </Head>
-          <h2>Configuracion de Gestiones</h2>
-          <GestionesDataGrid jwt={jwt} />
+         <div style={{padding:'0 100px'}}> <h2>Gestiones</h2>
+          <GestionesDataGrid jwt={jwt} /></div>
           </>
   );
 }

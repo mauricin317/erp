@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   experimentalStyled,
   useMediaQuery,
@@ -8,6 +8,9 @@ import {
 import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
 import Footer from "./footer/Footer";
+import useStorage from "../utils/storageHook";
+
+import { obtenerSesion } from "../services/Usuarios";
 
 const MainWrapper = experimentalStyled("div")(() => ({
   display: "flex",
@@ -31,22 +34,42 @@ const PageWrapper = experimentalStyled("div")(({ theme }) => ({
 }));
 
 const FullLayout = ({ children }) => {
+  const { getItem } = useStorage();
+  const jwt = getItem('token');
   const [isSidebarOpen, setSidebarOpen] = React.useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = React.useState(false);
   const xlUp = useMediaQuery((theme) => theme.breakpoints.up("xl"));
+
+  const [sesionData, setSesionData] = useState(null);
+
+  const cargarUsuario = async() =>{
+    let sesionData = await obtenerSesion( jwt);
+    if(sesionData.ok){
+      setSesionData(sesionData.data);
+    }
+  }
+
+  useEffect(()=>{
+    cargarUsuario();
+  },[children])
+
+
+
   return (
     <MainWrapper>
       <Header
         sx={{
           paddingLeft: isSidebarOpen && xlUp ? "265px" : "",
-          backgroundColor: "#fbfbfb",
+          backgroundColor: "#686c6e",
         }}
         toggleMobileSidebar={() => setMobileSidebarOpen(true)}
+        sesionData={sesionData} jwt={jwt}
       />
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         isMobileSidebarOpen={isMobileSidebarOpen}
         onSidebarClose={() => setMobileSidebarOpen(false)}
+        sesionData={sesionData} jwt={jwt}
       />
       <PageWrapper>
         <Container

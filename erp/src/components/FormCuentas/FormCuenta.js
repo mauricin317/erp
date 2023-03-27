@@ -77,16 +77,19 @@ export default function FormGestion(props){
         <form onSubmit={formik.handleSubmit}>   
             <Box sx={{pb: 1,pt: 3}}>
               <Typography align="center" color="textSecondary" variant="h5">
-                {props.tipo === "nuevo" ? "Nueva" : "Editar"} Cuenta
+                {props.tipo === "nuevo" ? "Crear" : "Editar"} Cuenta
               </Typography>
             </Box>
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
+              <Typography>
+            Nombre de Cuenta
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.nombre && formik.errors.nombre)}
                   fullWidth
                   helperText={formik.touched.nombre && formik.errors.nombre}
-                  label="Nombre"
+                 
                   margin="normal"
                   name="nombre"
                   onBlur={formik.handleBlur}
@@ -99,7 +102,7 @@ export default function FormGestion(props){
               </Grid>
             </Grid>
             <Box sx={{ py: 2,display:'flex',justifyContent:'end' }}>
-              <Button sx={{mx: 3}} size="large" color="primary" disabled={formik.isSubmitting} type="submit" variant="contained">
+              <Button sx={{mx: 3}} size="large" color="success" disabled={formik.isSubmitting} type="submit" variant="contained">
                 Guardar
               </Button>
               <Button sx={{mx: 3}} size="large" color="error" variant="contained" disabled={formik.isSubmitting}  onClick={props.close}>Cancelar</Button>

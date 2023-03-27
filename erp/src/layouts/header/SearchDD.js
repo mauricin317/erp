@@ -11,6 +11,8 @@ const SearchDD = (props) => {
     let empresa = await obtenerEmpresa(props.sesion.idempresa, props.jwt);
     if(empresa.ok){
       setNombre(empresa.data.nombre);
+    }else{
+      setNombre('');
     }
   }
 
@@ -22,7 +24,7 @@ const SearchDD = (props) => {
   
   return (
     <>
-      <h2>Empresa: {nombre}</h2>
+      <h2 style={{color:'black'}}>{nombre}</h2>
     </>
   );
 };

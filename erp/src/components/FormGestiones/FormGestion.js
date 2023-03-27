@@ -64,16 +64,19 @@ export default function FormGestion(props){
         <form onSubmit={formik.handleSubmit}>   
             <Box sx={{pb: 1,pt: 3}}>
               <Typography align="center" color="textSecondary" variant="h5">
-                {props.tipo === "nuevo" ? "Nueva" : "Editar"} Gestion
+                {props.tipo === "nuevo" ? "Crear" : "Editar"} Gestion
               </Typography>
             </Box>
             <Grid container spacing={2}>
               <Grid item md={12} xs={12}>
+              <Typography>
+              Nombre de Gestion
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.nombre && formik.errors.nombre)}
                   fullWidth
                   helperText={formik.touched.nombre && formik.errors.nombre}
-                  label="Nombre"
+                
                   margin="normal"
                   name="nombre"
                   onBlur={formik.handleBlur}
@@ -84,12 +87,15 @@ export default function FormGestion(props){
                   focused
                 />
               </Grid>
-              <Grid item md={12} xs={12}>
+              <Grid item md={6} xs={12}>
+              <Typography>
+              Fecha de Inicio
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.fechainicio && formik.errors.fechainicio)}
                   fullWidth
                   helperText={formik.touched.fechainicio && formik.errors.fechainicio}
-                  label="Fecha de Inicio"
+                
                   margin="normal"
                   name="fechainicio"
                   onBlur={formik.handleBlur}
@@ -100,12 +106,15 @@ export default function FormGestion(props){
                   focused
                 />
               </Grid>
-              <Grid item md={12} xs={12}>
+              <Grid item md={6} xs={12}>
+              <Typography>
+              Fecha de Fin
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.fechafin && formik.errors.fechafin)}
                   fullWidth
                   helperText={formik.touched.fechafin && formik.errors.fechafin}
-                  label="Fecha de Fin"
+                
                   margin="normal"
                   name="fechafin"
                   onBlur={formik.handleBlur}
@@ -118,7 +127,7 @@ export default function FormGestion(props){
               </Grid>
             </Grid>
             <Box sx={{ py: 2,display:'flex',justifyContent:'end' }}>
-              <Button sx={{mx: 3}} size="large" color="primary" disabled={formik.isSubmitting} type="submit" variant="contained">
+              <Button sx={{mx: 3}} size="large" color="success" disabled={formik.isSubmitting} type="submit" variant="contained">
                 Guardar
               </Button>
               <Button sx={{mx: 3}} size="large" color="error" variant="contained" disabled={formik.isSubmitting}  onClick={props.close}>Cancelar</Button>

@@ -7,11 +7,10 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  maxHeight: '95vh',
+ width:'50%',
   bgcolor: 'background.paper',
-  border: '1px solid #6a1b9a',
   boxShadow: 24,
-  p: 2,
+  px: 0,
 };
 
 export default function ModalForm(props) {

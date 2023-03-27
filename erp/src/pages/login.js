@@ -54,7 +54,7 @@ export default function Login() {
   return(
     <>
     <Head>
-        <title>Login | ERP</title>
+        <title>Login</title>
     </Head>
     <Box
         component="main"
@@ -62,31 +62,36 @@ export default function Login() {
           alignItems: 'center',
           display: 'flex',
           flexGrow: 1,
-          minHeight: '100vh'
+          minHeight: '100vh',
+          backgroundColor:'#858785'
         }}
       >
-        <Container maxWidth="sm">
+        <Container maxWidth="sm"   sx={{
+                pb: 1,
+                pt: 3,
+                backgroundColor:'white'
+                
+              }}>
           <form onSubmit={formik.handleSubmit}>
             <Box
               sx={{
                 pb: 1,
-                pt: 3
+                pt: 3,
+                
               }}
             >
-              <Typography
-                align="center"
-                color="textSecondary"
-                variant="h3"
-                
-              >
-                Iniciar Sesión
-              </Typography>
+           
             </Box>
+            <Typography>
+Username
+            </Typography>
+         
+        
             <TextField
               error={Boolean(formik.touched.usuario && formik.errors.usuario)}
               fullWidth autoComplete='off'
               helperText={formik.touched.usuario && formik.errors.usuario}
-              label="Nombre de Usuario"
+             
               margin="normal"
               name="usuario"
               onBlur={formik.handleBlur}
@@ -95,11 +100,14 @@ export default function Login() {
               value={formik.values.usuario}
               variant="outlined"
             />
+                  <Typography>
+Password
+            </Typography>
             <TextField
               error={Boolean(formik.touched.contraseña && formik.errors.contraseña)}
               fullWidth autoComplete='off'
               helperText={formik.touched.contraseña && formik.errors.contraseña}
-              label="Contraseña"
+           
               margin="normal"
               name="contraseña"
               onBlur={formik.handleBlur}
@@ -112,12 +120,11 @@ export default function Login() {
               <Button
                 color="primary"
                 disabled={formik.isSubmitting}
-                fullWidth 
-                size="large"
                 type="submit"
                 variant="contained"
+                sx={{ height:'50px' }}
               >
-                Log In
+              Login
               </Button>
             </Box>
           </form>

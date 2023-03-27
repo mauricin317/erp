@@ -45,13 +45,14 @@ export default function Periodos() {
   return (
     <>
           <Head>
-              <title>Periodos | ERP</title>
+              <title>Periodos</title>
           </Head>
-          <div>
-            <Button onClick={() => router.back()} sx={{display: 'inline-block'}}><ArrowBackRoundedIcon/></Button>
-            <h2 style={{display: 'inline-block'}}>Configuracion de Periodos - {gestion.datos!==null?gestion.datos.nombre:""}</h2>
+          <div  style={{padding:'0 100px'}}>
+           
+            <h2 style={{display: 'inline-block'}}>Periodos - {gestion.datos!==null?gestion.datos.nombre:""}</h2>
+            <PeriodosDataGrid idgestion={idgestion} mindate={gestion.datos!==null?formatInTimeZone(gestion.datos.fechainicio, 'UTC', 'yyy-MM-dd'):""} maxdate={gestion.datos!==null?formatInTimeZone(gestion.datos.fechafin, 'UTC', 'yyy-MM-dd'):""} jwt={jwt}/>
           </div>
-          <PeriodosDataGrid idgestion={idgestion} mindate={gestion.datos!==null?formatInTimeZone(gestion.datos.fechainicio, 'UTC', 'yyy-MM-dd'):""} maxdate={gestion.datos!==null?formatInTimeZone(gestion.datos.fechafin, 'UTC', 'yyy-MM-dd'):""} jwt={jwt}/>
+         
           
           </>
   );

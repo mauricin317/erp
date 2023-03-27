@@ -61,19 +61,22 @@ export default function FormEmpresa(props){
       });
     return(
       <Container maxWidth="md">
-        <form onSubmit={formik.handleSubmit}>   
+        <form onSubmit={formik.handleSubmit} >   
             <Box sx={{pb: 1,pt: 3}}>
               <Typography align="center" color="textSecondary" variant="h3">
-                {props.tipo === "nuevo" ? "Nueva" : "Editar"} Empresa
+                {props.tipo === "nuevo" ? "Crear" : "Editar"} Empresa
               </Typography>
             </Box>
             <Grid container spacing={1}>
-              <Grid item md={12} xs={12}>
+              <Grid item md={9} xs={12}>
+              <Typography>
+            Nombre
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.nombre && formik.errors.nombre)}
                   fullWidth
                   helperText={formik.touched.nombre && formik.errors.nombre}
-                  label="Nombre"
+               
                   margin="normal"
                   name="nombre"
                   onBlur={formik.handleBlur}
@@ -86,12 +89,15 @@ export default function FormEmpresa(props){
                   }
                 />
               </Grid>
-              <Grid item md={6} xs={12}>
+              <Grid item md={3} xs={12}>
+              <Typography>
+NIT
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.nit && formik.errors.nit)}
                   fullWidth
                   helperText={formik.touched.nit && formik.errors.nit}
-                  label="Nit"
+                 
                   margin="normal"
                   name="nit"
                   onBlur={formik.handleBlur}
@@ -104,12 +110,15 @@ export default function FormEmpresa(props){
                   }
                 />
               </Grid>
-              <Grid item md={6} xs={12}>
+              <Grid item md={4} xs={12}>
+              <Typography>
+Niveles
+            </Typography>
                 <TextField
                   fullWidth
                   error={Boolean(formik.touched.niveles && formik.errors.niveles)}
                   helperText={formik.touched.niveles && formik.errors.niveles}
-                  label="Niveles"
+                
                   margin="normal"
                   name="niveles"
                   onBlur={formik.handleBlur}
@@ -126,12 +135,15 @@ export default function FormEmpresa(props){
                   <MenuItem value={7} >7</MenuItem>
                 </TextField>
               </Grid>
-              <Grid item md={6} xs={12}>
+              <Grid item md={4} xs={12}>
+              <Typography>
+Sigla
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.sigla && formik.errors.sigla)}
                   fullWidth
                   helperText={formik.touched.sigla && formik.errors.sigla}
-                  label="Sigla"
+              
                   margin="normal"
                   name="sigla"
                   onBlur={formik.handleBlur}
@@ -144,12 +156,15 @@ export default function FormEmpresa(props){
                   }
                 />
               </Grid>
-              <Grid item md={6} xs={12}>
+              <Grid item md={4} xs={12}>
+              <Typography>
+Monedaa Principal
+            </Typography>
                 <TextField
                   fullWidth
                   error={Boolean(formik.touched.moneda && formik.errors.moneda)}
                   helperText={formik.touched.moneda && formik.errors.moneda}
-                  label="Moneda Principal"
+              
                   margin="normal"
                   name="moneda"
                   onBlur={formik.handleBlur}
@@ -167,11 +182,14 @@ export default function FormEmpresa(props){
                 </TextField>
               </Grid>             
               <Grid item md={6} xs={12}>
+              <Typography>
+Telefono
+            </Typography>
                 <TextField
                   fullWidth
                   error={Boolean(formik.touched.telefono && formik.errors.telefono)}
                   helperText={formik.touched.telefono && formik.errors.telefono}
-                  label="Telefono"
+                
                   margin="normal"
                   name="telefono"
                   onBlur={formik.handleBlur}
@@ -187,11 +205,14 @@ export default function FormEmpresa(props){
               </Grid>
               
               <Grid item md={6} xs={12}>
+              <Typography>
+Correo
+            </Typography>
                 <TextField
                   fullWidth
                   error={Boolean(formik.touched.correo && formik.errors.correo)}
                   helperText={formik.touched.correo && formik.errors.correo}
-                  label="Correo"
+                
                   margin="normal"
                   name="correo"
                   onBlur={formik.handleBlur}
@@ -206,13 +227,15 @@ export default function FormEmpresa(props){
               </Grid>
               
               <Grid item md={12} xs={12}>
+              <Typography>
+Direccion
+            </Typography>
                 <TextField
                   fullWidth
                   error={Boolean(formik.touched.direccion && formik.errors.direccion)}
-                  multiline
-                  rows={2}
+         
                   helperText={formik.touched.direccion && formik.errors.direccion}
-                  label="Direccion"
+     
                   margin="normal"
                   name="direccion"
                   onBlur={formik.handleBlur}

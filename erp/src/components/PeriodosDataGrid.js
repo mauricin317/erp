@@ -1,10 +1,10 @@
 import { DataGrid, GridActionsCellItem, GridRowParams, esES   } from '@mui/x-data-grid';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
-import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
-import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import BorderColorSharpIcon from '@mui/icons-material/BorderColorSharp';
+import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
+import AssessmentSharpIcon from '@mui/icons-material/AssessmentSharp';
+import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/system/Box';
 import AlertDialog from './AlertDialog';
 import clsx from 'clsx';
@@ -14,7 +14,7 @@ import ModalForm from './FormPeriodos/ModalForm';
 import { useRouter } from "next/router";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import { obtenerPeriodos, eliminarPeriodo } from '../services/Periodos'
 
 
@@ -88,7 +88,7 @@ export default function PeriodosDataGrid(props){
   }
 
   const handleReport= () =>{
-    window.open(`http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=%2Freports&reportUnit=%2Freports%2FPeriodos&standAlone=true&id_gestion=${props.idgestion}&j_username=joeuser&j_password=123&sessionDecorator=no`, '_blank');
+   // window.open(`http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=%2Freports&reportUnit=%2Freports%2FPeriodos&standAlone=true&id_gestion=${props.idgestion}&j_username=joeuser&j_password=123&sessionDecorator=no`, '_blank');
   }
 
   const columns = [
@@ -138,18 +138,19 @@ export default function PeriodosDataGrid(props){
       field: 'accions',
       headerName: 'Acciones',
       type:'actions',
+      minWidth:300,
       getActions: (params) =>{
         let disabled = params.row.estado === 0;
         return(
           [
             <GridActionsCellItem key={params.id}
-              icon={<EditRoundedIcon color={!disabled?'info':''}/>}
+              icon={<> <b style={{color:'black'}}></b><BorderColorSharpIcon color={!disabled?'warning':''}/></>}
               label="Editar"
               onClick={()=>{handleEditar(params.row)}}
               disabled={disabled}
             />,
             <GridActionsCellItem key={params.id}
-              icon={<DeleteIcon color={!disabled?'error':''}/>}
+              icon={<> <b style={{color:'black'}}></b><DeleteSharpIcon color={!disabled?'error':''}/></>}
               label="Eliminar"
               onClick={()=>{setOpenDialog({state: true,id:params.id})}}
               disabled={disabled}
@@ -165,28 +166,29 @@ export default function PeriodosDataGrid(props){
           { 
             height: 400, width: 1,
             '& .estado.abierto': {
-                backgroundColor: '#00c292',
-                color: '#f9f9f9',
+                // backgroundColor: '#00c292',
+                // color: '#f9f9f9',
                 fontWeight: '600',
               },
             '& .estado.cerrado': {
-                backgroundColor: '#e46a76',
-                color: '#f9f9f9',
+                // backgroundColor: '#e46a76',
+                // color: '#f9f9f9',
                 fontWeight: '600',
               }, 
           }
         }>
           <Stack sx={{ '& button': { m: 1 } }} direction="row">
-            <Button variant="contained" color="primary" disabled={state.disabledNuevo} onClick={handleNuevo}><AddCircleRoundedIcon/></Button>
-            <Button variant="contained" color="secondary" onClick={handleReport} ><AssignmentRoundedIcon/></Button>
+            <Button variant="contained" color="success" disabled={state.disabledNuevo} onClick={handleNuevo}>Crear<AddIcon/></Button>
+            
+            <Button variant="contained" color="secondary" onClick={handleReport} >Reporte<AssessmentSharpIcon/></Button>
+            <Button onClick={() => router.back()} variant="contained" color="danger" sx={{color:'white'}}>Atras<ArrowBackRoundedIcon/></Button>
           </Stack>
       <DataGrid
         rows={state.periodos}
         columns={columns}
         getRowId={(row) => row.idperiodo}
-        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-        pageSize={pageSize}
-        rowsPerPageOptions={[15,30]}
+        autoPageSize
+        disableRowSelectionOnClick
         localeText={esES.components.MuiDataGrid.defaultProps.localeText}
       />
       <AlertDialog open={openDialog.state} title={"¿Seguro que desea eliminar este periodo?"} body={"El periodo se eliminará de forma permanente"} btnText={"Eliminar"} close={() => setOpenDialog({state:false,id:0})} confirm={()=>{handleEliminar(openDialog.id)}} />

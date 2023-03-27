@@ -10,6 +10,7 @@ import {
   Button,
   Typography,
   ListItem,
+  ListItemButton,
   Collapse,
   ListItemIcon,
   ListItemText,
@@ -22,19 +23,21 @@ import LogoIcon from "../logo/LogoIcon";
 import {Menuitems, Contabilidaditems, Inventarioitems, Configuracionitems, Reportesitems} from "./MenuItems";
 import { useRouter } from "next/router";
 
-const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
+const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen, sesionData, jwt }) => {
   const [open, setOpen] = React.useState(true);
   const [collapse, setCollapse] = React.useState("");
-
-
 
   const xlUp = useMediaQuery((theme) => theme.breakpoints.up("xl"));
 
   const handleClick = (index) => {
-    if (open === index) {
-      setOpen((prevopen) => !prevopen);
-    } else {
-      setOpen(index);
+    if(sesionData?.idempresa === null){
+      return
+    }else{
+      if (open === index) {
+        setOpen((prevopen) => !prevopen);
+      } else {
+        setOpen(index);
+      }
     }
   };
 
@@ -59,10 +62,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
         <List>
           {Menuitems.map((item, index) => (
             <List component="li" disablePadding key={item.title}>
-              <NextLink href={item.href}>
                 <ListItem
-                  onClick={() => handleClick(index)}
-                  button
                   selected={location === item.href}
                   sx={{
                     mb: 1,
@@ -73,7 +73,12 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
                     }),
                   }}
                 >
-                  <ListItemIcon>
+                  <ListItemButton 
+                    onClick={() => handleClick(index)}
+                    disabled={sesionData?.idempresa === null}
+                  >
+                     <NextLink disa href={item.href}>
+                  {/* <ListItemIcon>
                     <FeatherIcon
                       style={{
                         color: `${location === item.href ? "white" : ""} `,
@@ -82,17 +87,18 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
                       width="20"
                       height="20"
                     />
-                  </ListItemIcon>
+                  </ListItemIcon> */}
 
-                  <ListItemText onClick={onSidebarClose}>
-                    {item.title}
-                  </ListItemText>
+                      <ListItemText onClick={onSidebarClose}>
+                        {item.title}
+                      </ListItemText>
+                    </NextLink>
+                  </ListItemButton>
                 </ListItem>
-              </NextLink>
             </List>
           ))}
         </List>
-          <ListItem onClick={() => handleCollapse("contabilidad")} button selected={collapse==="contabilidad"} sx={{mb: 1}} >
+          {/* <ListItem onClick={() => handleCollapse("contabilidad")} button selected={collapse==="contabilidad"} sx={{mb: 1}} >
             <ListItemText primary="Contabilidad" />
             {collapse==="contabilidad" ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
@@ -131,8 +137,8 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
                   </NextLink>
                 </List>
               ))}
-          </Collapse>
-          <ListItem onClick={() => handleCollapse("inventario")} button selected={collapse==="inventario"} sx={{mb: 1}} >
+          </Collapse> */}
+          {/* <ListItem onClick={() => handleCollapse("inventario")} button selected={collapse==="inventario"} sx={{mb: 1}} >
             <ListItemText primary="Inventario" />
             {collapse==="inventario" ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
@@ -171,12 +177,12 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
                   </NextLink>
                 </List>
               ))}
-          </Collapse>
-          <ListItem onClick={() => handleCollapse("reportes")} button selected={collapse==="reportes"} sx={{mb: 1}} >
+          </Collapse> */}
+          {/* <ListItem onClick={() => handleCollapse("reportes")} button selected={collapse==="reportes"} sx={{mb: 1}} >
             <ListItemText primary="Reportes" />
             {collapse==="reportes" ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={collapse==="reportes"} timeout="auto" unmountOnExit>
+          </ListItem> */}
+          {/* <Collapse in={collapse==="reportes"} timeout="auto" unmountOnExit>
           {Reportesitems.map((item, index) => (
                 <List component="li" disablePadding key={item.title}>
                   <NextLink href={item.href}>
@@ -211,8 +217,8 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
                   </NextLink>
                 </List>
               ))}
-          </Collapse>
-          <ListItem onClick={() => handleCollapse("configuracion")} button selected={collapse==="configuracion"} sx={{mb: 1}} >
+          </Collapse> */}
+          {/* <ListItem onClick={() => handleCollapse("configuracion")} button selected={collapse==="configuracion"} sx={{mb: 1}} >
             <ListItemText primary="Configuración" />
             {collapse==="configuracion" ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
@@ -251,7 +257,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen }) => {
                   </NextLink>
                 </List>
               ))}
-          </Collapse>
+          </Collapse> */}
          
       </Box>
 

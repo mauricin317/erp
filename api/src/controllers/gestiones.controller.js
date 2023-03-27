@@ -83,7 +83,7 @@ module.exports = {
             SELECT * FROM gestion WHERE ((${fechainicio}::date BETWEEN fechainicio AND fechafin) OR (${fechafin}::date BETWEEN fechainicio AND fechafin)) AND idempresa = ${idempresa};
           `
         if(validarFechas.length){
-          res.json({ok:false, mensaje:"No debe haber solapamiento con otras gestiones"})
+          res.json({ok:false, mensaje:"Existe un solapamiento"})
         }else{
           const crearGestion = await prisma.gestion.create({
             data:{
@@ -95,7 +95,7 @@ module.exports = {
             },
           })
           if(crearGestion){
-            res.json({ok:true, mensaje:'Gestión creada con éxito', data:crearGestion})
+            res.json({ok:true, mensaje:'Gestión creada', data:crearGestion})
           }else{
             res.json({ok:false, mensaje:'Error al crear Gestión'})
           }
@@ -126,7 +126,7 @@ module.exports = {
             SELECT * FROM gestion WHERE ((${fechainicio}::date BETWEEN fechainicio AND fechafin) OR (${fechafin}::date BETWEEN fechainicio AND fechafin)) AND idempresa = ${idempresa} AND idgestion!=${Number(idgestion)};
           `
         if(validarFechas.length){
-          res.json({ok:false, mensaje:"No debe haber solapamiento con otras gestiones"})
+          res.json({ok:false, mensaje:"Existe un solapamiento"})
         }else{
           const updateGestion = await prisma.gestion.update({
             where:{

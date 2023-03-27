@@ -53,13 +53,13 @@ module.exports = {
         },
       })
       if( validarNombre ){
-        res.json({ok:false, mensaje:"Ya existe un periodo con ese nombre en esta gestión"})
+        res.json({ok:false, mensaje:"Ya existe un periodo con el mismo nombre"})
       }else{
         const validarFechas = await prisma.$queryRaw`
             SELECT * FROM periodo WHERE ((${fechainicio}::date BETWEEN fechainicio AND fechafin) OR (${fechafin}::date BETWEEN fechainicio AND fechafin)) AND idgestion=${Number(idgestion)};
           `
         if(validarFechas.length){
-          res.json({ok:false, mensaje:"No debe haber solapamiento con otros periodos"})
+          res.json({ok:false, mensaje:"Existe un solapamiento"})
         }else{
           const crearPeriodo = await prisma.periodo.create({
             data:{
@@ -71,7 +71,7 @@ module.exports = {
             }
           })
           if(crearPeriodo){
-            res.json({ok:true, mensaje:'Periodo creado con éxito', data:crearPeriodo})
+            res.json({ok:true, mensaje:'Periodo creado', data:crearPeriodo})
           }else{
             res.json({ok:false, mensaje:'Error al crear periodo'})
           }
@@ -95,13 +95,13 @@ module.exports = {
         },
       })
       if(validarNombre){
-        res.json({ok:false, mensaje:"Ya existe otro periodo con ese nombre en esta gestión"})
+        res.json({ok:false, mensaje:"Ya existe otro periodo con el mismo nombre"})
       }else{
         const validarFechas = await prisma.$queryRaw`
             SELECT * FROM periodo WHERE ((${fechainicio}::date BETWEEN fechainicio AND fechafin) OR (${fechafin}::date BETWEEN fechainicio AND fechafin)) AND idgestion = ${Number(idgestion)} AND idperiodo!=${Number(idperiodo)};
           `
         if(validarFechas.length){
-          res.json({ok:false, mensaje:"No debe haber solapamiento con otros periodos"})
+          res.json({ok:false, mensaje:"Existe un solapamiento"})
         }else{
           const updatePeriodo = await prisma.periodo.update({
             where:{
@@ -114,7 +114,7 @@ module.exports = {
             },
           })
           if(updatePeriodo){
-            return res.json({ok:true, mensaje:"Periodo modificado con Éxito", data:updatePeriodo})
+            return res.json({ok:true, mensaje:"Periodo modificado", data:updatePeriodo})
           }else{
               return res.json({ok:false, mensaje:"No se pudo modificar el periodo"})
           }
@@ -135,7 +135,7 @@ module.exports = {
         },
       })
       if(deletePeriodo){
-        return res.json({ok:true, mensaje:"Eliminado con Éxito", data:deletePeriodo})
+        return res.json({ok:true, mensaje:"Periodo Eliminado", data:deletePeriodo})
       }else{
           return res.json({ok:false, mensaje:"Error al eliminar el periodo"})
       }

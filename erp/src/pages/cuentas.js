@@ -15,10 +15,10 @@ export default function Cuentas() {
   return (
     <>
       <Head>
-          <title>Cuentas | ERP</title>
+          <title>Cuentas</title>
       </Head>
-          <h2>Plan de Cuentas</h2>
-          <CuentasTreeView jwt={jwt}  />
+      <div style={{padding:'0 100px'}}>  <h2>Gestion de Cuentas</h2>
+          <CuentasTreeView jwt={jwt}  /></div>
     </>
   );
 }
