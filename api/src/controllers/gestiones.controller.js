@@ -125,7 +125,7 @@ module.exports = {
           }
         }
       });
-      if(new Date(validarPeriodos.gestion.fechainicio).toISOString() != new Date(fechainicio).toISOString() || new Date(validarPeriodos.gestion.fechafin).toISOString() != new Date(fechafin).toISOString()){
+      if(validarPeriodos&&(new Date(validarPeriodos.gestion.fechainicio).toISOString() != new Date(fechainicio).toISOString() || new Date(validarPeriodos.gestion.fechafin).toISOString() != new Date(fechafin).toISOString())){
         res.json({ok:false, mensaje:"No se puede editar las fechas de una gestion con periodos"})
       }else{
         const validarNombre = await prisma.gestion.findFirst({

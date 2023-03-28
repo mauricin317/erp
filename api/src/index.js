@@ -28,7 +28,7 @@ app.use('/api/gestiones',gestionesRouter);
 app.use('/api/periodos',periodosRouter);
 app.use('/api/cuentas',cuentasRouter);
 app.use('/api/comprobantes',comprobantesRouter);
-
+app.use('/api/empresamonedas',empresamonedasRouter);
 // 404: Not found
 app.use(function(req, res, next){
   res.status(404).json({ERROR: 'Not found.'});

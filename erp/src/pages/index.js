@@ -161,7 +161,7 @@ function Home() {
                 <Button sx={{ mx: 2 }} color="secondary" size="large" variant="contained" disabled={idEmpresa==="" ? true : false} onClick={handleEditar}>Editar<BorderColorSharpIcon/></Button>
                 <Button sx={{ mx: 2}} color="error" size="large" variant="contained" onClick={()=>{setOpenDialog(true)}} disabled={idEmpresa===""}>Borrar<DeleteSharpIcon/></Button>
                 <Button sx={{ mx: 2}} color="primary" size="large" variant="contained" onClick={handleReport}>Reporte<AssessmentSharpIcon/></Button>   
-                <Button sx={{ mx: 2}} color="error" onClick={logout} size="large" variant="contained" >Logout<LockIcon/></Button>   
+              
             </Box>
           
         </Container>

@@ -8,14 +8,18 @@ import AlertDialog from './AlertDialog';
 import CustomTreeItem from './CustomTreeItem'
 import Box from '@mui/system/Box';
 import TreeView from '@mui/lab/TreeView';
+import AddIcon from '@mui/icons-material/Add';
 import _ from 'lodash';
 import AddCircleTwoToneIcon from '@mui/icons-material/AddCircleTwoTone';
 import DoDisturbOnTwoToneIcon from '@mui/icons-material/DoDisturbOnTwoTone';
 import FiberManualRecordOutlinedIcon from '@mui/icons-material/FiberManualRecordOutlined';
 import { useState, useEffect } from 'react';
+import BorderColorSharpIcon from '@mui/icons-material/BorderColorSharp';
+import AssessmentSharpIcon from '@mui/icons-material/AssessmentSharp';
 import ModalForm from './FormCuentas/ModalForm';
 import { toast } from 'react-toastify';
 import { obtenerCuentas, eliminarCuenta } from '../services/Cuentas';
+
 import 'react-toastify/dist/ReactToastify.min.css';
 import tree_util from 'tree-util'
 
@@ -170,16 +174,14 @@ export default function CuentasTreeView(props){
         }>
         <Stack sx={{mb:3}} direction="row" justifyContent="space-between" alignItems="center">
             <Stack direction="row" spacing={1}>
-                <Button disabled={disabled.new} variant="contained" color="primary" onClick={handleNuevo}><AddCircleRoundedIcon/></Button>
-                <Button disabled={disabled.edit} variant="contained" color="info" onClick={handleEditar}><EditRoundedIcon sx={{color:'white'}}/></Button>
-                <Button disabled={disabled.delete || loading} variant="contained" color="error" onClick={() => setOpenDialog(true)}><DeleteIcon/></Button>
-                <Button variant="contained" color="secondary" onClick={handleReport} ><AssignmentRoundedIcon/></Button>
+            <Button  disabled={disabled.new} color="success" size="large" variant="contained" onClick={handleNuevo} >Crear<AddIcon/></Button>
+                <Button  color="secondary" size="large" variant="contained" onClick={handleEditar}>Editar<BorderColorSharpIcon/></Button>
+                <Button disabled={disabled.delete||loading} variant="contained" color="error" onClick={() => setOpenDialog(true)}>Borrar<DeleteIcon/></Button>
+                <Button variant="contained" color="secondary" onClick={handleReport} >Reporte<AssessmentSharpIcon/></Button>
             </Stack>
             
         </Stack>
-        <Button sx={{m:1}} variant="outlined" size="small" color="secondary" onClick={handleExpandClick}>
-          {expanded.length === 1 ? <><AddCircleTwoToneIcon />Expandir Todos</> : <><DoDisturbOnTwoToneIcon />Cerrar todos</>}
-        </Button>
+     
         <TreeView aria-label="file system navigator" selected={selected} onNodeSelect={handleSelect} defaultCollapseIcon={<DoDisturbOnTwoToneIcon color='error' />} expanded={expanded} onNodeToggle={handleToggle} defaultExpandIcon={<AddCircleTwoToneIcon color='secondary' />} sx={{ maxHeight:680, marginLeft: '50px', flexGrow: 1, maxWidth: '100%', overflowY: 'auto' }} defaultEndIcon={<FiberManualRecordOutlinedIcon color='info' />} >
         <CustomTreeItem key={"0"} nodeId={"0"} label={`Plan de Cuentas`}>
             {state.cuentas.map((tree) => renderTree(tree.rootNode))}

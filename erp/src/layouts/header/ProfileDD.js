@@ -1,7 +1,7 @@
 import React from "react";
 import FeatherIcon from "feather-icons-react";
 import Image from "next/image";
-import userimg from "../../../assets/images/users/7.jpg";
+import userimg from "../../../assets/images/users/user.jpg";
 import useStorage from "../../utils/storageHook";
 import {
   Box,
