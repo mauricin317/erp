@@ -11,6 +11,8 @@ module.exports = {
             idempresa: idempresa
           },
           select:{
+            idempresa: true,
+            niveles: true,
             cuenta: {
               orderBy:{
                 codigo: 'asc'
@@ -20,7 +22,11 @@ module.exports = {
           
         })
         if(findCuentas){
-          return res.json({ok:true, data:findCuentas.cuenta, niveles:findCuentas.niveles, idempresa:idempresa});
+          if(findCuentas.cuenta){
+            return res.json({ok:true, data:findCuentas.cuenta, niveles:findCuentas.niveles, idempresa:idempresa});
+          }else{
+            return res.json({ok:true, data:[], niveles:findCuentas.niveles, idempresa:idempresa});
+          }
         }else{
             return res.json({ok:false, data:[], mensaje:"No se encontraron Cuentas"})
         }

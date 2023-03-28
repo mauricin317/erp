@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import SearchDD from "./SearchDD";
 import ProfileDD from "./ProfileDD";
 
-const Header = ({ sx, customClass, toggleMobileSidebar, position, sesionData, jwt}) => {
+const Header = ({ sx, customClass, toggleMobileSidebar, position, sesionData, isIndex, jwt}) => {
 
   return (
     <AppBar sx={sx} position={position} elevation={0} className={customClass}>
@@ -19,8 +19,8 @@ const Header = ({ sx, customClass, toggleMobileSidebar, position, sesionData, jw
           onClick={toggleMobileSidebar}
           sx={{
             display: {
-              xl: "none",
-              xs: "flex",
+              xl: isIndex ? "none" : "flex" ,
+              xs: isIndex ? "none" : "flex",
               color:"black"
             },
           }}
@@ -35,7 +35,7 @@ const Header = ({ sx, customClass, toggleMobileSidebar, position, sesionData, jw
 
         <Box flexGrow={1} />
 
-        <ProfileDD sesion={sesionData} jwt={jwt} />
+        <ProfileDD sesion={sesionData} jwt={jwt} isIndex={isIndex} />
         {/* ------------------------------------------- */}
         {/* Profile Dropdown */}
         {/* ------------------------------------------- */}

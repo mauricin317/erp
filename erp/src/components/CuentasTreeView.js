@@ -38,12 +38,14 @@ export default function CuentasTreeView(props){
         tipo:'nuevo',
         datos:null
       });
+      const [loading, setLoading] = useState(false);
       const [selected, setSelected] = useState(["0"]);
       const [expanded, setExpanded] = useState(["0"]);
       const [openDialog, setOpenDialog] = useState(false);
 
 
       const cargarDatos= async () =>{
+        setLoading(true)
         let cuentas = await obtenerCuentas(props.jwt);
         if(cuentas.ok){
           var trees = tree_util.buildTrees(cuentas.data, standardConfig);
@@ -60,6 +62,7 @@ export default function CuentasTreeView(props){
           })
 
         }
+        setLoading(false)
       }
 
       useEffect(()=>{
@@ -96,11 +99,13 @@ export default function CuentasTreeView(props){
       };
       const handleEditar = () =>{
         let node = state.cuentas[0].getNodeById(selected)
-        setModalform({
-          open:true,
-          tipo:'editar',
-          datos: node
-        });
+        if(node){
+          setModalform({
+            open:true,
+            tipo:'editar',
+            datos: node
+          });  
+        }
       }
       const handleCloseModal = () => {
         setModalform({
@@ -111,12 +116,15 @@ export default function CuentasTreeView(props){
       };
       const handleEliminar = async () => {
         let node = state.cuentas[0].getNodeById(selected)
-        let eliminar = await eliminarCuenta(node.dataObj.idcuenta, props.jwt);
-        if(eliminar.ok){
-          handleSubmit();
-        }else{
-          toast.error(eliminar.mensaje,{theme: "colored"});
+        if(node){
+          let eliminar = await eliminarCuenta(node.dataObj.idcuenta, props.jwt);
+          if(eliminar.ok){
+            handleSubmit();
+          }else{
+            toast.error(eliminar.mensaje,{theme: "colored"});
+          }
         }
+        handleSelect(null,"0")
       }
 
       const handleSubmit = (cuenta) =>{
@@ -164,7 +172,7 @@ export default function CuentasTreeView(props){
             <Stack direction="row" spacing={1}>
                 <Button disabled={disabled.new} variant="contained" color="primary" onClick={handleNuevo}><AddCircleRoundedIcon/></Button>
                 <Button disabled={disabled.edit} variant="contained" color="info" onClick={handleEditar}><EditRoundedIcon sx={{color:'white'}}/></Button>
-                <Button disabled={disabled.delete} variant="contained" color="error" onClick={() => setOpenDialog(true)}><DeleteIcon/></Button>
+                <Button disabled={disabled.delete || loading} variant="contained" color="error" onClick={() => setOpenDialog(true)}><DeleteIcon/></Button>
                 <Button variant="contained" color="secondary" onClick={handleReport} ><AssignmentRoundedIcon/></Button>
             </Stack>
             

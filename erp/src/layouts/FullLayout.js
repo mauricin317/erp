@@ -33,7 +33,7 @@ const PageWrapper = experimentalStyled("div")(({ theme }) => ({
   },
 }));
 
-const FullLayout = ({ children }) => {
+const FullLayout = ({ children, isIndex }) => {
   const { getItem } = useStorage();
   const jwt = getItem('token');
   const [isSidebarOpen, setSidebarOpen] = React.useState(true);
@@ -59,24 +59,25 @@ const FullLayout = ({ children }) => {
     <MainWrapper>
       <Header
         sx={{
-          paddingLeft: isSidebarOpen && xlUp ? "265px" : "",
+          paddingLeft: isMobileSidebarOpen ? "265px" : "",
           backgroundColor: "#686c6e",
         }}
         toggleMobileSidebar={() => setMobileSidebarOpen(true)}
+        isIndex={isIndex}
         sesionData={sesionData} jwt={jwt}
       />
-      <Sidebar
+      {!isIndex && <Sidebar
         isSidebarOpen={isSidebarOpen}
         isMobileSidebarOpen={isMobileSidebarOpen}
         onSidebarClose={() => setMobileSidebarOpen(false)}
         sesionData={sesionData} jwt={jwt}
-      />
+      />}
       <PageWrapper>
         <Container
           maxWidth={false}
           sx={{
             paddingTop: "10px",
-            paddingLeft: isSidebarOpen && xlUp ? "280px!important" : "",
+            paddingLeft: (isMobileSidebarOpen) && !isIndex ? "280px!important" : "",
           }}
         >
           <Box sx={{ minHeight: "calc(100vh - 170px)" }}>{children}</Box>

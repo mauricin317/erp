@@ -112,36 +112,53 @@ module.exports = {
       const { idgestion } = req.params;
       const { idempresa, idusuario } = req.user
       let { nombre,fechainicio,fechafin } = req.body;
-      const validarNombre = await prisma.gestion.findFirst({
+      const validarPeriodos = await prisma.periodo.findFirst({
         where:{
-          nombre,
-          idempresa,
-          NOT:[ {idgestion: Number(idgestion)}]
+          idgestion: Number(idgestion)
         },
-      })
-      if(validarNombre){
-        res.json({ok:false, mensaje:"Ya existe ese nombre de gestión"})
+        select:{
+          idperiodo: true,
+          gestion:{
+            select:{
+              idgestion: true, nombre: true, fechainicio: true, fechafin: true
+            }
+          }
+        }
+      });
+      if(new Date(validarPeriodos.gestion.fechainicio).toISOString() != new Date(fechainicio).toISOString() || new Date(validarPeriodos.gestion.fechafin).toISOString() != new Date(fechafin).toISOString()){
+        res.json({ok:false, mensaje:"No se puede editar las fechas de una gestion con periodos"})
       }else{
-        const validarFechas = await prisma.$queryRaw`
-            SELECT * FROM gestion WHERE ((${fechainicio}::date BETWEEN fechainicio AND fechafin) OR (${fechafin}::date BETWEEN fechainicio AND fechafin)) AND idempresa = ${idempresa} AND idgestion!=${Number(idgestion)};
-          `
-        if(validarFechas.length){
-          res.json({ok:false, mensaje:"Existe un solapamiento"})
+        const validarNombre = await prisma.gestion.findFirst({
+          where:{
+            nombre,
+            idempresa,
+            NOT:[ {idgestion: Number(idgestion)}]
+          },
+        })
+        if(validarNombre){
+          res.json({ok:false, mensaje:"Ya existe ese nombre de gestión"})
         }else{
-          const updateGestion = await prisma.gestion.update({
-            where:{
-              idgestion: Number(idgestion)
-            },
-            data:{
-              nombre,
-              fechainicio: new Date(fechainicio),
-              fechafin: new Date(fechafin),
-            },
-          })
-          if(updateGestion){
-            return res.json({ok:true, mensaje:"Gestión modificada con Éxito", data:updateGestion})
+          const validarFechas = await prisma.$queryRaw`
+              SELECT * FROM gestion WHERE ((${fechainicio}::date BETWEEN fechainicio AND fechafin) OR (${fechafin}::date BETWEEN fechainicio AND fechafin)) AND idempresa = ${idempresa} AND idgestion!=${Number(idgestion)};
+            `
+          if(validarFechas.length){
+            res.json({ok:false, mensaje:"Existe un solapamiento"})
           }else{
-              return res.json({ok:false, mensaje:"No se pudo modificar la gestión"})
+            const updateGestion = await prisma.gestion.update({
+              where:{
+                idgestion: Number(idgestion)
+              },
+              data:{
+                nombre,
+                fechainicio: new Date(fechainicio),
+                fechafin: new Date(fechafin),
+              },
+            })
+            if(updateGestion){
+              return res.json({ok:true, mensaje:"Gestión modificada con Éxito", data:updateGestion})
+            }else{
+                return res.json({ok:false, mensaje:"No se pudo modificar la gestión"})
+            }
           }
         }
       }

@@ -110,13 +110,12 @@ const ProfileDD = (props) => {
               onClick={handleClose4}
               sx={{p:0}}
             >
-              <ListItemButton onClick={changeEmpresa}>
+             {!props.isIndex && <ListItemButton onClick={changeEmpresa}>
                 {/* <Link href="/" style={{textDecoration: 'none', display:'flex', alignItems:'center', flexWrap: 'wrap'}} > */}
                 
-                <ListItemText sx={{ml:1,color:'black'}} primary={'Cambiar empresa'} 
-                />
-              </ListItemButton>
-              <ListItemButton onClick={logout}>
+                <ListItemText sx={{ml:1,color:'black'}} primary={'Cambiar empresa'} />
+              </ListItemButton>}
+              <ListItemButton onClick={logout} >
                 <ListItemText sx={{ml:1,color:'black'}}  primary={'Cerrar Sesion'} />
               </ListItemButton>
             </List>

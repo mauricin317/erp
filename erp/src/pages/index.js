@@ -182,7 +182,7 @@ Home.getLayout = function getLayout(page) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-        <FullLayout>
+        <FullLayout isIndex>
           {page}
         </FullLayout>
     </ThemeProvider>
