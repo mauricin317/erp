@@ -4,8 +4,10 @@ import { TextField } from '@mui/material';
 import { MenuItem } from '@mui/material';
 import Box from '@mui/system/Box';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import Typography from '@mui/material/Typography';
 import { useFormik } from 'formik';
 import { crearEmpresamoneda } from '../services/EmpresaMonedas';
+import Grid from '@mui/material/Grid';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -15,15 +17,15 @@ function MonedasForm(props) {
     let datos = props.datos
     const formik = useFormik({
         initialValues: {
-          monedaalternativa: datos.idmonedaalternativa != null ? datos.idmonedaalternativa : '',
-          cambio: datos.cambio != null ? datos.cambio : 0,
+          monedaalternativa: datos != null ? datos?.idmonedaalternativa : '',
+          cambio: datos != null ? datos?.cambio : 0,
         },
         validationSchema: Yup.object({
             monedaalternativa: Yup.number().required('Requerido'),
             cambio: Yup.number().typeError('Debe ser un número').positive('Debe ser un número positivo').required('Requerido'),
         }),
         onSubmit: async values => {
-          if(values.monedaalternativa === datos.idmonedaalternativa && values.cambio === datos.cambio){
+          if(values.monedaalternativa === datos.idmonedaalternativa && values.cambio === Number(datos.cambio)){
             toast.error("Debe modificar los datos para guardar un nuevo registro",{theme: "colored"});
           }else{
             let data ={
@@ -46,23 +48,28 @@ function MonedasForm(props) {
         <Box  textAlign={'center'} sx={{mb:2}}>
             <form onSubmit={formik.handleSubmit}>
             <Stack direction="row" spacing={2} justifyContent={'center'} alignItems={"flex-start"}>
+            <Typography sx={{textAlign:'center',paddingTop:'15px'}}>
+              Moneda Principal:
+            </Typography>
                 <TextField 
-                sx={{margin:0}}
-                label="Moneda Principal"
+                sx={{width:'150px'}}
                 margin="normal"
                 name="monedaprincipal"
                 type="text"
-                value={datos != null ? datos.monedaprincipal : ''}
+                value={datos != null ? datos?.monedaprincipal : ''}
                 variant="outlined"
                 inputProps={
                   {disabled: true}
                 }
                  />
+                      <Typography sx={{textAlign:'center',paddingTop:'15px'}}>
+              Moneda Alternativa:
+            </Typography>
                 <TextField
-                sx={{width:'250px'}}
+                sx={{width:'150px'}}
                 error={Boolean(formik.touched.monedaalternativa && formik.errors.monedaalternativa)}
                 helperText={formik.touched.monedaalternativa && formik.errors.monedaalternativa}
-                label="Moneda Alternativa"
+            
                 margin="normal"
                 name="monedaalternativa"
                 onBlur={formik.handleBlur}
@@ -82,10 +89,13 @@ function MonedasForm(props) {
                   ))}
                     
                 </TextField>    
-                <TextField sx={{textAlign:'right'}}
+          
+                <Typography sx={{textAlign:'center',paddingTop:'15px'}}>
+              Tipo de Cambio:
+            </Typography>
+                <TextField sx={{width:'150px'}}
                 error={Boolean(formik.touched.cambio && formik.errors.cambio)}
                 helperText={formik.touched.cambio && formik.errors.cambio}
-                label="Tipo de Cambio"
                 margin="normal"
                 name="cambio"
                 onBlur={formik.handleBlur}
@@ -101,9 +111,9 @@ function MonedasForm(props) {
                   style: { textAlign: "right" }
                 }}
                 />
-              <Box sx={{justifyContent:'end' ,display: "inline-flex", alignItems: "center"}}>
-                <Button sx={{height:"52px"}} color="primary"  type="submit" variant="contained"><AddCircleRoundedIcon /></Button>
-              </Box>
+
+                <Button sx={{height:'55px'}}  size="large" color="success" type="submit" variant="contained">Guardar</Button>
+
             </Stack>
             
             </form>

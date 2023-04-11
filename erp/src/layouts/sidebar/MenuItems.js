@@ -13,6 +13,11 @@ export const Menuitems = [
     title: "Plan de Cuentas",
     icon: "calendar",
     href: "/cuentas",
+  },
+  {
+    title: "Moneda",
+   icon: "dollar-sign",
+    href: "/monedas",
   }
   
 ];

@@ -1,7 +1,7 @@
 import { DataGrid, esES } from '@mui/x-data-grid';
 import Box from '@mui/system/Box';
 import MonedasForm from './MonedasForm';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { formatInTimeZone } from 'date-fns-tz';
 import { ToastContainer } from 'react-toastify';
 import { obtenerEmpresamonedas } from '../services/EmpresaMonedas';
@@ -14,17 +14,11 @@ function MonedasDatarid(props) {
     const [state, setState] = useState({
         empresamonedas:[],
         monedas:[],
-        isfetched: false,
         tieneComprobante: false
       });
 
       const handleSubmit = () =>{
-        setState({
-            empresamonedas:state.empresamonedas,
-            monedas:state.monedas,
-            isfetched: false,
-            tieneComprobante: state.tieneComprobante
-        })
+       cargarDatos();
       }
 
     const cargarDatos= async () =>{
@@ -34,16 +28,13 @@ function MonedasDatarid(props) {
             setState({
                 empresamonedas: registros.data,
                 monedas: registros.monedas,
-                isfetched: true,
                 tieneComprobante: registros.comprobantes_count != 0
             })
         }
       }
-    
-    if(!state.isfetched){
+      useEffect(()=>{
         cargarDatos();
-    }
-
+      },[])
     const columns = [
         {
           field: 'fecharegistro',
@@ -51,7 +42,7 @@ function MonedasDatarid(props) {
           type: 'date',
           minWidth:200,
           valueFormatter: (params) => {
-            const valueFormatted =formatInTimeZone(params.value, 'UTC', 'dd/MM/yyy HH:mm:ss')
+            const valueFormatted =formatInTimeZone(params.value, 'America/La_Paz', 'dd/MM/yyy HH:mm:ss')
             return valueFormatted;
           },
         },
@@ -68,10 +59,10 @@ function MonedasDatarid(props) {
         {
             field: 'cambio',
             headerName: 'Cambio',
-            type: 'number',
             minWidth:200
         },
         {
+          
           field: 'activo',
           headerName: 'Estado',
           minWidth:200,
@@ -86,11 +77,12 @@ function MonedasDatarid(props) {
       ];
 
     return ( <Box>
-            {state.isfetched ?
-                <MonedasForm monedas={state.monedas} datos={state.isfetched ? state.empresamonedas[0] : null} submit={handleSubmit} readOnly={state.tieneComprobante} jwt={props.jwt} /> : ''}
+         
+               <MonedasForm monedas={state.monedas} datos={state?.empresamonedas[0]} submit={handleSubmit} readOnly={state.tieneComprobante} jwt={props.jwt} />
             <Box>
                 <DataGrid
-                    autoHeight 
+                    autoHeight
+                    minWidth={200}
                     rows={state.empresamonedas}
                     columns={columns}
                     onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}

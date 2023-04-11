@@ -70,7 +70,6 @@ export default function FormPeriodo(props){
                   error={Boolean(formik.touched.nombre && formik.errors.nombre)}
                   fullWidth
                   helperText={formik.touched.nombre && formik.errors.nombre}
-    
                   margin="normal"
                   name="nombre"
                   onBlur={formik.handleBlur}
@@ -89,7 +88,6 @@ export default function FormPeriodo(props){
                   error={Boolean(formik.touched.fechainicio && formik.errors.fechainicio)}
                   fullWidth
                   helperText={formik.touched.fechainicio && formik.errors.fechainicio}
-                
                   margin="normal"
                   name="fechainicio"
                   onBlur={formik.handleBlur}
@@ -109,7 +107,6 @@ export default function FormPeriodo(props){
                   error={Boolean(formik.touched.fechafin && formik.errors.fechafin)}
                   fullWidth
                   helperText={formik.touched.fechafin && formik.errors.fechafin}
-               
                   margin="normal"
                   name="fechafin"
                   onBlur={formik.handleBlur}

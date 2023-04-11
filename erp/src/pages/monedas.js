@@ -16,10 +16,12 @@ export default function Monedas() {
   return (
     <>
       <Head>
-          <title>Monedas | ERP</title>
+          <title>Monedas</title>
       </Head>
-          <h2>Configuracion de Monedas</h2>
+      <div  style={{padding:'0 150px'}}>
+          <h2>Gestion de Monedas</h2>
           <MonedasDataGrid jwt={jwt}/>
+          </div>
     </>
   );
 }
