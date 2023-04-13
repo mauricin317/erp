@@ -53,133 +53,133 @@ module.exports = {
         return res.status(400).json({ok:false, mensaje:'Bad Request'})
       }
   },
-  getEmpresa: async (req,res)=>{
+  geDetalleComprobante: async (req,res)=>{
     try {
-      const { idempresa } = req.params;
-      const {idusuario} = req.user
-      const findEmpresa = await prisma.empresa.findUnique({
+      const { idcomprobante } = req.params;
+      const findMonedas = await prisma.comprobante.findFirst({
         where: {
-          idempresa:Number(idempresa),
+          idcomprobante:Number(idcomprobante),
         },
-      })
-      if(findEmpresa){
-        return res.json({ok:true, data:findEmpresa});
-      }else{
-          return res.json({ok:true, data:[], mensaje:"No se encontró la empresa"})
-      }
-    } catch (error) {
-      console.log("Error: ", error.message);
-      res.status(400).json({ok:false, mensaje:'Bad Request'})
-    }
-  },
-  createEmpresa: async (req,res)=>{
-    try {
-      const { idusuario } = req.user
-      let { nombre,nit,sigla,telefono,correo,direccion,niveles,moneda } = req.body
-      const findEmpresa = await prisma.empresa.findFirst({
-        where:{
-          OR:[
-            { nombre: nombre },
-            { nit: nit },
-            { sigla: sigla },
-          ],
-          estado: 1
-        },
-      })
-      if(findEmpresa){
-        res.json({ok:false, mensaje:"Ya existe una empresa con esos datos"})
-      }else{
-        const crearEmpresa = await prisma.empresa.create({
-          data:{
-            nombre, nit, sigla, telefono, correo, direccion, niveles: Number(niveles), idusuario,
-            empresamoneda: {
-              create: [
-                { activo:1, idmonedaprincipal: Number(moneda) },
-              ]
-            },
-            integracion: {
-              create:{  }
-            }
-          }
-        })
-        if(crearEmpresa){
-          const generarCuentas = await prisma.$queryRaw`
-            SELECT generar_cuentas_principales(${crearEmpresa.idempresa}::bigint, ${idusuario}::bigint, ${Number(niveles)}::int2) as total;
-          `
-            res.json({ok:true, mensaje:'Empresa creada con éxito', data:crearEmpresa})
-        }else{
-          res.json({ok:false, mensaje:'Error al crear empresa'})
-        }
-      }
-    } catch (error) {
-      console.log("Error: ", error.message);
-      res.status(400).json({ok:false, mensaje:'Bad Request'})
-    }
-  },
-  editEmpresa: async (req,res)=>{
-    try {
-      const { idempresa } = req.params;
-      const { idusuario } = req.user;
-      let { nombre,nit,sigla,telefono,correo,direccion,moneda } = req.body;
-
-      const findEmpresaMoneda = await prisma.empresamoneda.findFirst({
-        where:{
-          idempresa: Number(idempresa),
-          activo: 1
-        },
-      });
-
-      const findEmpresa = await prisma.empresa.findFirst({
-        where:{
-          OR:[
-            { nombre: nombre },
-            { nit: nit },
-            { sigla: sigla },
-          ],
-          estado: 1,
-          NOT:[{
-            idempresa: Number(idempresa)
-          }]
-        },
-      })
-      if(findEmpresa){
-        res.json({ok:false, mensaje:"Ya existe una empresa con esos datos"})
-      }else{
-        const updateEmpresa = await prisma.usuario.update({
-          where:{
-            idusuario: idusuario
-          },
-          data:{
-            empresa:{
-              update:{
+        select:{
+          idcomprobante: true,
+          idmoneda: true,
+          empresa:{
+            select:{
+              empresamoneda:{
                 where:{
-                  idempresa: Number(idempresa)
+                  activo: 1
                 },
-                data:{
-                  nombre, nit, sigla, telefono, correo, direccion,
-                  empresamoneda:{
-                    update:{
-                      where:{
-                        idempresamoneda: findEmpresaMoneda.idempresamoneda
-                      },
-                      data:{
-                        idmonedaprincipal: Number(moneda)
-                      }
-                    }
-                  }
+                select:{
+                  idmonedaprincipal: true,
                 }
               }
             }
-          },
-          include: { empresa: true }
-        })
-        if(updateEmpresa){
-          const empresa = updateEmpresa.empresa.filter(emp => emp.idempresa = idempresa)[0]
-          return res.json({ok:true, mensaje:"Empresa modificada con Éxito", data:empresa})
-        }else{
-            return res.json({ok:false, mensaje:"No se pudo eliminar la empresa"})
+          }
+        }
+      })
+      let strdebe = 'd.montodebe';
+      let strhaber = 'd.montohaber';
+      if(findMonedas?.idmoneda != findMonedas?.empresa?.empresamoneda[0]?.idmonedaprincipal){
+        strdebe= 'd.montodebealt';
+        strhaber='d.montohaberalt';
+      }
+      const findDetalleComprobante = await prisma.$queryRawUnsafe(`
+        SELECT d.idcuenta AS id, d.idcuenta, concat(c.codigo,' - ', c.nombre) as cuenta, d.glosa, ${strdebe} AS debe, ${strhaber} AS haber FROM detallecomprobante d LEFT JOIN cuenta c ON c.idcuenta=d.idcuenta WHERE idcomprobante=${Number(idcomprobante)} ORDER BY d.numero;
+      `)
+      if(findDetalleComprobante.length){
+        return res.json({ok:true, data:findDetalleComprobante});
+      }else{
+        return res.json({ok:false, data:[], mensaje:"No se encontraron detalles"})
+      }
+    } catch (error) {
+      console.log("Error: ", error.message);
+      res.status(400).json({ok:false, mensaje:'Bad Request'})
+    }
+  },
+  createComprobante: async (req,res)=>{
+    try {
+      const { idusuario, idempresa } = req.user
+      let { glosa, fecha, tc, tipocomprobante, idmoneda, detalles } = req.body
+
+      if(Number(tipocomprobante) == 1){
+        const findComprobanteApertura = await prisma.$queryRaw`
+          SELECT * FROM comprobante c left join gestion g on c.idempresa=g.idempresa where tipocomprobante=1 AND c.idempresa=${idempresa} AND c.estado>=0 AND ${fecha}::date between fechainicio and fechafin LIMIT 1;
+        `
+        if(findComprobanteApertura.length){
+          return res.json({ok:false, mensaje:"Ya existe un comprobante de apertura para esta gestión"})
         }
       }
+      const validarFechas = await prisma.$queryRaw`
+        SELECT * FROM periodo p LEFT JOIN gestion g ON p.idgestion=g.idgestion WHERE (${fecha}::date BETWEEN p.fechainicio AND p.fechafin) AND p.estado=1 AND g.idempresa=${idempresa} LIMIT 1
+      `
+      if(!validarFechas.length){
+        return res.json({ok:false, mensaje:"La fecha no pertenece a un periodo abierto de la empresa"})
+      }
+      const findUltimaSerie = await prisma.empresa.findFirst({
+        where:{
+          idempresa: idempresa
+        },
+        select:{
+          empresamoneda:{
+            where:{
+              activo: 1,
+            },
+            select:{
+              idmonedaprincipal: true
+            }
+          },
+          _count:{
+            select:{
+              comprobante: true
+            }
+          }
+        }
+      })
+      let nueva_serie = 1;
+      let idmonpri = 1;
+      let tipo_cambio =  Number(tc);
+      if(findUltimaSerie){
+        nueva_serie = findUltimaSerie._count.comprobante + 1
+        idmonpri = findUltimaSerie.empresamoneda[0].idmonedaprincipal
+      }
+
+      let detalles_format_create = detalles.map((d, i)=>{
+
+        return {
+          numero: i,
+          glosa: d.glosa,
+          montodebe: idmoneda == idmonpri ? d.debe : d.debe * tipo_cambio,
+          montohaber: idmoneda == idmonpri ? d.haber : d.haber * tipo_cambio,
+          montodebealt: idmoneda != idmonpri ? d.debe : d.debe / tipo_cambio,
+          montohaberalt: idmoneda != idmonpri ? d.haber: d.haber / tipo_cambio,
+          idusuario: idusuario,
+          idcuenta: d.idcuenta,
+        }
+      })
+      const createComprobante = await prisma.comprobante.create({
+        data:{
+          serie: nueva_serie,
+          glosa: glosa,
+          fecha: new Date(fecha),
+          tc: tipo_cambio,
+          estado: 1,
+          tipocomprobante: Number(tipocomprobante),
+          idusuario: idusuario,
+          idmoneda: Number(idmoneda),
+          idempresa: idempresa,
+          detallecomprobante:{
+            createMany: {
+              data: detalles_format_create,
+            }
+          }
+        }
+      })
+      if(createComprobante){
+        return res.json({ok:true, mensaje:"Guardado con éxito", datos:createComprobante})
+      }else{
+        return res.json({ok:false, mensaje:'Ocurrio un error al crear comprobante'})
+      }
+      
     } catch (error) {
       console.log("Error: ", error.message);
       res.status(400).json({ok:false, mensaje:'Bad Request'})

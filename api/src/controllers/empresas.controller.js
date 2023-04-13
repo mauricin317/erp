@@ -97,9 +97,9 @@ module.exports = {
           }
         })
         if(crearEmpresa){
-          // const generarCuentas = await prisma.$queryRaw`
-          //   SELECT generar_cuentas_principales(${crearEmpresa.idempresa}::bigint, ${idusuario}::bigint, ${Number(niveles)}::int2) as total;
-          // `
+          const generarCuentas = await prisma.$queryRaw`
+            SELECT generar_cuentas_principales(${crearEmpresa.idempresa}::bigint, ${idusuario}::bigint, ${Number(niveles)}::int2) as total;
+          `
             res.json({ok:true, mensaje:'Empresa creada con éxito', data:crearEmpresa})
         }else{
           res.json({ok:false, mensaje:'Error al crear empresa'})

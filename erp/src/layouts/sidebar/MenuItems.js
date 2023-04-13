@@ -16,8 +16,13 @@ export const Menuitems = [
   },
   {
     title: "Moneda",
-   icon: "dollar-sign",
+    icon: "dollar-sign",
     href: "/monedas",
+  },
+  {
+    title: "Comprobantes",
+    icon: "book-open",
+    href: "/comprobantes",
   }
   
 ];

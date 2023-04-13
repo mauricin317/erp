@@ -27,6 +27,7 @@ app.use('/api/empresas',empresasRouter);
 app.use('/api/gestiones',gestionesRouter);
 app.use('/api/periodos',periodosRouter);
 app.use('/api/cuentas',cuentasRouter);
+app.use('/api/empresamonedas',empresamonedasRouter);
 app.use('/api/comprobantes',comprobantesRouter);
 app.use('/api/empresamonedas',empresamonedasRouter);
 // 404: Not found

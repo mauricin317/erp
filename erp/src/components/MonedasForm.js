@@ -11,10 +11,18 @@ import Grid from '@mui/material/Grid';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
+import { useEffect } from 'react';
 
 
 function MonedasForm(props) {
     let datos = props.datos
+
+    useEffect(()=>{
+      formik.setValues({
+        monedaalternativa: datos != null ? datos?.idmonedaalternativa : '',
+          cambio: datos != null ? datos?.cambio : 0,
+      })
+    },[props])
     const formik = useFormik({
         initialValues: {
           monedaalternativa: datos != null ? datos?.idmonedaalternativa : '',

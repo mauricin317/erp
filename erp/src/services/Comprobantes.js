@@ -34,7 +34,7 @@ export async function crearComrpobante(datos, jwt) {
  }
 
  export async function anularComprobante(datos, jwt) {
-  return fetch(`http://localhost:3000/api/comprobantes/`, {
+  return fetch(process.env.NEXT_PUBLIC_BACKEND_API + '/comprobantes', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

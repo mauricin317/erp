@@ -1,7 +1,7 @@
 import { DataGrid, esES } from '@mui/x-data-grid';
 import Box from '@mui/system/Box';
 import MonedasForm from './MonedasForm';
-import { useState,useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { formatInTimeZone } from 'date-fns-tz';
 import { ToastContainer } from 'react-toastify';
 import { obtenerEmpresamonedas } from '../services/EmpresaMonedas';
@@ -17,9 +17,6 @@ function MonedasDatarid(props) {
         tieneComprobante: false
       });
 
-      const handleSubmit = () =>{
-       cargarDatos();
-      }
 
     const cargarDatos= async () =>{
         let registros = await obtenerEmpresamonedas(props.jwt);
@@ -32,9 +29,15 @@ function MonedasDatarid(props) {
             })
         }
       }
-      useEffect(()=>{
+
+      const handleSubmit = () =>{
         cargarDatos();
-      },[])
+      }
+
+    useEffect(()=>{
+      cargarDatos();
+    },[])
+
     const columns = [
         {
           field: 'fecharegistro',
@@ -76,22 +79,22 @@ function MonedasDatarid(props) {
         }
       ];
 
-    return ( <Box>
-         
-               <MonedasForm monedas={state.monedas} datos={state?.empresamonedas[0]} submit={handleSubmit} readOnly={state.tieneComprobante} jwt={props.jwt} />
-            <Box>
-                <DataGrid
-                    autoHeight
-                    minWidth={200}
-                    rows={state.empresamonedas}
-                    columns={columns}
-                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                    pageSize={pageSize}
-                    rowsPerPageOptions={[5,10,20]}
-                    localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-                />
-            </Box>
-            <ToastContainer position="top-right" autoClose={2000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover />
+
+    return ( 
+      <Box>
+        <MonedasForm monedas={state?.monedas} datos={state?.empresamonedas[0]} submit={handleSubmit} readOnly={state?.tieneComprobante} jwt={props.jwt} />
+        <Box>
+            <DataGrid
+                autoHeight 
+                rows={state?.empresamonedas}
+                columns={columns}
+                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                pageSize={pageSize}
+                rowsPerPageOptions={[5,10,20]}
+                localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+            />
+        </Box>
+        <ToastContainer position="top-right" autoClose={2000} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover />
       </Box> );
 }
 

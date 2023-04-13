@@ -107,6 +107,7 @@ export default function ComprobantesDataGrid(props){
         showForm: false,
         readOnly: false,
       })
+      cargarDatos();
     }
 
     const showComprobante = (comprobante) =>{

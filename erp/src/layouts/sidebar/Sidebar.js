@@ -62,20 +62,18 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen, sesionDat
         <List>
           {Menuitems.map((item, index) => (
             <List component="li" disablePadding key={item.title}>
-                <ListItem
-                  selected={location === item.href}
-                  sx={{
-                    mb: 1,
-                    ...(location === item.href && {
-                      color: "white",
-                      backgroundColor: (theme) =>
-                        `${theme.palette.primary.main}!important`,
-                    }),
-                  }}
-                >
                   <ListItemButton 
-                    onClick={() => handleClick(index)}
+                    //onClick={() => handleClick(index)}
                     disabled={sesionData?.idempresa === null}
+                    selected={location === item.href}
+                    sx={{
+                      mb: 1,
+                      ...(location === item.href && {
+                        color: "white",
+                        backgroundColor: (theme) =>
+                          `${theme.palette.primary.main}!important`,
+                      }),
+                    }}
                   >
                      <NextLink disa href={item.href}>
                   {/* <ListItemIcon>
@@ -94,7 +92,6 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen, sesionDat
                       </ListItemText>
                     </NextLink>
                   </ListItemButton>
-                </ListItem>
             </List>
           ))}
         </List>
