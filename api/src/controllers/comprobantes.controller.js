@@ -34,7 +34,7 @@ module.exports = {
             activo: 1
           }
         })
-        if(findTipoCambio){
+        if(findTipoCambio?.idmonedaalternativa){
           const findMonedas = await prisma.moneda.findMany({
             where:{
               OR:[

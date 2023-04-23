@@ -19,8 +19,8 @@ function MonedasForm(props) {
 
     useEffect(()=>{
       formik.setValues({
-        monedaalternativa: datos != null ? datos?.idmonedaalternativa : '',
-          cambio: datos != null ? datos?.cambio : 0,
+        monedaalternativa: datos != null && datos?.idmonedaalternativa ? datos?.idmonedaalternativa : '',
+          cambio: datos != null && datos?.cambio ? datos?.cambio : 0,
       })
     },[props])
     const formik = useFormik({
