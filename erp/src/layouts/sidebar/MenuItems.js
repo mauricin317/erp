@@ -4,40 +4,40 @@ export const Menuitems = [
     icon: "home",
     href: "/inicio",
   },
-  {
-    title: "Gestiones",
-    icon: "calendar",
-    href: "/gestiones",
-  },
+  // {
+  //   title: "Gestiones",
+  //   icon: "calendar",
+  //   href: "/gestiones",
+  // },
+  // {
+  //   title: "Plan de Cuentas",
+  //   icon: "calendar",
+  //   href: "/cuentas",
+  // },
+  // {
+  //   title: "Moneda",
+  //   icon: "dollar-sign",
+  //   href: "/monedas",
+  // },
+  // {
+  //   title: "Comprobantes",
+  //   icon: "book-open",
+  //   href: "/comprobantes",
+  // }
+  
+];
+
+export const Contabilidaditems = [
   {
     title: "Plan de Cuentas",
-    icon: "calendar",
+    icon: "align-left",
     href: "/cuentas",
-  },
-  {
-    title: "Moneda",
-    icon: "dollar-sign",
-    href: "/monedas",
   },
   {
     title: "Comprobantes",
     icon: "book-open",
     href: "/comprobantes",
   }
-  
-];
-
-export const Contabilidaditems = [
-//   {
-//     title: "Plan de Cuentas",
-//     icon: "align-left",
-//     href: "/cuentas",
-//   },
-//   {
-//     title: "Comprobantes",
-//     icon: "book-open",
-//     href: "/comprobantes",
-//   }
 ];
 
 export const Inventarioitems = [
@@ -64,43 +64,43 @@ export const Inventarioitems = [
  ];
 
  export const Configuracionitems = [
-//   {
-//     title: "Gestiones",
-//     icon: "calendar",
-//     href: "/gestiones",
-//   },
-//   {
-//     title: "Moneda",
-//     icon: "dollar-sign",
-//     href: "/monedas",
-//   },
-//   {
-//     title: "Cuentas de Integración",
-//     icon: "settings",
-//     href: "/integracion",
-//   }
+  {
+    title: "Gestiones",
+    icon: "calendar",
+    href: "/gestiones",
+  },
+  {
+    title: "Moneda",
+    icon: "dollar-sign",
+    href: "/monedas",
+  },
+  // {
+  //   title: "Cuentas de Integración",
+  //   icon: "settings",
+  //   href: "/integracion",
+  // }
  ];
 
  export const Reportesitems = [
-//   {
-//     title: "Balance Inicial",
-//     icon: "book",
-//     href: "/reportes/1",
-//   },
-//   {
-//     title: "Libro Diario",
-//     icon: "book",
-//     href: "/reportes/2",
-//   },
-//   {
-//     title: "Libro Mayor",
-//     icon: "book",
-//     href: "/reportes/3",
-//   },
-//   {
-//     title: "Comprobacion Sumas y Saldos",
-//     icon: "book",
-//     href: "/reportes/4",
-//   }
+  {
+    title: "Balance Inicial",
+    icon: "book",
+    href: "/reportes/balance-inicial",
+  },
+  {
+    title: "Libro Diario",
+    icon: "book",
+    href: "/reportes/libro-diario",
+  },
+  {
+    title: "Libro Mayor",
+    icon: "book",
+    href: "/reportes/libro-mayor",
+  },
+  {
+    title: "Comprobacion Sumas y Saldos",
+    icon: "book",
+    href: "/reportes/sumas-saldos",
+  }
  ];
 

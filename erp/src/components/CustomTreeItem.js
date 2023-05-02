@@ -58,8 +58,8 @@ const CustomContent = React.forwardRef(function CustomContent(props, ref) {
       </div>
       <Typography
         onClick={handleSelectionClick}
-        variant="h3"
-        //className={classes.label}
+        //variant="h3"
+        className={classes.label}
       >
         {label}
       </Typography>

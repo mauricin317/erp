@@ -10,6 +10,7 @@ var periodosRouter = require('./routes/periodos.router');
 var cuentasRouter = require('./routes/cuentas.router');
 var empresamonedasRouter = require('./routes/empresamonedas.router');
 var comprobantesRouter = require('./routes/comprobantes.router');
+var reportesRouter = require('./routes/reportes.router');
 
 
 const app = express();
@@ -30,6 +31,7 @@ app.use('/api/cuentas',cuentasRouter);
 app.use('/api/empresamonedas',empresamonedasRouter);
 app.use('/api/comprobantes',comprobantesRouter);
 app.use('/api/empresamonedas',empresamonedasRouter);
+app.use('/api/reportes',reportesRouter);
 // 404: Not found
 app.use(function(req, res, next){
   res.status(404).json({ERROR: 'Not found.'});

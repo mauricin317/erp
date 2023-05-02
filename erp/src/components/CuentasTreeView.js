@@ -48,7 +48,7 @@ export default function CuentasTreeView(props){
       const [openDialog, setOpenDialog] = useState(false);
 
 
-      const cargarDatos= async () =>{
+      const cargarDatos= async (firstFetch = false) =>{
         setLoading(true)
         let cuentas = await obtenerCuentas(props.jwt);
         if(cuentas.ok){
@@ -58,23 +58,24 @@ export default function CuentasTreeView(props){
             niveles: cuentas.niveles,
             idempresa: cuentas.idempresa
           })
+          if(firstFetch) handleExpandClick(trees)
         }else{
           setState({
             cuentas: [],
             niveles: cuentas.niveles,
             idempresa: cuentas.idempresa
           })
-
         }
+        console.log(expanded)
         setLoading(false)
       }
 
       useEffect(()=>{
-        cargarDatos();
+        cargarDatos(true);
       },[])
 
-      const handleExpandClick = () => {
-        let objNodeIds = state.cuentas[0]._nodeById
+      const handleExpandClick = (trees) => {
+        let objNodeIds = trees[0]._nodeById
         let _arrNodeIds = _.keys(objNodeIds);
         _arrNodeIds.map((n, i) =>{
           return n.toString();
@@ -153,10 +154,8 @@ export default function CuentasTreeView(props){
       };
 
       const handleReport= () =>{
-     window.open(`http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=%2Freports&reportUnit=%2Freports%2FPlanCuentas&standAlone=true&id_empresa=${state.idempresa}&j_username=joeuser&j_password=123&sessionDecorator=no`, '_blank');
+        window.open(`http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=%2Freports&reportUnit=%2Freports%2FPlanCuentas&standAlone=true&id_empresa=${state.idempresa}&j_username=joeuser&j_password=123&sessionDecorator=no`, '_blank');
       }
-      
-
       
       const renderTree = (node) => (
         <CustomTreeItem key={node.id} nodeId={node.id+""} label={`${node.dataObj.codigo} - ${node.dataObj.nombre}`}>
@@ -178,14 +177,12 @@ export default function CuentasTreeView(props){
                 <Button  color="secondary" size="large" variant="contained" onClick={handleEditar}>Editar<BorderColorSharpIcon/></Button>
                 <Button disabled={disabled.delete||loading} variant="contained" color="error" onClick={() => setOpenDialog(true)}>Borrar<DeleteIcon/></Button>
                 <Button variant="contained" color="secondary" onClick={handleReport} >Reporte<AssessmentSharpIcon/></Button>
-            </Stack>
-            
+            </Stack> 
         </Stack>
-     
         <TreeView aria-label="file system navigator" selected={selected} onNodeSelect={handleSelect} defaultCollapseIcon={<DoDisturbOnTwoToneIcon color='error' />} expanded={expanded} onNodeToggle={handleToggle} defaultExpandIcon={<AddCircleTwoToneIcon color='secondary' />} sx={{ maxHeight:680, marginLeft: '50px', flexGrow: 1, maxWidth: '100%', overflowY: 'auto' }} defaultEndIcon={<FiberManualRecordOutlinedIcon color='info' />} >
-        <CustomTreeItem key={"0"} nodeId={"0"} label={`Plan de Cuentas`}>
-            {state.cuentas.map((tree) => renderTree(tree.rootNode))}
-        </CustomTreeItem>
+          <CustomTreeItem key={"0"} nodeId={"0"} label={`Plan de Cuentas`}>
+              {state.cuentas.map((tree) => renderTree(tree.rootNode))}
+          </CustomTreeItem>
         </TreeView>
         <AlertDialog open={openDialog} title={"¿Seguro que desea eliminar esta cuenta?"} body={"La cuenta se eliminará de forma permanente"} btnText={"Eliminar"} close={() => setOpenDialog(false)} confirm={handleEliminar} />
         <ModalForm open={modalform.open} tipo={modalform.tipo} datos={modalform.datos} niveles={state.niveles} close={handleCloseModal} submit={handleSubmit} jwt={props.jwt} />

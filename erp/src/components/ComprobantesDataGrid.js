@@ -229,7 +229,7 @@ export default function ComprobantesDataGrid(props){
       ];
 
     return(
-        <div>
+        <div style={{padding:'0 100px'}}>
             {!state.showForm ?
             <div>
               <h2>Comprobantes</h2>

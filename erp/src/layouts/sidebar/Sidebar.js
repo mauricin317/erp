@@ -95,7 +95,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen, sesionDat
             </List>
           ))}
         </List>
-          {/* <ListItem onClick={() => handleCollapse("contabilidad")} button selected={collapse==="contabilidad"} sx={{mb: 1}} >
+          <ListItem onClick={() => handleCollapse("contabilidad")} button selected={collapse==="contabilidad"} sx={{mb: 1}} >
             <ListItemText primary="Contabilidad" />
             {collapse==="contabilidad" ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
@@ -134,7 +134,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen, sesionDat
                   </NextLink>
                 </List>
               ))}
-          </Collapse> */}
+          </Collapse>
           {/* <ListItem onClick={() => handleCollapse("inventario")} button selected={collapse==="inventario"} sx={{mb: 1}} >
             <ListItemText primary="Inventario" />
             {collapse==="inventario" ? <ExpandLess /> : <ExpandMore />}
@@ -175,11 +175,11 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen, sesionDat
                 </List>
               ))}
           </Collapse> */}
-          {/* <ListItem onClick={() => handleCollapse("reportes")} button selected={collapse==="reportes"} sx={{mb: 1}} >
+          <ListItem onClick={() => handleCollapse("reportes")} button selected={collapse==="reportes"} sx={{mb: 1}} >
             <ListItemText primary="Reportes" />
             {collapse==="reportes" ? <ExpandLess /> : <ExpandMore />}
-          </ListItem> */}
-          {/* <Collapse in={collapse==="reportes"} timeout="auto" unmountOnExit>
+          </ListItem>
+          <Collapse in={collapse==="reportes"} timeout="auto" unmountOnExit>
           {Reportesitems.map((item, index) => (
                 <List component="li" disablePadding key={item.title}>
                   <NextLink href={item.href}>
@@ -214,8 +214,8 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen, sesionDat
                   </NextLink>
                 </List>
               ))}
-          </Collapse> */}
-          {/* <ListItem onClick={() => handleCollapse("configuracion")} button selected={collapse==="configuracion"} sx={{mb: 1}} >
+          </Collapse>
+          <ListItem onClick={() => handleCollapse("configuracion")} button selected={collapse==="configuracion"} sx={{mb: 1}} >
             <ListItemText primary="Configuración" />
             {collapse==="configuracion" ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
@@ -254,7 +254,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen, sesionDat
                   </NextLink>
                 </List>
               ))}
-          </Collapse> */}
+          </Collapse>
          
       </Box>
 

@@ -230,7 +230,8 @@ export default function FormComprobante(props){
     return(
         <Box sx={
           { 
-            width: 1
+            width: 1,
+            mt:3
           }
         }>
         <form onSubmit={formik.handleSubmit}>   
