@@ -107,7 +107,17 @@ module.exports = {
           c.idcomprobante=${Number(idcomprobante)} AND em.activo=1;
         `
         if(findDatos){
-          return res.json(findDatos)
+          let formatedDatos = findDatos.map((data)=>{
+            return {
+              ...data,
+              tc: Number(data?.tc),
+              montodebe:  Number(data?.montodebe),
+              montohaber:  Number(data?.montohaber),
+              montodebealt:  Number(data?.montodebealt),
+              montohaberalt:  Number(data?.montohaberalt),
+            }
+          })
+          return res.json(formatedDatos)
         }else{
           res.status(400).json('No se encontraron resultados')
         }
@@ -150,7 +160,16 @@ module.exports = {
         ORDER BY fecha , serie, numero;
         `
         if(findDatos){
-          return res.json(findDatos)
+          let formatedDatos = findDatos.map((data)=>{
+            return {
+              ...data,
+              sumadebe: Number(data?.sumadebe),
+              sumahaber: Number(data?.sumahaber),
+              sumadebealt: Number(data?.sumadebealt),
+              sumahaberalt: Number(data?.sumahaberalt)
+            }
+          })
+          return res.json(formatedDatos)
         }else{
           res.status(400).json('No se encontraron resultados')
         }
@@ -181,7 +200,20 @@ module.exports = {
         GROUP BY cuenta, e.nombre, u.usuario, g.nombre, m.nombre, m.abreviatura, em.idmonedaprincipal;
         `
         if(findDatos){
-          return res.json(findDatos)
+          let formatedDatos = findDatos.map((data)=>{
+            return {
+              ...data,
+              sumadebe: Number(data?.sumadebe),
+              sumhaber: Number(data?.sumhaber),
+              sumdebealt: Number(data?.sumdebealt),
+              sumhaberalt: Number(data?.sumhaberalt),
+              saldodebe: Number(data?.saldodebe),
+              saldohaber: Number(data?.saldohaber),
+              saldodebealt: Number(data?.saldodebealt),
+              saldohaberalt: Number(data?.saldohaberalt),
+            }
+          })
+          return res.json(formatedDatos)
         }else{
           res.status(400).json('No se encontraron resultados')
         }
@@ -228,7 +260,18 @@ module.exports = {
         ORDER BY cuenta, fecha) AS tab;
         `
         if(findDatos){
-          return res.json(findDatos)
+          let formatedDatos = findDatos.map((data)=>{
+            return {
+              ...data,
+              debe: Number(data?.debe),
+              haber: Number(data?.haber),
+              debealt: Number(data?.debealt),
+              haberalt: Number(data?.haberalt),
+              saldo: Number(data?.saldo),
+              saldoalt: Number(data?.saldoalt),
+            }
+          })
+          return res.json(formatedDatos)
         }else{
           res.status(400).json('No se encontraron resultados')
         }
@@ -251,7 +294,7 @@ module.exports = {
           FROM detallecomprobante d 
             LEFT JOIN comprobante c ON c.idcomprobante=d.idcomprobante
             LEFT JOIN cuenta c2  ON d.idcuenta=c2.idcuenta 
-            LEFT JOIN moneda m ON m.idmoneda =$P{id_moneda} 
+            LEFT JOIN moneda m ON m.idmoneda =${Number(idmoneda)} 
             LEFT JOIN empresa e ON c2.idempresa = e.idempresa 
             LEFT JOIN gestion g ON g.idempresa = e.idempresa 
             LEFT JOIN periodo p ON p.idgestion = g.idgestion AND c.fecha BETWEEN p.fechainicio AND p.fechafin 
@@ -265,17 +308,28 @@ module.exports = {
         FROM detallecomprobante d
           LEFT JOIN comprobante c ON c.idcomprobante=d.idcomprobante
           LEFT JOIN cuenta c2 ON c2.idcuenta = d.idcuenta  
-          LEFT JOIN moneda m ON m.idmoneda = $P{id_moneda} 
+          LEFT JOIN moneda m ON m.idmoneda = ${Number(idmoneda)} 
           LEFT JOIN empresa e ON c2.idempresa = e.idempresa 
           LEFT JOIN gestion g ON g.idempresa = e.idempresa 
           LEFT JOIN periodo p ON p.idgestion = g.idgestion AND c.fecha BETWEEN p.fechainicio AND p.fechafin 
           LEFT JOIN empresamoneda em ON em.idempresa = e.idempresa 
           LEFT JOIN usuario u ON u.idusuario = e.idusuario
         WHERE c.estado>=0 AND  em.activo=1 AND (p.idperiodo=${Number(idperiodo)} OR g.idgestion=${Number(idgestion)})
-        GROUP BY cuenta, fecha) AS tab;
+        ORDER BY cuenta, fecha) AS tab;
         `
         if(findDatos){
-          return res.json(findDatos)
+          let formatedDatos = findDatos.map((data)=>{
+            return {
+              ...data,
+              debe: Number(data?.debe),
+              haber: Number(data?.haber),
+              debealt: Number(data?.debealt),
+              haberalt: Number(data?.haberalt),
+              saldo: Number(data?.saldo),
+              saldoalt: Number(data?.saldoalt),
+            }
+          })
+          return res.json(formatedDatos)
         }else{
           res.status(400).json('No se encontraron resultados')
         }
