@@ -7,8 +7,15 @@ const jwt = require('../jwt')
 router.get("/",jwt.ensureToken , controller.getReportData);
 
 
-//REPORTES PARA JASPER
-router.get("/empresas", controller.getReporteEmpresas); //api/reportes/empresas
+//ENDPOINTS PARA JASPER
+router.get("/empresas", controller.getReporteEmpresas);  // api/reportes/empresas
+router.get("/plan-cuentas", controller.getReportePlanCuentas);  // api/reportes/plan-cuentas
+router.get("/comprobante", controller.getReporteComprobante);  // api/reportes/comprobante
+
+router.get("/libro-diario", controller.getReporteLibroDiario);  // api/reportes/libro-diario
+router.get("/sumas-saldos", controller.getReporteSumasSaldos);  // api/reportes/sumas-saldos
+router.get("/libro-mayor-todos", controller.getReporteLibroMayorTodos);  // api/reportes/libro-mayor-todos
+router.get("/libro-mayor-periodo", controller.getReporteLibroMayorPeriodo);  // api/reportes/libro-mayor-periodo
 
 
 module.exports = router;
