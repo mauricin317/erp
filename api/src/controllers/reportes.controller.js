@@ -10,10 +10,6 @@ function format_date(date) {
   return `${day}/${month}/${year}`;
 }
 
-function roundToTwoDecimals(number) {
-  return number.toFixed(2);
-}
-
 module.exports = {
     getReportData: async (req, res) => {
         try {
@@ -123,11 +119,11 @@ module.exports = {
             return {
               ...data,
               fecha: format_date(data?.fecha),
-              tc: roundToTwoDecimals(Number(data?.tc)),
-              montodebe:  roundToTwoDecimals(Number(data?.montodebe)),
-              montohaber:  roundToTwoDecimals(Number(data?.montohaber)),
-              montodebealt:  roundToTwoDecimals(Number(data?.montodebealt)),
-              montohaberalt:  roundToTwoDecimals(Number(data?.montohaberalt)),
+              tc: Number(data?.tc),
+              montodebe:  Number(data?.montodebe),
+              montohaber:  Number(data?.montohaber),
+              montodebealt:  Number(data?.montodebealt),
+              montohaberalt:  Number(data?.montohaberalt),
             }
           })
           return res.json(formatedDatos)
@@ -176,6 +172,7 @@ module.exports = {
           let formatedDatos = findDatos.map((data)=>{
             return {
               ...data,
+              fecha: format_date(data?.fecha),
               sumadebe: Number(data?.sumadebe),
               sumahaber: Number(data?.sumahaber),
               sumadebealt: Number(data?.sumadebealt),
@@ -216,7 +213,7 @@ module.exports = {
           let formatedDatos = findDatos.map((data)=>{
             return {
               ...data,
-              sumadebe: Number(data?.sumadebe),
+              sumdebe: Number(data?.sumdebe),
               sumhaber: Number(data?.sumhaber),
               sumdebealt: Number(data?.sumdebealt),
               sumhaberalt: Number(data?.sumhaberalt),
@@ -276,6 +273,7 @@ module.exports = {
           let formatedDatos = findDatos.map((data)=>{
             return {
               ...data,
+              fecha: format_date(data?.fecha),
               debe: Number(data?.debe),
               haber: Number(data?.haber),
               debealt: Number(data?.debealt),
@@ -334,6 +332,7 @@ module.exports = {
           let formatedDatos = findDatos.map((data)=>{
             return {
               ...data,
+              fecha: format_date(data?.fecha),
               debe: Number(data?.debe),
               haber: Number(data?.haber),
               debealt: Number(data?.debealt),
