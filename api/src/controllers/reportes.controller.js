@@ -2,6 +2,18 @@ const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
 
+function format_date(date) {
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+
+function roundToTwoDecimals(number) {
+  return number.toFixed(2);
+}
+
 module.exports = {
     getReportData: async (req, res) => {
         try {
@@ -110,11 +122,12 @@ module.exports = {
           let formatedDatos = findDatos.map((data)=>{
             return {
               ...data,
-              tc: Number(data?.tc),
-              montodebe:  Number(data?.montodebe),
-              montohaber:  Number(data?.montohaber),
-              montodebealt:  Number(data?.montodebealt),
-              montohaberalt:  Number(data?.montohaberalt),
+              fecha: format_date(data?.fecha),
+              tc: roundToTwoDecimals(Number(data?.tc)),
+              montodebe:  roundToTwoDecimals(Number(data?.montodebe)),
+              montohaber:  roundToTwoDecimals(Number(data?.montohaber)),
+              montodebealt:  roundToTwoDecimals(Number(data?.montodebealt)),
+              montohaberalt:  roundToTwoDecimals(Number(data?.montohaberalt)),
             }
           })
           return res.json(formatedDatos)
