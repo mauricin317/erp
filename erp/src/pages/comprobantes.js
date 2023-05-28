@@ -16,7 +16,7 @@ export default function Comprobantes() {
   return (
     <>
       <Head>
-          <title>Comprobantes | ERP</title>
+          <title>Gestion de Comprobantes</title>
       </Head>
           <ComprobantesDataGrid jwt={jwt} />
     </>

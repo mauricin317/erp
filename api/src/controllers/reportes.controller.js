@@ -139,7 +139,7 @@ module.exports = {
       try{
         let { idmoneda, idperiodo, idgestion } = req.query
         const findDatos = await prisma.$queryRaw`
-        SELECT c.serie, 0 AS numero, c.fecha, m.nombre AS moneda, e.nombre AS empresa, c.glosa AS glosaC, g.nombre AS gestion, p.nombre AS periodo,	CONCAT( cu.codigo,' - ',cu.nombre) AS nombrecuenta,
+        SELECT c.serie, -1 AS numero, c.fecha, m.nombre AS moneda, e.nombre AS empresa, c.glosa AS glosaC, g.nombre AS gestion, p.nombre AS periodo,	CONCAT( cu.codigo,' - ',cu.nombre) AS nombrecuenta,
           m.abreviatura AS simbolo, 0 AS sumadebe, 0 AS sumahaber, 0 AS sumadebealt, 0 AS sumahaberalt, u.usuario AS nombreusuario, em.idmonedaprincipal AS idmonpri
         FROM detallecomprobante d
           LEFT JOIN comprobante c ON d.idcomprobante = c.idcomprobante 
@@ -238,9 +238,9 @@ module.exports = {
         const findDatos = await prisma.$queryRaw`
         SELECT tab.*, 
           SUM(CASE WHEN debe<>0 THEN debe ELSE haber*(-1) END) 
-          OVER (PARTITION BY tab.cuenta ORDER BY tab.fecha) AS saldo,
+          OVER (PARTITION BY tab.cuenta ORDER BY tab.fecha, tab.serie) AS saldo,
           SUM(CASE WHEN debealt<>0 THEN debealt ELSE haberalt*(-1) END) 
-          OVER (PARTITION BY tab.cuenta ORDER BY tab.fecha) AS saldoalt
+          OVER (PARTITION BY tab.cuenta ORDER BY tab.fecha, tab.serie) AS saldoalt
         FROM (SELECT DISTINCT ON (c2.idcuenta) CONCAT(c2.codigo,' - ',c2.nombre) AS cuenta,'01-01-2000' AS fecha ,0 AS serie,0 AS tipocomprobante, '0' AS glosa,0 AS debe,0 AS haber,0 AS debealt,0 AS haberalt,0 AS numero,
           m.abreviatura AS simbolo, m.nombre AS moneda,e.nombre AS empresa,	g.nombre AS gestion, p.nombre AS periodo,u.usuario AS nombreusuario, em.idmonedaprincipal AS idmonpri
         FROM detallecomprobante d 
@@ -266,7 +266,7 @@ module.exports = {
           LEFT JOIN periodo p ON p.idgestion = g.idgestion AND c.fecha BETWEEN p.fechainicio AND p.fechafin 
           LEFT JOIN empresamoneda em ON em.idempresa = e.idempresa 
           LEFT JOIN usuario u ON u.idusuario = e.idusuario
-        WHERE c.estado>=0 AND  em.activo=1 AND (p.idperiodo=${Number(idperiodo)}  OR g.idgestion=${Number(idgestion)}  )
+        WHERE c.estado>0 AND  em.activo=1 AND (p.idperiodo=${Number(idperiodo)}  OR g.idgestion=${Number(idgestion)}  )
         ORDER BY cuenta, fecha) AS tab;
         `
         if(findDatos){
@@ -297,9 +297,9 @@ module.exports = {
         const findDatos = await prisma.$queryRaw`
         SELECT tab.*, 
           SUM(CASE WHEN debe<>0 THEN debe ELSE haber*(-1) END) 
-          OVER (PARTITION BY tab.cuenta ORDER BY tab.fecha) AS saldo,
+          OVER (PARTITION BY tab.cuenta ORDER BY tab.fecha, tab.serie) AS saldo,
           SUM(CASE WHEN debealt<>0 THEN debealt ELSE haberalt*(-1) END) 
-          OVER (PARTITION BY tab.cuenta ORDER BY tab.fecha) AS saldoalt
+          OVER (PARTITION BY tab.cuenta ORDER BY tab.fecha, tab.serie) AS saldoalt
         FROM (SELECT CONCAT(c2.codigo,' - ',c2.nombre) AS cuenta, '01-01-2000' AS fecha, 0 AS serie, 0 AS tipocomprobante, '0' AS glosa, 0 AS debe, 0 AS haber, 0 AS debealt, 0 AS haberalt, 0 AS numero,
           m.abreviatura AS simbolo, m.nombre AS moneda,e.nombre AS empresa, g.nombre AS gestion, p.nombre AS periodo,u.usuario AS nombreusuario, em.idmonedaprincipal AS idmonpri
           FROM detallecomprobante d 

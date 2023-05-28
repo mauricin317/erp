@@ -46,7 +46,7 @@ export default function Reportes() {
   return (
     <>
       <Head>
-          <title>Reporte Sumas y Saldos | ERP</title>
+          <title>Reporte Sumas y Saldos</title>
       </Head>
           <h2>Reporte Sumas y Saldos</h2>
           <FormSumasSaldos gestiones={state.gestiones} monedas={state.monedas} />

@@ -6,6 +6,7 @@ import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
+import Typography from '@mui/material/Typography';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 
@@ -39,12 +40,15 @@ function FormLibroDiario(props) {
         <Container maxWidth="md">
             <form onSubmit={formik.handleSubmit}>
             <Grid container spacing={2}>
-            <Grid item md={3} xs={12}>
+            <Grid item md={10} xs={12}>
+            <Typography>
+              Gestion
+            </Typography>
               <TextField
                 fullWidth
                 error={Boolean(formik.touched.idgestion && formik.errors.idgestion)}
                 helperText={formik.touched.idgestion && formik.errors.idgestion}
-                label="Gestion"
+             
                 margin="normal"
                 name="idgestion"
                 onBlur={formik.handleBlur}
@@ -60,12 +64,15 @@ function FormLibroDiario(props) {
                         ))}  
                 </TextField> 
               </Grid>
-              <Grid item md={3} xs={12}>
+              <Grid item md={10} xs={12}>
+              <Typography>
+              Periodo
+            </Typography>
                 <TextField
                     fullWidth
                     error={Boolean(formik.touched.idperiodo && formik.errors.idperiodo)}
                     helperText={formik.touched.idperiodo && formik.errors.idperiodo}
-                    label="Periodo"
+                   
                     margin="normal"
                     name="idperiodo"
                     onBlur={formik.handleBlur}
@@ -85,12 +92,15 @@ function FormLibroDiario(props) {
                     </TextField>
               </Grid>
               
-              <Grid item md={3} xs={12}>
+              <Grid item md={10} xs={12}>
+              <Typography>
+              Moneda
+            </Typography>
               <TextField
                 fullWidth
                 error={Boolean(formik.touched.idmoneda && formik.errors.idmoneda)}
                 helperText={formik.touched.idmoneda && formik.errors.idmoneda}
-                label="Moneda"
+              
                 margin="normal"
                 name="idmoneda"
                 onBlur={formik.handleBlur}
@@ -106,8 +116,8 @@ function FormLibroDiario(props) {
                     ))} 
                 </TextField> 
               </Grid>
-              <Grid item md={3} xs={12} sx={{justifyContent:'center' ,display: "inline-flex", alignItems: "center"}}>
-                <Button sx={{height:"52px", marginTop: "7px", color:"white"}} color="info" type="submit" variant="contained"><AssignmentRoundedIcon /></Button>
+              <Grid item md={10} xs={12} sx={{justifyContent:'center' ,display: "inline-flex", alignItems: "center"}}>
+                <Button sx={{height:"52px", marginTop: "7px", color:"white"}} fullWidth size="large" color="info" type="submit" variant="contained"><AssignmentRoundedIcon />Reporte</Button>
               </Grid>
             </Grid>
             

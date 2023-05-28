@@ -46,7 +46,7 @@ export default function Reportes() {
   return (
     <>
       <Head>
-          <title>Reporte Libro Diario | ERP</title>
+          <title>Reporte Libro Diario</title>
       </Head>
           <h2>Reporte Libro Diario</h2>
           <FormLibroDiario gestiones={state.gestiones} periodos={state.periodos} monedas={state.monedas} />

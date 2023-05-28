@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Autocomplete from '@mui/material/Autocomplete';
+import AddIcon from '@mui/icons-material/Add';
 import Grid from '@mui/material/Grid';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -71,16 +72,20 @@ export default function FormDetalleComprobante(props){
       <Container maxWidth="xl">
         <form onSubmit={formik.handleSubmit}>   
             <Box sx={{pb: 1, display:"flex", alignItems:"center", justifyContent:"space-between"}}>
-              <Typography align="center" color="textSecondary" variant="h5">
+              <Typography align="center" color="black" variant="h2">
                 {props.tipo === "nuevo" ? "Nuevo" : "Editar"} Detalle Comprobante
               </Typography>
-              <Button size="large" color="error" variant="contained" disabled={formik.isSubmitting}  onClick={props.close}>X</Button>
+            
             </Box>
             <Grid container spacing={2}>
               <Grid item md={4} xs={12}>
+              <Typography>
+           Cuenta
+            </Typography>
                 <Autocomplete
                     id="combo-box-demo"
                     name="cuenta"
+                    size="small"
                     options={props.cuentas}
                     value={cuenta}
                     onChange={(event, newValue) => {
@@ -88,7 +93,7 @@ export default function FormDetalleComprobante(props){
                     }}
                     renderInput={(params) => <TextField
                         fullWidth
-                        label="Cuenta"
+                        size="small"
                         margin="normal"
                         type="text"
                         variant="outlined"
@@ -97,11 +102,14 @@ export default function FormDetalleComprobante(props){
                 />
               </Grid>
               <Grid item md={4} xs={12}>
+              <Typography>
+           Glosa
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.glosa && formik.errors.glosa)}
                   fullWidth
                   helperText={formik.touched.glosa && formik.errors.glosa}
-                  label="Glosa"
+                  size="small"
                   margin="normal"
                   name="glosa"
                   onBlur={formik.handleBlur}
@@ -116,11 +124,14 @@ export default function FormDetalleComprobante(props){
                 />
               </Grid>
               <Grid item md={2} xs={12}>
+              <Typography>
+       Debe
+            </Typography>
                 <TextField sx={{textAlign:'right'}}
                   error={Boolean(formik.touched.debe && formik.errors.debe)}
                   fullWidth
                   helperText={formik.touched.debe && formik.errors.debe}
-                  label="Debe"
+                  size="small"
                   margin="normal"
                   name="debe"
                   onBlur={formik.handleBlur}
@@ -139,11 +150,14 @@ export default function FormDetalleComprobante(props){
                 />
               </Grid>
               <Grid item md={2} xs={12}>
+              <Typography>
+       Haber
+            </Typography>
                 <TextField sx={{textAlign:'right'}}
                   error={Boolean(formik.touched.haber && formik.errors.haber)}
                   fullWidth
                   helperText={formik.touched.haber && formik.errors.haber}
-                  label="Haber"
+                  size="small"
                   margin="normal"
                   name="haber"
                   onBlur={formik.handleBlur}
@@ -164,8 +178,8 @@ export default function FormDetalleComprobante(props){
               
             </Grid>
             <Box sx={{ py: 1,display:'flex',justifyContent:'end' }}>
-              <Button size="large" color="primary" disabled={formik.isSubmitting} type="submit" variant="contained">
-                Guardar
+              <Button size="medium" color="success" disabled={formik.isSubmitting} type="submit" variant="contained">
+              <AddIcon/>Guardar
               </Button>
               
             </Box>

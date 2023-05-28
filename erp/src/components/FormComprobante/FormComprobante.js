@@ -5,7 +5,10 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import CancelIcon from '@mui/icons-material/Cancel';
+import Typography from '@mui/material/Typography';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import AddIcon from '@mui/icons-material/Add';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import AddToPhotosRoundedIcon from '@mui/icons-material/AddToPhotosRounded';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
@@ -186,7 +189,7 @@ export default function FormComprobante(props){
         {
             field: 'glosa',
             headerName: 'Glosa',
-            width:500
+            width:400
             
         },
         {
@@ -239,26 +242,29 @@ export default function FormComprobante(props){
             <Stack sx={{ justifyContent:'space-between', alignItems:'center',height:'50px'}} direction="row">
             <h2>{`${!props.readOnly ? 'Nuevo' : 'Ver'} Comprobante`}</h2>
             <Stack sx={{ '& button': { my: 1, ml:1 }, justifyContent:'end'}} direction="row">
-            <Button variant="contained" color="secondary" disabled={formik.isSubmitting} onClick={() => {props.readOnly == true ? props.closeForm() : setOpenDialog({state:true})}} ><ArrowBackRoundedIcon/></Button>
+            <Button variant="contained" color="secondary" disabled={formik.isSubmitting} onClick={() => {props.readOnly == true ? props.closeForm() : setOpenDialog({state:true})}} ><ArrowBackRoundedIcon/>Atras</Button>
             {
               props.readOnly == false ?
-                <Button variant="contained" color="success" disabled={formik.isSubmitting || props.readOnly} type="submit" ><SaveRoundedIcon/></Button>
+                <Button variant="contained" color="success" disabled={formik.isSubmitting || props.readOnly} type="submit" ><AddIcon/>Guardar</Button>
               :<>
               {/* <Button variant="contained" color="success" sx={{color:'white'}} ><AddCircleRoundedIcon/></Button>*/}
-                <Button variant="contained" color="info" disabled={formik.isSubmitting}  sx={{color:'white'}} onClick={openReport} ><AssignmentRoundedIcon/></Button>
+                <Button variant="contained" color="info" disabled={formik.isSubmitting}  sx={{color:'white'}} onClick={openReport} ><AssignmentRoundedIcon/>Reporte</Button>
               </>
             }
-              <Button variant="contained" color="danger" disabled={formik.isSubmitting || estado != 'Abierto' || props.readOnly == false}  sx={{color:'white'}} onClick={() => setOpenDialogAnular({state:true})}><DoDisturbOnRoundedIcon/></Button>
+              <Button variant="contained" color="danger" disabled={formik.isSubmitting || estado != 'Abierto' || props.readOnly == false}  sx={{color:'white'}} onClick={() => setOpenDialogAnular({state:true})}><CancelIcon/>Anular</Button>
             </Stack>
             </Stack>
             <Grid container spacing={1}>
+          
               <Grid item md={1} xs={12}>
+              <Typography>Serie
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.serie && formik.errors.serie)}
                   fullWidth
                   helperText={formik.touched.serie && formik.errors.serie}
-                  label="Serie"
                   margin="normal"
+                  size="small"
                   name="serie"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
@@ -272,11 +278,13 @@ export default function FormComprobante(props){
                 />
               </Grid>
               <Grid item md={2} xs={12}>
+              <Typography>Fecha
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.fecha && formik.errors.fecha)}
                   fullWidth
                   helperText={formik.touched.fecha && formik.errors.fecha}
-                  label="Fecha"
+                  size="small"
                   margin="normal"
                   name="fecha"
                   onBlur={formik.handleBlur}
@@ -289,9 +297,11 @@ export default function FormComprobante(props){
                 />
               </Grid>
               <Grid item md={2} xs={12}>
+              <Typography>Estado
+            </Typography>
                 <TextField
                   fullWidth
-                  label="Estado"
+                  size="small"
                   margin="normal"
                   name="estado1"
                   type="text"
@@ -304,11 +314,13 @@ export default function FormComprobante(props){
                 />
               </Grid>
               <Grid item md={3} xs={12}>
+              <Typography>Tipo Comprobante
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.tipo_comprobante && formik.errors.tipo_comprobante)}
                   helperText={formik.touched.tipo_comprobante && formik.errors.tipo_comprobante}
                   fullWidth
-                  label="Tipo Comprobante"
+                  size="small"
                   margin="normal"
                   name="tipo_comprobante"
                   onBlur={formik.handleBlur}
@@ -325,12 +337,14 @@ export default function FormComprobante(props){
                     <MenuItem key={5} value={5}>{"Ajuste"}</MenuItem>
                 </TextField>
               </Grid>
-              <Grid item md={3} xs={12}>
+              <Grid item md={2} xs={12}>
+              <Typography>Moneda
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.moneda && formik.errors.moneda)}
                   helperText={formik.touched.moneda && formik.errors.moneda}
                   fullWidth
-                  label="Moneda"
+                  size="small"
                   margin="normal"
                   name="moneda"
                   onBlur={formik.handleBlur}
@@ -347,12 +361,14 @@ export default function FormComprobante(props){
                     ))}
                 </TextField>
               </Grid>
-              <Grid item md={1} xs={12}>
+              <Grid item md={2} xs={12}>
+              <Typography>Tipo Cambio
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.tipo_cambio && formik.errors.tipo_cambio)}
                   fullWidth
                   helperText={formik.touched.tipo_cambio && formik.errors.tipo_cambio}
-                  label="Tipo Cambio"
+                  size="small"
                   margin="normal"
                   name="tipo_cambio"
                   onBlur={formik.handleBlur}
@@ -371,11 +387,13 @@ export default function FormComprobante(props){
             </Grid>
             <Grid container spacing={2}>
               <Grid item md={11} xs={12}>
+              <Typography>Glosa
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.glosa && formik.errors.glosa)}
                   fullWidth
                   helperText={formik.touched.glosa && formik.errors.glosa}
-                  label="Glosa"
+                  size="small"
                   margin="normal"
                   name="glosa"
                   onBlur={formik.handleBlur}
@@ -391,13 +409,14 @@ export default function FormComprobante(props){
                 />
               </Grid>
               <Grid item md={1} xs={12} sx={{justifyContent:'end' ,display: "inline-flex", alignItems: "center"}}>
-                <Button sx={{height: "56px", marginTop: "7px", width:"100%"}} variant="contained" color="primary" disabled={formik.isSubmitting || props.readOnly} onClick={handleNuevo} ><AddToPhotosRoundedIcon/></Button>
+                <Button sx={{marginTop: "28px"}} size="medium" variant="contained" color="success" disabled={formik.isSubmitting || props.readOnly} onClick={handleNuevo} ><AddIcon/>Detalle</Button>
               </Grid>
             </Grid>
           </form>
           <Box sx={{ height: 370, width: 1}}>            
                 <DataGrid
                     rows={detalles}
+                    autoHeight
                     columns={columns}
                     localeText={esES.components.MuiDataGrid.defaultProps.localeText}
                     hideFooterPagination
@@ -408,8 +427,8 @@ export default function FormComprobante(props){
                     rowHeight={30}
                 />    
           </Box>
-          <AlertDialog open={openDialog.state} title={"¿Seguro que desea salir?"} body={"Se perderán todos los datos de este comprobante"} btnText={"Sí, Salir"} close={() => setOpenDialog({state:false})} confirm={props.closeForm} />
-          <AlertDialog open={openDialogAnular.state} title={"¿Seguro que desea anular este comprobante?"} body={"El comprobante será anulado de forma permanente"} btnText={"Anular"} close={() => setOpenDialogAnular({state:false})} confirm={handleAnular} />
+          <AlertDialog open={openDialog.state} title={"Comprobantes"} body={"Desea volver atras? se perderan los datos"} btnText={"Volver"} close={() => setOpenDialog({state:false})} confirm={props.closeForm} />
+          <AlertDialog open={openDialogAnular.state} title={"Anular"} body={"Desea anular este comprobante?"} btnText={"Anular"} close={() => setOpenDialogAnular({state:false})} confirm={handleAnular} />
           <ModalForm open={modalform.open} tipo={modalform.tipo} datos={modalform.datos} close={handleCloseModal} glosa={formik.values.glosa} cuentas={modalform.tipo == "nuevo" ? _cuentas : modalform.cuenta} submit={handleSubmitDetalle}/>
     </Box>
     )
@@ -435,7 +454,7 @@ const TotalesFooter = (props) =>{
   return(
     <GridFooterContainer>
       <Stack direction="row"  >
-        <div style={{width:'800px', textAlign:'right'}}>
+        <div style={{width:'690px', textAlign:'right'}}>
           <b>Totales</b>
         </div>
         <div style={{width:'150px', textAlign:'right'}}>

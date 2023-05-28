@@ -11,7 +11,7 @@ import FormComprobante from './FormComprobante/FormComprobante';
 import { ToastContainer, toast } from 'react-toastify';
 import { obtenerComprobantes } from '../services/Comprobantes';
 import { obtenerDetalleCuentas } from '../services/Cuentas';
-
+import AddIcon from '@mui/icons-material/Add';
 export default function ComprobantesDataGrid(props){
 
     const [pageSize, setPageSize] = useState(10);
@@ -232,9 +232,10 @@ export default function ComprobantesDataGrid(props){
         <div style={{padding:'0 100px'}}>
             {!state.showForm ?
             <div>
-              <h2>Comprobantes</h2>
+              <h2>Gestion de Comprobantes</h2>
               <Stack sx={{ '& button': { m: 1 } }} direction="row">
-                  <Button variant="contained" color="primary" onClick={openForm} disabled={!Boolean(state.formData.monedas)}><AddCircleRoundedIcon/></Button>
+
+                  <Button variant="contained" color="success" onClick={openForm} disabled={!Boolean(state.formData.monedas)}>Crear<AddIcon/></Button>
               </Stack>
               <Box sx={{ height: 500, width: 1,
                           '& .estado.abierto': {
@@ -250,6 +251,7 @@ export default function ComprobantesDataGrid(props){
               >
                 <DataGrid
                     rows={state.comprobantes}
+                    
                     columns={columns}
                     localeText={esES.components.MuiDataGrid.defaultProps.localeText}
                     onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}

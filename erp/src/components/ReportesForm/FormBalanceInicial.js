@@ -4,6 +4,8 @@ import { MenuItem } from '@mui/material';
 import { Container,Box, Grid } from '@mui/material';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import { useFormik } from 'formik';
+import Typography from '@mui/material/Typography';
+
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -30,12 +32,15 @@ function FormBalanceInicial(props) {
         <Container maxWidth="md">
             <form onSubmit={formik.handleSubmit}>
             <Grid container spacing={2}>
-              <Grid item md={4} xs={12}>
+              <Grid item md={10} xs={12}>
+              <Typography>
+              Gestion
+            </Typography>
                 <TextField
                     fullWidth
                     error={Boolean(formik.touched.idgestion && formik.errors.idgestion)}
                     helperText={formik.touched.idgestion && formik.errors.idgestion}
-                    label="Gestion"
+                  
                     margin="normal"
                     name="idgestion"
                     onBlur={formik.handleBlur}
@@ -52,12 +57,15 @@ function FormBalanceInicial(props) {
                         
                     </TextField>
               </Grid>
-              <Grid item md={4} xs={12}>
+              <Grid item md={10} xs={12}>
+              <Typography>
+              Moneda
+            </Typography>
               <TextField
                 fullWidth
                 error={Boolean(formik.touched.idmoneda && formik.errors.idmoneda)}
                 helperText={formik.touched.idmoneda && formik.errors.idmoneda}
-                label="Moneda"
+             
                 margin="normal"
                 name="idmoneda"
                 onBlur={formik.handleBlur}
@@ -73,8 +81,8 @@ function FormBalanceInicial(props) {
                     ))} 
                 </TextField> 
               </Grid>
-              <Grid item md={4} xs={12} sx={{justifyContent:'center' ,display: "inline-flex", alignItems: "center"}}>
-                <Button sx={{height:"52px", marginTop: "7px", color:"white"}} color="info" type="submit" variant="contained"><AssignmentRoundedIcon /></Button>
+              <Grid item md={10} xs={12} sx={{justifyContent:'center' ,display: "inline-flex", alignItems: "center"}}>
+                <Button sx={{color:"white"}} fullWidth size="large" color="info" type="submit" variant="contained"><AssignmentRoundedIcon />Reporte</Button>
               </Grid>
             </Grid>
             

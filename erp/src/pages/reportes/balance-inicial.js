@@ -46,7 +46,7 @@ export default function Reportes() {
   return (
     <>
       <Head>
-          <title>Reporte Balance Inicial | ERP</title>
+          <title>Reporte Balance Inicial</title>
       </Head>
           <h2>Reporte Balance Inicial</h2>
           <FormBalanceInicial gestiones={state.gestiones} monedas={state.monedas} />

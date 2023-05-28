@@ -46,7 +46,7 @@ export default function Reportes() {
   return (
     <>
       <Head>
-          <title>Reporte Libro Mayor | ERP</title>
+          <title>Reporte Libro Mayor</title>
       </Head>
           <h2>Reporte Libro Mayor</h2>
           <FormLibroMayor gestiones={state.gestiones} periodos={state.periodos} monedas={state.monedas} />

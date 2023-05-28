@@ -1,7 +1,7 @@
 export const Menuitems = [
   {
     title: "Inicio",
-    icon: "home",
+    icon: "arrow-right",
     href: "/inicio",
   },
   
@@ -10,12 +10,12 @@ export const Menuitems = [
 export const Contabilidaditems = [
   {
     title: "Plan de Cuentas",
-    icon: "align-left",
+    icon: "arrow-right",
     href: "/cuentas",
   },
   {
     title: "Comprobantes",
-    icon: "book-open",
+    icon: "arrow-right",
     href: "/comprobantes",
   }
 ];
@@ -46,12 +46,12 @@ export const Inventarioitems = [
  export const Configuracionitems = [
   {
     title: "Gestiones",
-    icon: "calendar",
+    icon: "arrow-right",
     href: "/gestiones",
   },
   {
     title: "Moneda",
-    icon: "dollar-sign",
+    icon: "arrow-right",
     href: "/monedas",
   },
   {
@@ -64,22 +64,22 @@ export const Inventarioitems = [
  export const Reportesitems = [
   {
     title: "Balance Inicial",
-    icon: "book",
+    icon: "arrow-right",
     href: "/reportes/balance-inicial",
   },
   {
     title: "Libro Diario",
-    icon: "book",
+    icon: "arrow-right",
     href: "/reportes/libro-diario",
   },
   {
     title: "Libro Mayor",
-    icon: "book",
+    icon: "arrow-right",
     href: "/reportes/libro-mayor",
   },
   {
     title: "Comprobacion Sumas y Saldos",
-    icon: "book",
+    icon: "arrow-right",
     href: "/reportes/sumas-saldos",
   }
  ];
