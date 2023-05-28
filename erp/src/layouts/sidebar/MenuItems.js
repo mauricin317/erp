@@ -4,26 +4,6 @@ export const Menuitems = [
     icon: "home",
     href: "/inicio",
   },
-  // {
-  //   title: "Gestiones",
-  //   icon: "calendar",
-  //   href: "/gestiones",
-  // },
-  // {
-  //   title: "Plan de Cuentas",
-  //   icon: "calendar",
-  //   href: "/cuentas",
-  // },
-  // {
-  //   title: "Moneda",
-  //   icon: "dollar-sign",
-  //   href: "/monedas",
-  // },
-  // {
-  //   title: "Comprobantes",
-  //   icon: "book-open",
-  //   href: "/comprobantes",
-  // }
   
 ];
 
@@ -41,26 +21,26 @@ export const Contabilidaditems = [
 ];
 
 export const Inventarioitems = [
-//   {
-//     title: "Categorías",
-//     icon: "tag",
-//     href: "/categorias",
-//   },
-//   {
-//     title: "Artículos",
-//     icon: "award",
-//     href: "/articulos",
-//   },
-//   {
-//     title: "Nota de Compra",
-//     icon: "shopping-bag",
-//     href: "/notacompra",
-//   },
-//   {
-//     title: "Nota de Venta",
-//     icon: "shopping-cart",
-//     href: "/notaventa",
-//   }
+  {
+    title: "Categorías",
+    icon: "tag",
+    href: "/categorias",
+  },
+  {
+    title: "Artículos",
+    icon: "award",
+    href: "/articulos",
+  },
+  {
+    title: "Nota de Compra",
+    icon: "shopping-bag",
+    href: "/notacompra",
+  },
+  {
+    title: "Nota de Venta",
+    icon: "shopping-cart",
+    href: "/notaventa",
+  }
  ];
 
  export const Configuracionitems = [
@@ -74,11 +54,11 @@ export const Inventarioitems = [
     icon: "dollar-sign",
     href: "/monedas",
   },
-  // {
-  //   title: "Cuentas de Integración",
-  //   icon: "settings",
-  //   href: "/integracion",
-  // }
+  {
+    title: "Cuentas de Integración",
+    icon: "settings",
+    href: "/integracion",
+  }
  ];
 
  export const Reportesitems = [

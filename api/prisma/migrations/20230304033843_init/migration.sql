@@ -242,6 +242,97 @@ END;
 $function$
 ;
 
+CREATE OR REPLACE FUNCTION public.detalle_anular_trigger() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $_$
+DECLARE
+	cantidad_a integer;
+	stock_l integer;
+BEGIN
+SELECT cantidad into cantidad_a from articulo where idarticulo=NEW.idarticulo;
+SELECT stock into stock_l from lote where idarticulo=NEW.idarticulo AND nrolote=NEW.nrolote;
+IF NEW.estado = -1 THEN
+EXECUTE 'UPDATE articulo set cantidad=' || (cantidad_a+NEW.cantidad) || ' WHERE idarticulo=$1.idarticulo' USING NEW;
+EXECUTE 'UPDATE lote set stock=' || (stock_l+NEW.cantidad) || ',estado=1 WHERE idarticulo=$1.idarticulo AND nrolote=$1.nrolote' USING NEW;
+END IF;
+RETURN NULL;
+END;
+$_$;
+
+
+ALTER FUNCTION public.detalle_anular_trigger() OWNER TO postgres;
+
+CREATE OR REPLACE FUNCTION public.detalle_insert_trigger() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $_$
+Declare  
+ cantidad_a integer;
+ stock_l integer;
+BEGIN
+select cantidad into cantidad_a from articulo where idarticulo=NEW.idarticulo;
+select stock into stock_l from lote where idarticulo=NEW.idarticulo AND nrolote=NEW.nrolote; 
+EXECUTE 'UPDATE articulo set cantidad='|| (cantidad_a-NEW.cantidad) || ' where idarticulo=$1.idarticulo' USING NEW;
+	IF (stock_l-NEW.cantidad) = 0 THEN 
+		EXECUTE 'UPDATE lote set stock='|| (stock_l-NEW.cantidad) || ', estado=0 where idarticulo=$1.idarticulo and nrolote=$1.nrolote' USING NEW;
+  	ELSE
+     	EXECUTE 'UPDATE lote set stock='|| (stock_l-NEW.cantidad) || ' where idarticulo=$1.idarticulo and nrolote=$1.nrolote' USING NEW;
+	END IF;
+
+RETURN NULL;
+END;
+$_$;
+
+
+ALTER FUNCTION public.detalle_insert_trigger() OWNER TO postgres;
+
+
+CREATE OR REPLACE FUNCTION public.lote_anular_trigger() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $_$
+DECLARE
+	cantidad_a integer;
+BEGIN
+SELECT cantidad into cantidad_a from articulo where idarticulo=NEW.idarticulo;
+IF NEW.estado = -1 THEN
+EXECUTE 'UPDATE articulo set cantidad=' || (cantidad_a-NEW.cantidad) || ' WHERE idarticulo=$1.idarticulo' USING NEW;
+END IF;
+RETURN NULL;
+END;
+$_$;
+
+
+ALTER FUNCTION public.lote_anular_trigger() OWNER TO postgres;
+
+CREATE OR REPLACE FUNCTION public.lote_insert_trigger() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $_$
+Declare  
+ nrolote integer;
+ cantidad_a integer;
+BEGIN
+select count(*) into nrolote from lote where idarticulo=NEW.idarticulo; 
+select cantidad into cantidad_a from articulo where idarticulo=NEW.idarticulo; 
+EXECUTE 'UPDATE lote set nrolote='|| nrolote || ' where idarticulo=$1.idarticulo and idnota=$1.idnota' USING NEW;
+EXECUTE 'UPDATE articulo set cantidad='|| (cantidad_a+NEW.cantidad) || ' where idarticulo=$1.idarticulo' USING NEW;
+RETURN NULL;
+END;
+$_$;
+
+
+ALTER FUNCTION public.lote_insert_trigger() OWNER TO postgres;
+
+
+CREATE OR REPLACE TRIGGER trigg_detalle_anular AFTER UPDATE ON public.detalle FOR EACH ROW EXECUTE FUNCTION public.detalle_anular_trigger();
+
+
+CREATE OR REPLACE TRIGGER trigg_detalle_insert AFTER INSERT ON public.detalle FOR EACH ROW EXECUTE FUNCTION public.detalle_insert_trigger();
+
+
+CREATE OR REPLACE TRIGGER trigg_lote_anular AFTER UPDATE ON public.lote FOR EACH ROW EXECUTE FUNCTION public.lote_anular_trigger();
+
+
+CREATE OR REPLACE TRIGGER trigg_lote_insert AFTER INSERT ON public.lote FOR EACH ROW EXECUTE FUNCTION public.lote_insert_trigger();
+
 -- CreateIndex
 CREATE INDEX "fki_cuenta_idempresa_fkey" ON "cuenta"("idempresa");
 

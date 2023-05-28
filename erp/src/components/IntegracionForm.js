@@ -9,48 +9,25 @@ import SaveRoundedIcon from '@mui/icons-material/SaveRounded';
 import Grid from '@mui/material/Grid';
 import { useFormik } from 'formik';
 import _ from 'lodash';
-import * as Yup from 'yup';
+import { actualizarIntegracion } from '../services/Integracion';
 import { toast } from 'react-toastify';
 import { Autocomplete } from '@mui/material';
 import { useState } from 'react';
-import theme from '../theme/theme';
 
-async function actualizarIntegracion(datos) {
-  return fetch('http://localhost:3000/api/integracion', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(datos)
-  })
-    .then(result => result.json())
- }
+
 
 
 export default function IntegracionForm(props){
 
-    let c = props.cuentas;
-    let integracion = props.integracion;
 
 
-    const[valores, setValores] = useState({
-      caja: integracion.caja != null ? integracion.caja : null,
-      creditofiscal: integracion.creditofiscal != null ? integracion.creditofiscal : null,
-      debitofiscal: integracion.debitofiscal != null ? integracion.debitofiscal : null,
-      compras: integracion.compras != null ? integracion.compras : null,
-      ventas: integracion.ventas != null ? integracion.ventas : null,
-      it: integracion.it != null ? integracion.it : null,
-      itxpagar: integracion.itxpagar != null ? integracion.itxpagar : null,
-    })
-
-    
-
-
-    const[cuentas, setCuentas] = useState(c)
+    const[valores, setValores] = useState(props.integracion)
+  
+    const[cuentas, setCuentas] = useState(props.cuentas)
 
     const formik = useFormik({
         initialValues: {
-          toggle: integracion.estado == 1 ? true : false,
+          toggle: props.integracion.estado == 1 ? true : false,
         },
         onSubmit: async values => {
           if(_.includes(_.values(valores),null)){
@@ -67,7 +44,7 @@ export default function IntegracionForm(props){
               it: valores.it.id,
               itxpagar: valores.itxpagar.id
             }
-            let respuesta = await actualizarIntegracion(data);
+            let respuesta = await actualizarIntegracion(data, props.jwt);
             if(respuesta.ok){
               toast.success(respuesta.mensaje, {theme: 'colored'})
               props.submit();
@@ -139,7 +116,7 @@ export default function IntegracionForm(props){
                     name="caja"
                     options={cuentas}
                     value={valores.caja}
-                    isOptionEqualToValue={(option, value) => option.label == value.label}
+                    isOptionEqualToValue={(option, value) => option.id == value.id}
                     getOptionLabel={(option)=> option.label}
                     onChange={(e, v) => {handleSelect(v,"caja")}}
                     renderInput={(params) => <TextField
@@ -161,7 +138,7 @@ export default function IntegracionForm(props){
                     name="creditofiscal"
                     options={cuentas}
                     value={valores.creditofiscal}
-                    isOptionEqualToValue={(option, value) => option.label == value.label}
+                    isOptionEqualToValue={(option, value) => option.id == value.id}
                     getOptionLabel={(option)=> option.label}
                     onChange={(e, v) => {handleSelect(v,"creditofiscal")}}
                     renderInput={(params) => <TextField
@@ -181,7 +158,7 @@ export default function IntegracionForm(props){
                     name="debitofiscal"
                     options={cuentas}
                     value={valores.debitofiscal}
-                    isOptionEqualToValue={(option, value) => option.label == value.label}
+                    isOptionEqualToValue={(option, value) => option.id == value.id}
                     getOptionLabel={(option)=> option.label}
                     onChange={(e, v) => {handleSelect(v,"debitofiscal")}}
                     renderInput={(params) => <TextField
@@ -201,7 +178,7 @@ export default function IntegracionForm(props){
                     name="compras"
                     options={cuentas}
                     value={valores.compras}
-                    isOptionEqualToValue={(option, value) => option.label == value.label}
+                    isOptionEqualToValue={(option, value) => option.id == value.id}
                     getOptionLabel={(option)=> option.label}
                     onChange={(e, v) => {handleSelect(v,"compras")}}
                     renderInput={(params) => <TextField
@@ -221,7 +198,7 @@ export default function IntegracionForm(props){
                     name="ventas"
                     options={cuentas}
                     value={valores.ventas}
-                    isOptionEqualToValue={(option, value) => option.label == value.label}
+                    isOptionEqualToValue={(option, value) => option.id == value.id}
                     getOptionLabel={(option)=> option.label}
                     onChange={(e, v) => {handleSelect(v,"ventas")}}
                     renderInput={(params) => <TextField
@@ -241,7 +218,7 @@ export default function IntegracionForm(props){
                     name="it"
                     options={cuentas}
                     value={valores.it}
-                    isOptionEqualToValue={(option, value) => option.label == value.label}
+                    isOptionEqualToValue={(option, value) => option.id == value.id}
                     getOptionLabel={(option)=> option.label}
                     onChange={(e, v) => {handleSelect(v,"it")}}
                     renderInput={(params) => <TextField
@@ -261,7 +238,7 @@ export default function IntegracionForm(props){
                     name="itxpagar"
                     options={cuentas}
                     value={valores.itxpagar}
-                    isOptionEqualToValue={(option, value) => option.label == value.label}
+                    isOptionEqualToValue={(option, value) => option.id == value.id}
                     getOptionLabel={(option)=> option.label}
                     onChange={(e, v) => {handleSelect(v,"itxpagar")}}
                     renderInput={(params) => <TextField

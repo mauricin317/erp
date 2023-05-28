@@ -135,7 +135,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen, sesionDat
                 </List>
               ))}
           </Collapse>
-          {/* <ListItem onClick={() => handleCollapse("inventario")} button selected={collapse==="inventario"} sx={{mb: 1}} >
+          <ListItem onClick={() => handleCollapse("inventario")} button selected={collapse==="inventario"} sx={{mb: 1}} >
             <ListItemText primary="Inventario" />
             {collapse==="inventario" ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
@@ -174,7 +174,7 @@ const Sidebar = ({ isMobileSidebarOpen, onSidebarClose, isSidebarOpen, sesionDat
                   </NextLink>
                 </List>
               ))}
-          </Collapse> */}
+          </Collapse>
           <ListItem onClick={() => handleCollapse("reportes")} button selected={collapse==="reportes"} sx={{mb: 1}} >
             <ListItemText primary="Reportes" />
             {collapse==="reportes" ? <ExpandLess /> : <ExpandMore />}

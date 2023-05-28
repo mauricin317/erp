@@ -136,7 +136,7 @@ model empresamoneda {
   idempresamoneda                                  Int       @id @default(autoincrement())
   cambio                                           Decimal?  @db.Decimal(10, 2)
   activo                                           Int?      @default(1) @db.SmallInt
-  fecharegistro                                    DateTime? @db.Timestamp(6) @default(now())
+  fecharegistro                                    DateTime? @default(now()) @db.Timestamp(6)
   idempresa                                        Int?
   idmonedaprincipal                                Int?
   idmonedaalternativa                              Int?
@@ -213,7 +213,7 @@ model nota {
   idempresa     Int?
   idusuario     Int?
   idcomprobante Int?
-  estado        Int?         @db.SmallInt
+  estado        Int?         @default(1) @db.SmallInt
   detalle       detalle[]
   lote          lote[]
   comprobante   comprobante? @relation(fields: [idcomprobante], references: [idcomprobante], onDelete: NoAction, onUpdate: NoAction)
@@ -236,7 +236,7 @@ model periodo {
 model usuario {
   idusuario          Int                  @id @default(autoincrement())
   nombre             String               @db.VarChar(50)
-  usuario            String               @db.VarChar(90) @unique
+  usuario            String               @unique @db.VarChar(90)
   pass               String               @db.VarChar(100)
   tipo               Int?                 @default(1) @db.SmallInt
   articulo           articulo[]

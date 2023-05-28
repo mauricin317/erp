@@ -1,24 +1,21 @@
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import FormDetalleNotaCompra from './FormDetalleNotaCompra';
-import { ToastContainer } from 'react-toastify';
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import FormDetalleNotaCompra from "./FormDetalleNotaCompra";
+import { ToastContainer } from "react-toastify";
 
 const style = {
-  position: 'absolute',
-  top: '25%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '70%',
-  bgcolor: 'background.paper',
-  border: '2px solid #333',
+  position: "absolute",
+  top: "25%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "70%",
+  bgcolor: "background.paper",
+  border: "2px solid #333",
   boxShadow: 24,
   py: 1,
 };
 
 export default function ModalForm(props) {
-
- 
-
   return (
     <div>
       <Modal
@@ -26,13 +23,30 @@ export default function ModalForm(props) {
         onClose={props.close}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        sx={{overflow: 'auto', backgroundColor: "rgba(0, 0, 0, 0.3)"}}
+        sx={{ overflow: "auto", backgroundColor: "rgba(0, 0, 0, 0.3)" }}
       >
         <Box sx={style}>
-        <FormDetalleNotaCompra close={props.close} tipo={props.tipo} datos={props.datos} submit={props.submit} articulos={props.articulos} />
+          <FormDetalleNotaCompra
+            close={props.close}
+            tipo={props.tipo}
+            datos={props.datos}
+            submit={props.submit}
+            articulos={props.articulos}
+            jwt={props.jwt}
+          />
         </Box>
       </Modal>
-      <ToastContainer position="top-right" autoClose={2500} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover />
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable={false}
+        pauseOnHover
+      />
     </div>
   );
 }
