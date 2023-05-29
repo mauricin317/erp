@@ -16,6 +16,7 @@ var categoriasRouter = require("./routes/categorias.router");
 var articulosRouter = require("./routes/articulos.router");
 var lotesRouter = require("./routes/lotes.router");
 var notascompraRouter = require("./routes/notascompra.router");
+var notasventaRouter = require("./routes/notasventa.router");
 
 const app = express();
 const PORT = 4000;
@@ -41,6 +42,7 @@ app.use("/api/categorias", categoriasRouter);
 app.use("/api/articulos", articulosRouter);
 app.use("/api/lotes", lotesRouter);
 app.use("/api/notascompra", notascompraRouter);
+app.use("/api/notasventa", notasventaRouter);
 // 404: Not found
 app.use(function (req, res, next) {
   res.status(404).json({ ERROR: "Not found." });

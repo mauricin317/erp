@@ -1,5 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const { createComprobante } = require("./comprobantes.controller");
 
 const prisma = new PrismaClient();
 
@@ -14,7 +13,7 @@ async function generarComprobante(params) {
   if (!findIntegracion) {
     return false;
   }
-  const { caja, compras, creditofiscal } = findIntegracion;
+  const { caja, ventas, debitofiscal, it, itxpagar } = findIntegracion;
   const countComprobantes = await prisma.comprobante.count({
     where: {
       idempresa: Number(idempresa),
@@ -40,7 +39,7 @@ async function generarComprobante(params) {
       fecha: new Date(fecha),
       tc: tipocambio,
       estado: 1,
-      tipocomprobante: 3,
+      tipocomprobante: 2,
       idusuario,
       idempresa,
       idmoneda: idmonpricipal,
@@ -49,33 +48,53 @@ async function generarComprobante(params) {
           data: [
             {
               numero: 0,
-              glosa: "Compra de Mercaderías",
-              montodebe: total - total * 0.13,
+              glosa: "Venta de Mercaderías",
+              montodebe: total,
               montohaber: 0,
-              montodebealt: total - (total * 0.13) / tipocambio,
+              montodebealt: total / tipocambio,
               montohaberalt: 0,
               idusuario,
-              idcuenta: compras,
+              idcuenta: caja,
             },
             {
               numero: 1,
-              glosa: "Compra de Mercaderías",
-              montodebe: total * 0.13,
+              glosa: "Venta de Mercaderías",
+              montodebe: total * 0.03,
               montohaber: 0,
-              montodebealt: (total * 0.13) / tipocambio,
+              montodebealt: (total * 0.03) / tipocambio,
               montohaberalt: 0,
               idusuario,
-              idcuenta: creditofiscal,
+              idcuenta: it,
             },
             {
               numero: 2,
-              glosa: "Compra de Mercaderías",
+              glosa: "Venta de Mercaderías",
               montodebe: 0,
-              montohaber: total,
+              montohaber: total * 0.13,
               montodebealt: 0,
-              montohaberalt: total / tipocambio,
+              montohaberalt: (total * 0.13) / tipocambio,
               idusuario,
-              idcuenta: caja,
+              idcuenta: debitofiscal,
+            },
+            {
+              numero: 3,
+              glosa: "Venta de Mercaderías",
+              montodebe: 0,
+              montohaber: total - total * 0.13,
+              montodebealt: 0,
+              montohaberalt: total - (total * 0.13) / tipocambio,
+              idusuario,
+              idcuenta: ventas,
+            },
+            {
+              numero: 4,
+              glosa: "Venta de Mercaderías",
+              montodebe: 0,
+              montohaber: total * 0.03,
+              montodebealt: 0,
+              montohaberalt: (total * 0.03) / tipocambio,
+              idusuario,
+              idcuenta: itxpagar,
             },
           ],
         },
@@ -96,20 +115,20 @@ async function generarComprobante(params) {
 }
 
 module.exports = {
-  getNotasCompra: async (req, res) => {
+  getNotasVenta: async (req, res) => {
     try {
       const { idempresa } = req.user;
-      const findNotasCompra = await prisma.nota.findMany({
+      const findNotasVenta = await prisma.nota.findMany({
         where: {
           idempresa,
-          tipo: 1,
+          tipo: 2,
         },
         orderBy: {
           fecha: "desc",
         },
       });
-      if (findNotasCompra) {
-        let _findNotasCompra = findNotasCompra.map((nota) => {
+      if (findNotasVenta) {
+        let _findNotasVenta = findNotasVenta.map((nota) => {
           return {
             ...nota,
             id: nota.idnota,
@@ -117,7 +136,7 @@ module.exports = {
         });
         return res.json({
           ok: true,
-          data: _findNotasCompra,
+          data: _findNotasVenta,
         });
       } else {
         return res.json({
@@ -130,12 +149,30 @@ module.exports = {
       res.status(400).json({ ok: false, mensaje: "Bad Request" });
     }
   },
-  getNotasCompraArticulos: async (req, res) => {
+  getNotasVentaArticulos: async (req, res) => {
     try {
       const { idempresa } = req.user;
       const findArticulo = await prisma.articulo.findMany({
         where: {
           idempresa,
+        },
+        include: {
+          lote: {
+            where: {
+              estado: 1,
+            },
+            select: {
+              idnota: true,
+              nrolote: true,
+              stock: true,
+            },
+            orderBy: {
+              fechaingreso: "asc",
+            },
+          },
+        },
+        orderBy: {
+          nombre: "asc",
         },
       });
       if (findArticulo) {
@@ -143,6 +180,13 @@ module.exports = {
           return {
             ...art,
             id: art.idarticulo,
+            lotes: art.lote.map((l) => {
+              return l.nrolote;
+            }),
+            stocks: art.lote.reduce((acc, l) => {
+              acc[l.nrolote] = l.stock;
+              return acc;
+            }, {}),
           };
         });
         return res.json({
@@ -160,10 +204,10 @@ module.exports = {
       res.status(400).json({ ok: false, mensaje: "Bad Request" });
     }
   },
-  getDetallesNotaCompra: async (req, res) => {
+  getDetallesNotaVenta: async (req, res) => {
     try {
       const { idnota } = req.params;
-      const findLotes = await prisma.lote.findMany({
+      const findDetalles = await prisma.detalle.findMany({
         where: {
           idnota: Number(idnota),
         },
@@ -171,24 +215,24 @@ module.exports = {
           articulo: true,
         },
       });
-      if (findLotes) {
-        let _findLotes = findLotes.map((lote) => {
+      if (findDetalles) {
+        let _findDetalles = findDetalles.map((detalle) => {
           return {
-            ...lote,
-            id: lote.idarticulo,
-            nombre: lote.articulo.nombre,
-            subtotal: lote.cantidad * lote.preciocompra,
+            ...detalle,
+            id: detalle.idarticulo,
+            nombre: detalle.articulo.nombre,
+            subtotal: detalle.cantidad * detalle.precioventa,
           };
         });
         return res.json({
           ok: true,
-          data: _findLotes,
+          data: _findDetalles,
         });
       } else {
         return res.json({
           ok: true,
           data: [],
-          mensaje: "No se encontraron lotes",
+          mensaje: "No se encontraron detalles",
         });
       }
     } catch (error) {
@@ -196,12 +240,12 @@ module.exports = {
       res.status(400).json({ ok: false, mensaje: "Bad Request" });
     }
   },
-  createNotasCompra: async (req, res) => {
+  createNotasVenta: async (req, res) => {
     try {
       const { idempresa, idusuario } = req.user;
       const { descripcion, fecha, total, detalles } = req.body;
       const validarFecha = await prisma.$queryRaw`
-        SELECT * FROM periodo p LEFT JOIN gestion g ON p.idgestion=g.idgestion WHERE (${fecha}::date BETWEEN p.fechainicio AND p.fechafin) AND p.estado=1 AND g.idempresa=${idempresa} LIMIT 1
+       SELECT * FROM periodo p LEFT JOIN gestion g ON p.idgestion=g.idgestion WHERE (${fecha}::date BETWEEN p.fechainicio AND p.fechafin) AND p.estado=1 AND g.idempresa=${idempresa} LIMIT 1
       `;
       if (!validarFecha.length) {
         res.json({
@@ -213,7 +257,7 @@ module.exports = {
         const countNotas = await prisma.nota.count({
           where: {
             idempresa,
-            tipo: 1,
+            tipo: 2,
           },
         });
         if (countNotas) {
@@ -225,24 +269,18 @@ module.exports = {
             fecha: new Date(fecha),
             descripcion,
             total: Number(total),
-            tipo: 1,
+            tipo: 2,
             estado: 1,
             idusuario,
             idempresa,
-            lote: {
+            detalle: {
               createMany: {
                 data: detalles.map((d) => {
                   return {
                     idarticulo: d.idarticulo,
-                    nrolote: 0,
-                    fechaingreso: new Date(fecha),
-                    fechavencimiento:
-                      d.fechavencimiento != ""
-                        ? new Date(d.fechavencimiento)
-                        : null,
+                    nrolote: d.nrolote,
                     cantidad: d.cantidad,
-                    preciocompra: d.preciocompra,
-                    stock: d.cantidad,
+                    precioventa: d.precioventa,
                     estado: 1,
                   };
                 }),
@@ -260,11 +298,11 @@ module.exports = {
           });
           res.json({
             ok: true,
-            mensaje: "Nota de Compra creada",
+            mensaje: "Nota de Venta creada",
             data: crearNota,
           });
         } else {
-          res.json({ ok: false, mensaje: "Error al crear Nota de Compra" });
+          res.json({ ok: false, mensaje: "Error al crear Nota de Venta" });
         }
       }
     } catch (error) {
@@ -272,67 +310,48 @@ module.exports = {
       res.status(400).json({ ok: false, mensaje: "Bad Request" });
     }
   },
-  anularNotaCompra: async (req, res) => {
+  anularNotaVenta: async (req, res) => {
     try {
       let { idnota, estado } = req.body;
-      const validarVentas = await prisma.detalle.findFirst({
+      const updateNota = await prisma.nota.update({
         where: {
           idnota: Number(idnota),
         },
-        include: {
-          articulo: {
-            include: {
-              lote: true,
-            },
-          },
-        },
-      });
-      if (validarVentas) {
-        res.json({
-          ok: false,
-          mensaje: "Ya existen ventas de estos lotes, no se puede anular",
-        });
-      } else {
-        const updateNota = await prisma.nota.update({
-          where: {
-            idnota: Number(idnota),
-          },
-          data: {
-            estado: Number(estado),
-            lote: {
-              updateMany: {
-                where: {
-                  idnota: Number(idnota),
-                },
-                data: {
-                  estado: Number(estado),
-                },
-              },
-            },
-          },
-        });
-        if (updateNota) {
-          if (updateNota.idcomprobante) {
-            await prisma.comprobante.update({
+        data: {
+          estado: Number(estado),
+          detalle: {
+            updateMany: {
               where: {
-                idcomprobante: updateNota.idcomprobante,
+                idnota: Number(idnota),
               },
               data: {
                 estado: Number(estado),
               },
-            });
-          }
-          return res.json({
-            ok: true,
-            mensaje: "Nota de Compra anulada con Éxito",
-            data: updateNota,
-          });
-        } else {
-          return res.json({
-            ok: false,
-            mensaje: "Ocurrio un error al anular la nota de compra",
+            },
+          },
+        },
+      });
+      if (updateNota) {
+        if (updateNota.idcomprobante) {
+          await prisma.comprobante.update({
+            where: {
+              idcomprobante: updateNota.idcomprobante,
+            },
+            data: {
+              estado: Number(estado),
+            },
           });
         }
+        return res.json({
+          ok: true,
+          mensaje: "Nota de Venta anulada con Éxito",
+          data: updateNota,
+        });
+      } else {
+        return res.json({
+          ok: false,
+          mensaje: "Ocurrio un error al anular la nota de venta",
+        });
       }
     } catch (error) {
       console.log("Error: ", error.message);

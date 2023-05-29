@@ -14,6 +14,6 @@ router.get(
 //POST
 router.post("/", jwt.ensureToken, controller.createNotasCompra);
 //PUT
-//router.put("/", jwt.ensureToken, controller.anularNotasCompra);
+router.put("/", jwt.ensureToken, controller.anularNotaCompra);
 
 module.exports = router;

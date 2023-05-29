@@ -1,101 +1,130 @@
-const { PrismaClient } = require('@prisma/client')
+const { PrismaClient } = require("@prisma/client");
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 function format_date(date) {
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
+  if (date) {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
 
-  return `${day}/${month}/${year}`;
+    return `${day}/${month}/${year}`;
+  } else {
+    return "";
+  }
 }
 
 module.exports = {
-    getReportData: async (req, res) => {
-        try {
-          const {idempresa} = req.user
-          const findEmpresamoneda = await prisma.$queryRaw`
-          select idmoneda as id,idmoneda, m.nombre, idmonedaprincipal, idmonedaalternativa from moneda m left join empresamoneda e on e.idmonedaprincipal=m.idmoneda or e.idmonedaalternativa = m.idmoneda where e.activo=1 and idempresa=${idempresa}`
-          if(findEmpresamoneda.length){
-            const findGestiones = await prisma.gestion.findMany({
-              where:{
-                idempresa: idempresa
+  getReportData: async (req, res) => {
+    try {
+      const { idempresa } = req.user;
+      const findEmpresamoneda = await prisma.$queryRaw`
+          select idmoneda as id,idmoneda, m.nombre, idmonedaprincipal, idmonedaalternativa from moneda m left join empresamoneda e on e.idmonedaprincipal=m.idmoneda or e.idmonedaalternativa = m.idmoneda where e.activo=1 and idempresa=${idempresa}`;
+      if (findEmpresamoneda.length) {
+        const findGestiones = await prisma.gestion.findMany({
+          where: {
+            idempresa: idempresa,
+          },
+          select: {
+            idgestion: true,
+            nombre: true,
+          },
+        });
+        if (findGestiones.length) {
+          const findPeriodos = await prisma.periodo.findMany({
+            where: {
+              gestion: {
+                idempresa: idempresa,
               },
-              select:{
-                idgestion: true,
-                nombre: true
-              }
-            })
-            if(findGestiones.length){
-              const findPeriodos = await prisma.periodo.findMany({
-                where:{
-                  gestion:{
-                    idempresa: idempresa
-                  }
-                },
-                select:{
-                  idperiodo: true,
-                  nombre: true,
-                  idgestion: true
-                }
-              })
-              if(findGestiones.length){
-                return res.json({ok:true, gestiones:findGestiones, periodos:findPeriodos, monedas:findEmpresamoneda})
-              }else{
-                return res.json({ok:false, gestiones:[], monedas:[], periodos:[], mensaje:"No existen Periodos"})
-              }
-            }else{
-              return res.json({ok:false, gestiones:[], monedas:[], periodos:[], mensaje:"No existen Gestiones"})
-            }
-          }else{
-            return res.json({ok:false, gestiones:[], monedas:[], periodos:[], mensaje:"No se han configurado monedas"})
+            },
+            select: {
+              idperiodo: true,
+              nombre: true,
+              idgestion: true,
+            },
+          });
+          if (findGestiones.length) {
+            return res.json({
+              ok: true,
+              gestiones: findGestiones,
+              periodos: findPeriodos,
+              monedas: findEmpresamoneda,
+            });
+          } else {
+            return res.json({
+              ok: false,
+              gestiones: [],
+              monedas: [],
+              periodos: [],
+              mensaje: "No existen Periodos",
+            });
           }
-        } catch (error) {
-          console.log("Error: ", error.message);
-          res.status(400).json({ok:false, mensaje:'Bad Request'})
+        } else {
+          return res.json({
+            ok: false,
+            gestiones: [],
+            monedas: [],
+            periodos: [],
+            mensaje: "No existen Gestiones",
+          });
         }
-    },
-    getReporteEmpresas: async (req, res) => {
-      try{
-        let { idusuario } = req.query
-        const findEmpresas = await prisma.$queryRaw`
+      } else {
+        return res.json({
+          ok: false,
+          gestiones: [],
+          monedas: [],
+          periodos: [],
+          mensaje: "No se han configurado monedas",
+        });
+      }
+    } catch (error) {
+      console.log("Error: ", error.message);
+      res.status(400).json({ ok: false, mensaje: "Bad Request" });
+    }
+  },
+  getReporteEmpresas: async (req, res) => {
+    try {
+      let { idusuario } = req.query;
+      const findEmpresas = await prisma.$queryRaw`
         SELECT empresa.*, usuario.usuario AS nombreusuario 
         FROM empresa JOIN usuario ON empresa.idusuario=usuario.idusuario 
-        WHERE empresa.idusuario= ${Number(idusuario)} AND empresa.estado=1 ORDER BY idempresa
-        `
-        if(findEmpresas){
-          return res.json(findEmpresas)
-        }else{
-          res.status(400).json('No se encontraron resultados')
-        }
-      }catch(error) {
-        console.log("Error: ", error.message);
-        res.status(400).json({ok:false, mensaje:'Bad Request'})
+        WHERE empresa.idusuario= ${Number(
+          idusuario
+        )} AND empresa.estado=1 ORDER BY idempresa
+        `;
+      if (findEmpresas) {
+        return res.json(findEmpresas);
+      } else {
+        res.status(400).json("No se encontraron resultados");
       }
-    },
-    getReportePlanCuentas: async (req, res) => {
-      try{
-        let { idempresa } = req.query
-        const findDatos = await prisma.$queryRaw`
+    } catch (error) {
+      console.log("Error: ", error.message);
+      res.status(400).json({ ok: false, mensaje: "Bad Request" });
+    }
+  },
+  getReportePlanCuentas: async (req, res) => {
+    try {
+      let { idempresa } = req.query;
+      const findDatos = await prisma.$queryRaw`
         SELECT cuenta.*, empresa.nombre AS empresa, usuario.usuario AS nombreusuario FROM cuenta 
         JOIN empresa ON cuenta.idempresa=empresa.idempresa
         JOIN usuario ON cuenta.idusuario=usuario.idusuario
         WHERE cuenta.idempresa=${Number(idempresa)} ORDER BY cuenta.codigo asc;
-        `
-        if(findDatos){
-          return res.json(findDatos)
-        }else{
-          res.status(400).json('No se encontraron resultados')
-        }
-      }catch(error) {
-        console.log("Error: ", error.message);
-        res.status(400).json({ok:false, mensaje:'Bad Request'})
+        `;
+      if (findDatos) {
+        return res.json(findDatos);
+      } else {
+        res.status(400).json("No se encontraron resultados");
       }
-    },
-    getReporteComprobante: async (req, res) => {
-      try{
-        let { idcomprobante } = req.query
-        const findDatos = await prisma.$queryRaw`
+    } catch (error) {
+      console.log("Error: ", error.message);
+      res.status(400).json({ ok: false, mensaje: "Bad Request" });
+    }
+  },
+  getReporteComprobante: async (req, res) => {
+    try {
+      let { idcomprobante } = req.query;
+      const findDatos = await prisma.$queryRaw`
         SELECT c.serie, u.usuario AS nombreusuario,	e.nombre AS empresa, c.glosa AS glosa_c, c.fecha, c.tc,	c.idmoneda AS idmoneda, em.idmonedaprincipal AS idmonpri,
           c.tipocomprobante, m.nombre AS moneda, m.abreviatura AS simbolo, c.estado, d.numero, d.glosa AS glosa_d, d.montodebe, d.montohaber, d.montodebealt,	d.montohaberalt, CONCAT( cu.codigo,' - ',cu.nombre) AS cuenta
         FROM detallecomprobante d
@@ -113,32 +142,122 @@ module.exports = {
           c.idusuario = u.idusuario 
         WHERE 
           c.idcomprobante=${Number(idcomprobante)} AND em.activo=1;
-        `
-        if(findDatos){
-          let formatedDatos = findDatos.map((data)=>{
-            return {
-              ...data,
-              fecha: format_date(data?.fecha),
-              tc: Number(data?.tc),
-              montodebe:  Number(data?.montodebe),
-              montohaber:  Number(data?.montohaber),
-              montodebealt:  Number(data?.montodebealt),
-              montohaberalt:  Number(data?.montohaberalt),
-            }
-          })
-          return res.json(formatedDatos)
-        }else{
-          res.status(400).json('No se encontraron resultados')
-        }
-      }catch(error) {
-        console.log("Error: ", error.message);
-        res.status(400).json({ok:false, mensaje:'Bad Request'})
+        `;
+      if (findDatos) {
+        let formatedDatos = findDatos.map((data) => {
+          return {
+            ...data,
+            fecha: format_date(data?.fecha),
+            tc: Number(data?.tc),
+            montodebe: Number(data?.montodebe),
+            montohaber: Number(data?.montohaber),
+            montodebealt: Number(data?.montodebealt),
+            montohaberalt: Number(data?.montohaberalt),
+          };
+        });
+        return res.json(formatedDatos);
+      } else {
+        res.status(400).json("No se encontraron resultados");
       }
-    },
-    getReporteLibroDiario: async (req, res) => {
-      try{
-        let { idmoneda, idperiodo, idgestion } = req.query
-        const findDatos = await prisma.$queryRaw`
+    } catch (error) {
+      console.log("Error: ", error.message);
+      res.status(400).json({ ok: false, mensaje: "Bad Request" });
+    }
+  },
+  getReporteNotaCompra: async (req, res) => {
+    try {
+      let { idnota } = req.query;
+      const findDatos = await prisma.$queryRaw`
+        SELECT n.nronota,
+          u.usuario AS nombreusuario,
+          e.nombre AS empresa,
+          n.descripcion AS descripcion_c,
+          n.fecha,
+          n.total,
+          n.estado,
+          a.nombre AS articulo,
+          l.fechavencimiento,
+          CAST ( l.cantidad AS numeric(10,2) ) as cantidad,
+          l.preciocompra
+        FROM lote l
+          left join nota n ON 
+          l.idnota = n.idnota 
+          left join articulo a ON
+          l.idarticulo = a.idarticulo
+          left join empresa e ON 
+          n.idempresa = e.idempresa 
+          left join usuario u ON 
+          n.idusuario = u.idusuario
+        WHERE l.idnota= ${Number(idnota)}  AND n.tipo=1`;
+      if (findDatos) {
+        let formatedDatos = findDatos.map((data) => {
+          return {
+            ...data,
+            fecha: format_date(data?.fecha),
+            fechavencimiento: format_date(data?.fechavencimiento),
+            total: Number(data?.total),
+            cantidad: Number(data?.cantidad),
+            preciocompra: Number(data?.preciocompra),
+          };
+        });
+        return res.json(formatedDatos);
+      } else {
+        res.status(400).json("No se encontraron resultados");
+      }
+    } catch (error) {
+      console.log("Error: ", error.message);
+      res.status(400).json({ ok: false, mensaje: "Bad Request" });
+    }
+  },
+  getReporteNotaVenta: async (req, res) => {
+    try {
+      let { idnota } = req.query;
+      const findDatos = await prisma.$queryRaw`
+        SELECT n.nronota,
+          u.usuario AS nombreusuario,
+          e.nombre AS empresa,
+          n.descripcion AS descripcion_c,
+          n.fecha,
+          n.total,
+          n.estado,
+          a.nombre AS articulo,
+          d.nrolote,
+          CAST ( d.cantidad AS numeric(10,2) ) as cantidad,
+          d.precioventa
+        FROM detalle d
+          left join nota n ON 
+          d.idnota = n.idnota 
+          left join articulo a ON
+          d.idarticulo = a.idarticulo
+          left join empresa e ON 
+          n.idempresa = e.idempresa 
+          left join usuario u ON 
+          n.idusuario = u.idusuario 
+        WHERE d.idnota= ${Number(idnota)}  AND n.tipo=2
+        `;
+      if (findDatos) {
+        let formatedDatos = findDatos.map((data) => {
+          return {
+            ...data,
+            fecha: format_date(data?.fecha),
+            total: Number(data?.total),
+            cantidad: Number(data?.cantidad),
+            precioventa: Number(data?.precioventa),
+          };
+        });
+        return res.json(formatedDatos);
+      } else {
+        res.status(400).json("No se encontraron resultados");
+      }
+    } catch (error) {
+      console.log("Error: ", error.message);
+      res.status(400).json({ ok: false, mensaje: "Bad Request" });
+    }
+  },
+  getReporteLibroDiario: async (req, res) => {
+    try {
+      let { idmoneda, idperiodo, idgestion } = req.query;
+      const findDatos = await prisma.$queryRaw`
         SELECT c.serie, -1 AS numero, c.fecha, m.nombre AS moneda, e.nombre AS empresa, c.glosa AS glosaC, g.nombre AS gestion, p.nombre AS periodo,	CONCAT( cu.codigo,' - ',cu.nombre) AS nombrecuenta,
           m.abreviatura AS simbolo, 0 AS sumadebe, 0 AS sumahaber, 0 AS sumadebealt, 0 AS sumahaberalt, u.usuario AS nombreusuario, em.idmonedaprincipal AS idmonpri
         FROM detallecomprobante d
@@ -150,7 +269,9 @@ module.exports = {
           LEFT JOIN periodo p ON p.idgestion = g.idgestion AND c.fecha BETWEEN p.fechainicio AND p.fechafin 
           LEFT JOIN empresamoneda em ON em.idempresa = e.idempresa 
           LEFT JOIN usuario u ON u.idusuario = e.idusuario
-        WHERE c.estado>=0 AND  em.activo=1 AND (p.idperiodo=${Number(idperiodo)}  OR g.idgestion=${Number(idgestion)} ) AND d.numero=1
+        WHERE c.estado>=0 AND  em.activo=1 AND (p.idperiodo=${Number(
+          idperiodo
+        )}  OR g.idgestion=${Number(idgestion)} ) AND d.numero=1
         GROUP BY m.nombre, e.nombre, g.nombre, p.nombre, nombrecuenta, c.fecha, c.glosa, d.numero, m.abreviatura, c.serie, idmonpri, u.usuario
           UNION
         SELECT c.serie, d.numero, c.fecha, m.nombre AS moneda, e.nombre AS empresa, c.glosa AS glosaC, g.nombre AS gestion,	p.nombre AS periodo, Concat( cu.codigo,' - ',cu.nombre) AS nombrecuenta,
@@ -164,34 +285,36 @@ module.exports = {
           LEFT JOIN periodo p ON p.idgestion = g.idgestion AND c.fecha BETWEEN p.fechainicio AND p.fechafin 
           LEFT JOIN empresamoneda em ON em.idempresa = e.idempresa 
           LEFT JOIN usuario u ON u.idusuario = e.idusuario
-        WHERE c.estado>=0 AND  em.activo=1 AND (p.idperiodo=${Number(idperiodo)}  OR g.idgestion=${Number(idgestion)} )
+        WHERE c.estado>=0 AND  em.activo=1 AND (p.idperiodo=${Number(
+          idperiodo
+        )}  OR g.idgestion=${Number(idgestion)} )
         GROUP BY m.nombre, e.nombre, g.nombre, p.nombre, nombrecuenta, c.fecha, c.glosa, d.numero, m.abreviatura, c.serie, idmonpri, u.usuario
         ORDER BY fecha , serie, numero;
-        `
-        if(findDatos){
-          let formatedDatos = findDatos.map((data)=>{
-            return {
-              ...data,
-              fecha: format_date(data?.fecha),
-              sumadebe: Number(data?.sumadebe),
-              sumahaber: Number(data?.sumahaber),
-              sumadebealt: Number(data?.sumadebealt),
-              sumahaberalt: Number(data?.sumahaberalt)
-            }
-          })
-          return res.json(formatedDatos)
-        }else{
-          res.status(400).json('No se encontraron resultados')
-        }
-      }catch(error) {
-        console.log("Error: ", error.message);
-        res.status(400).json({ok:false, mensaje:'Bad Request'})
+        `;
+      if (findDatos) {
+        let formatedDatos = findDatos.map((data) => {
+          return {
+            ...data,
+            fecha: format_date(data?.fecha),
+            sumadebe: Number(data?.sumadebe),
+            sumahaber: Number(data?.sumahaber),
+            sumadebealt: Number(data?.sumadebealt),
+            sumahaberalt: Number(data?.sumahaberalt),
+          };
+        });
+        return res.json(formatedDatos);
+      } else {
+        res.status(400).json("No se encontraron resultados");
       }
-    },
-    getReporteSumasSaldos: async (req, res) => {
-      try{
-        let { idmoneda, idgestion } = req.query
-        const findDatos = await prisma.$queryRaw`
+    } catch (error) {
+      console.log("Error: ", error.message);
+      res.status(400).json({ ok: false, mensaje: "Bad Request" });
+    }
+  },
+  getReporteSumasSaldos: async (req, res) => {
+    try {
+      let { idmoneda, idgestion } = req.query;
+      const findDatos = await prisma.$queryRaw`
         SELECT CONCAT(cu.codigo,' - ',cu.nombre) AS cuenta, SUM(d.montodebe) AS sumdebe, SUM(d.montohaber) AS sumhaber, SUM(d.montodebealt) AS sumdebealt, SUM(d.montohaberalt) AS sumhaberalt,
           CASE WHEN SUM(d.montodebe-d.montohaber)<=0 THEN 0 ELSE SUM(d.montodebe-d.montohaber) END AS saldodebe, 
           CASE WHEN SUM(d.montohaber - d.montodebe)<=0 THEN 0 ELSE SUM(d.montohaber - d.montodebe) END AS saldohaber,
@@ -206,36 +329,38 @@ module.exports = {
           LEFT JOIN usuario u ON u.idusuario = 1
           LEFT JOIN empresamoneda em ON em.idempresa = e.idempresa
           LEFT JOIN moneda m ON m.idmoneda=${Number(idmoneda)}  
-        WHERE g.idgestion=${Number(idgestion)}   AND (((c.fecha) Between g.FechaInicio And g.FechaFin) And (c.estado!='-1')) AND ((em.Activo)=1)
+        WHERE g.idgestion=${Number(
+          idgestion
+        )}   AND (((c.fecha) Between g.FechaInicio And g.FechaFin) And (c.estado!='-1')) AND ((em.Activo)=1)
         GROUP BY cuenta, e.nombre, u.usuario, g.nombre, m.nombre, m.abreviatura, em.idmonedaprincipal;
-        `
-        if(findDatos){
-          let formatedDatos = findDatos.map((data)=>{
-            return {
-              ...data,
-              sumdebe: Number(data?.sumdebe),
-              sumhaber: Number(data?.sumhaber),
-              sumdebealt: Number(data?.sumdebealt),
-              sumhaberalt: Number(data?.sumhaberalt),
-              saldodebe: Number(data?.saldodebe),
-              saldohaber: Number(data?.saldohaber),
-              saldodebealt: Number(data?.saldodebealt),
-              saldohaberalt: Number(data?.saldohaberalt),
-            }
-          })
-          return res.json(formatedDatos)
-        }else{
-          res.status(400).json('No se encontraron resultados')
-        }
-      }catch(error) {
-        console.log("Error: ", error.message);
-        res.status(400).json({ok:false, mensaje:'Bad Request'})
+        `;
+      if (findDatos) {
+        let formatedDatos = findDatos.map((data) => {
+          return {
+            ...data,
+            sumdebe: Number(data?.sumdebe),
+            sumhaber: Number(data?.sumhaber),
+            sumdebealt: Number(data?.sumdebealt),
+            sumhaberalt: Number(data?.sumhaberalt),
+            saldodebe: Number(data?.saldodebe),
+            saldohaber: Number(data?.saldohaber),
+            saldodebealt: Number(data?.saldodebealt),
+            saldohaberalt: Number(data?.saldohaberalt),
+          };
+        });
+        return res.json(formatedDatos);
+      } else {
+        res.status(400).json("No se encontraron resultados");
       }
-    },
-    getReporteLibroMayorTodos: async (req, res) => {
-      try{
-        let { idmoneda, idgestion, idperiodo } = req.query
-        const findDatos = await prisma.$queryRaw`
+    } catch (error) {
+      console.log("Error: ", error.message);
+      res.status(400).json({ ok: false, mensaje: "Bad Request" });
+    }
+  },
+  getReporteLibroMayorTodos: async (req, res) => {
+    try {
+      let { idmoneda, idgestion, idperiodo } = req.query;
+      const findDatos = await prisma.$queryRaw`
         SELECT tab.*, 
           SUM(CASE WHEN debe<>0 THEN debe ELSE haber*(-1) END) 
           OVER (PARTITION BY tab.cuenta ORDER BY tab.fecha, tab.serie) AS saldo,
@@ -252,7 +377,9 @@ module.exports = {
           LEFT JOIN periodo p ON p.idgestion = g.idgestion AND c.fecha BETWEEN p.fechainicio AND p.fechafin 
           LEFT JOIN empresamoneda em ON em.idempresa = e.idempresa 
           LEFT JOIN usuario u ON u.idusuario = e.idusuario
-        WHERE c.estado>=0 AND em.activo=1 AND (p.idperiodo=${Number(idperiodo)}   OR g.idgestion=${Number(idgestion)}  ) AND c2.tipocuenta=1
+        WHERE c.estado>=0 AND em.activo=1 AND (p.idperiodo=${Number(
+          idperiodo
+        )}   OR g.idgestion=${Number(idgestion)}  ) AND c2.tipocuenta=1
         GROUP BY c2.idcuenta, c2.codigo, cuenta, simbolo,moneda,empresa,gestion, periodo,nombreusuario,idmonpri
         UNION 
         SELECT CONCAT(c2.codigo,' - ',c2.nombre) AS cuenta, c.fecha, c.serie, c.tipocomprobante, c.glosa, d.montodebe AS debe, d.montohaber AS haber, d.montodebealt AS debealt, d.montohaberalt AS haberalt, d.numero,
@@ -266,35 +393,37 @@ module.exports = {
           LEFT JOIN periodo p ON p.idgestion = g.idgestion AND c.fecha BETWEEN p.fechainicio AND p.fechafin 
           LEFT JOIN empresamoneda em ON em.idempresa = e.idempresa 
           LEFT JOIN usuario u ON u.idusuario = e.idusuario
-        WHERE c.estado>0 AND  em.activo=1 AND (p.idperiodo=${Number(idperiodo)}  OR g.idgestion=${Number(idgestion)}  )
+        WHERE c.estado>0 AND  em.activo=1 AND (p.idperiodo=${Number(
+          idperiodo
+        )}  OR g.idgestion=${Number(idgestion)}  )
         ORDER BY cuenta, fecha) AS tab;
-        `
-        if(findDatos){
-          let formatedDatos = findDatos.map((data)=>{
-            return {
-              ...data,
-              fecha: format_date(data?.fecha),
-              debe: Number(data?.debe),
-              haber: Number(data?.haber),
-              debealt: Number(data?.debealt),
-              haberalt: Number(data?.haberalt),
-              saldo: Number(data?.saldo),
-              saldoalt: Number(data?.saldoalt),
-            }
-          })
-          return res.json(formatedDatos)
-        }else{
-          res.status(400).json('No se encontraron resultados')
-        }
-      }catch(error) {
-        console.log("Error: ", error.message);
-        res.status(400).json({ok:false, mensaje:'Bad Request'})
+        `;
+      if (findDatos) {
+        let formatedDatos = findDatos.map((data) => {
+          return {
+            ...data,
+            fecha: format_date(data?.fecha),
+            debe: Number(data?.debe),
+            haber: Number(data?.haber),
+            debealt: Number(data?.debealt),
+            haberalt: Number(data?.haberalt),
+            saldo: Number(data?.saldo),
+            saldoalt: Number(data?.saldoalt),
+          };
+        });
+        return res.json(formatedDatos);
+      } else {
+        res.status(400).json("No se encontraron resultados");
       }
-    },
-    getReporteLibroMayorPeriodo: async (req, res) => {
-      try{
-        let { idmoneda, idgestion, idperiodo } = req.query
-        const findDatos = await prisma.$queryRaw`
+    } catch (error) {
+      console.log("Error: ", error.message);
+      res.status(400).json({ ok: false, mensaje: "Bad Request" });
+    }
+  },
+  getReporteLibroMayorPeriodo: async (req, res) => {
+    try {
+      let { idmoneda, idgestion, idperiodo } = req.query;
+      const findDatos = await prisma.$queryRaw`
         SELECT tab.*, 
           SUM(CASE WHEN debe<>0 THEN debe ELSE haber*(-1) END) 
           OVER (PARTITION BY tab.cuenta ORDER BY tab.fecha, tab.serie) AS saldo,
@@ -311,7 +440,9 @@ module.exports = {
             LEFT JOIN periodo p ON p.idgestion = g.idgestion AND c.fecha BETWEEN p.fechainicio AND p.fechafin 
             LEFT JOIN empresamoneda em ON em.idempresa = e.idempresa 
             LEFT JOIN usuario u ON u.idusuario = e.idusuario
-          WHERE c.estado>=0 AND em.activo=1 AND (p.idperiodo=${Number(idperiodo)}  OR g.idgestion=${Number(idgestion)} ) AND c2.tipocuenta=1
+          WHERE c.estado>=0 AND em.activo=1 AND (p.idperiodo=${Number(
+            idperiodo
+          )}  OR g.idgestion=${Number(idgestion)} ) AND c2.tipocuenta=1
           GROUP BY c2.codigo, cuenta, simbolo,moneda,empresa,gestion, periodo,nombreusuario,idmonpri 
         UNION 
         SELECT CONCAT(c2.codigo,' - ',c2.nombre) AS cuenta, c.fecha, c.serie, c.tipocomprobante, c.glosa, d.montodebe AS debe, d.montohaber AS haber, d.montodebealt AS debealt, d.montohaberalt AS haberalt, d.numero,
@@ -325,30 +456,31 @@ module.exports = {
           LEFT JOIN periodo p ON p.idgestion = g.idgestion AND c.fecha BETWEEN p.fechainicio AND p.fechafin 
           LEFT JOIN empresamoneda em ON em.idempresa = e.idempresa 
           LEFT JOIN usuario u ON u.idusuario = e.idusuario
-        WHERE c.estado>=0 AND  em.activo=1 AND (p.idperiodo=${Number(idperiodo)} OR g.idgestion=${Number(idgestion)})
+        WHERE c.estado>=0 AND  em.activo=1 AND (p.idperiodo=${Number(
+          idperiodo
+        )} OR g.idgestion=${Number(idgestion)})
         ORDER BY cuenta, fecha) AS tab;
-        `
-        if(findDatos){
-          let formatedDatos = findDatos.map((data)=>{
-            return {
-              ...data,
-              fecha: format_date(data?.fecha),
-              debe: Number(data?.debe),
-              haber: Number(data?.haber),
-              debealt: Number(data?.debealt),
-              haberalt: Number(data?.haberalt),
-              saldo: Number(data?.saldo),
-              saldoalt: Number(data?.saldoalt),
-            }
-          })
-          return res.json(formatedDatos)
-        }else{
-          res.status(400).json('No se encontraron resultados')
-        }
-      }catch(error) {
-        console.log("Error: ", error.message);
-        res.status(400).json({ok:false, mensaje:'Bad Request'})
+        `;
+      if (findDatos) {
+        let formatedDatos = findDatos.map((data) => {
+          return {
+            ...data,
+            fecha: format_date(data?.fecha),
+            debe: Number(data?.debe),
+            haber: Number(data?.haber),
+            debealt: Number(data?.debealt),
+            haberalt: Number(data?.haberalt),
+            saldo: Number(data?.saldo),
+            saldoalt: Number(data?.saldoalt),
+          };
+        });
+        return res.json(formatedDatos);
+      } else {
+        res.status(400).json("No se encontraron resultados");
       }
-    },
-
-}
+    } catch (error) {
+      console.log("Error: ", error.message);
+      res.status(400).json({ ok: false, mensaje: "Bad Request" });
+    }
+  },
+};
