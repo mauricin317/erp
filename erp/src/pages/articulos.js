@@ -13,10 +13,12 @@ export default function Articulo() {
   return (
     <>
       <Head>
-        <title>Artículos | ERP</title>
+        <title>Artículos</title>
       </Head>
+      <div  style={{padding:'0 100px'}}>
       <h2>Artículos</h2>
       <ArticulosDataGrid jwt={jwt} />
+      </div>
     </>
   );
 }

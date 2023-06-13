@@ -104,16 +104,22 @@ export default function IntegracionForm(props){
                   checked={formik.values.toggle}
                   onChange={formik.handleChange}
                   size="large"
-                />} label={<Typography variant="h4" component="h4"> Integracion: </Typography>} labelPlacement="start" />
+                />} label={<Typography variant="h4" component="h4"> Activar Integracion: </Typography>} labelPlacement="start" />
               </Grid>
               <Grid item md={6} xs={6} sx={{textAlign: 'right'}}>
-                <Button sx={{mx: 3, height: '100%'}}  color="success" disabled={formik.isSubmitting} type="submit" variant="contained" >
-                <SaveRoundedIcon fontSize='large' />
-                </Button>
+
+                <Button sx={{mx: 3}} size="large" color="success" disabled={formik.isSubmitting} type="submit" variant="contained">
+                Guardar
+              </Button>
+           
               </Grid>
-              <Grid item md={6} xs={12}>
+              <Grid item md={12} xs={12}>
+              <Typography>
+              Caja
+            </Typography>
                 <Autocomplete
                     name="caja"
+                          size="small"
                     options={cuentas}
                     value={valores.caja}
                     isOptionEqualToValue={(option, value) => option.id == value.id}
@@ -121,10 +127,11 @@ export default function IntegracionForm(props){
                     onChange={(e, v) => {handleSelect(v,"caja")}}
                     renderInput={(params) => <TextField
                         fullWidth
-                        label="Caja"
+                     
                         margin="normal"
                         placeholder='Cuenta Caja'
                         type="text"
+                        size="small"
                         variant="outlined"
                         focused
                         required
@@ -132,10 +139,14 @@ export default function IntegracionForm(props){
                 />
                 
               </Grid>
-              <Grid item md={6}  xs={12}></Grid>
-              <Grid item md={6} xs={12}>
+             
+              <Grid item md={4} xs={12}>
+              <Typography>
+              Credito Fiscal
+            </Typography>
                 <Autocomplete
                     name="creditofiscal"
+                    size="small"
                     options={cuentas}
                     value={valores.creditofiscal}
                     isOptionEqualToValue={(option, value) => option.id == value.id}
@@ -143,7 +154,8 @@ export default function IntegracionForm(props){
                     onChange={(e, v) => {handleSelect(v,"creditofiscal")}}
                     renderInput={(params) => <TextField
                         fullWidth
-                        label="Credito Fiscal"
+                     
+                        
                         margin="normal"
                         placeholder='Cuenta Credito Fiscal'
                         type="text"
@@ -153,9 +165,13 @@ export default function IntegracionForm(props){
                         {...params} />}
                 />
               </Grid>
-              <Grid item md={6} xs={12}>
+              <Grid item md={4} xs={12}>
+              <Typography>
+              Debito Fiscal
+            </Typography>
                 <Autocomplete
                     name="debitofiscal"
+                    size="small"
                     options={cuentas}
                     value={valores.debitofiscal}
                     isOptionEqualToValue={(option, value) => option.id == value.id}
@@ -163,7 +179,7 @@ export default function IntegracionForm(props){
                     onChange={(e, v) => {handleSelect(v,"debitofiscal")}}
                     renderInput={(params) => <TextField
                         fullWidth
-                        label="Debito Fiscal"
+                      
                         margin="normal"
                         placeholder='Cuenta Debito Fiscal'
                         type="text"
@@ -173,9 +189,13 @@ export default function IntegracionForm(props){
                         {...params} />}
                 />
               </Grid>
-              <Grid item md={6} xs={12}>
+              <Grid item md={4} xs={12}>
+              <Typography>
+             Compras
+            </Typography>
                 <Autocomplete
                     name="compras"
+                    size="small"
                     options={cuentas}
                     value={valores.compras}
                     isOptionEqualToValue={(option, value) => option.id == value.id}
@@ -183,7 +203,7 @@ export default function IntegracionForm(props){
                     onChange={(e, v) => {handleSelect(v,"compras")}}
                     renderInput={(params) => <TextField
                         fullWidth
-                        label="Compras"
+                      
                         margin="normal"
                         placeholder='Cuenta Compras'
                         type="text"
@@ -193,9 +213,13 @@ export default function IntegracionForm(props){
                         {...params} />}
                 />
               </Grid>
-              <Grid item md={6} xs={12}>
+              <Grid item md={4} xs={12}>
+              <Typography>
+       Ventas
+            </Typography>
                 <Autocomplete
                     name="ventas"
+                    size="small"
                     options={cuentas}
                     value={valores.ventas}
                     isOptionEqualToValue={(option, value) => option.id == value.id}
@@ -203,7 +227,7 @@ export default function IntegracionForm(props){
                     onChange={(e, v) => {handleSelect(v,"ventas")}}
                     renderInput={(params) => <TextField
                         fullWidth
-                        label="Ventas"
+                       
                         margin="normal"
                         placeholder='Cuenta Ventas'
                         type="text"
@@ -213,9 +237,13 @@ export default function IntegracionForm(props){
                         {...params} />}
                 />
               </Grid>
-              <Grid item md={6} xs={12}>
+              <Grid item md={4} xs={12}>
+              <Typography>
+       IT
+            </Typography>
                 <Autocomplete
                     name="it"
+                    size="small"
                     options={cuentas}
                     value={valores.it}
                     isOptionEqualToValue={(option, value) => option.id == value.id}
@@ -223,7 +251,7 @@ export default function IntegracionForm(props){
                     onChange={(e, v) => {handleSelect(v,"it")}}
                     renderInput={(params) => <TextField
                         fullWidth
-                        label="IT"
+                        
                         margin="normal"
                         placeholder='Cuenta IT'
                         type="text"
@@ -233,9 +261,13 @@ export default function IntegracionForm(props){
                         {...params} />}
                 />
               </Grid>
-              <Grid item md={6} xs={12}>
+              <Grid item md={4} xs={12}>
+              <Typography>
+              IT por Pagar
+            </Typography>
                 <Autocomplete
                     name="itxpagar"
+                    size="small"
                     options={cuentas}
                     value={valores.itxpagar}
                     isOptionEqualToValue={(option, value) => option.id == value.id}
@@ -243,7 +275,7 @@ export default function IntegracionForm(props){
                     onChange={(e, v) => {handleSelect(v,"itxpagar")}}
                     renderInput={(params) => <TextField
                         fullWidth
-                        label="IT por Pagar"
+                       
                         margin="normal"
                         placeholder='Cuenta IT por Pagar'
                         type="text"

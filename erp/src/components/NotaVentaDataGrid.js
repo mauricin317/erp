@@ -7,6 +7,7 @@ import Box from "@mui/system/Box";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { formatInTimeZone } from "date-fns-tz";
+import AddIcon from '@mui/icons-material/Add';
 import FormNotaVenta from "./FormNotasVenta/FormNotaVenta";
 import { ToastContainer, toast } from "react-toastify";
 import {
@@ -193,14 +194,8 @@ export default function NotaVentaDataGrid({ jwt }) {
         <div>
           <h2>Notas de Venta</h2>
           <Stack sx={{ "& button": { m: 1 } }} direction="row">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={openForm}
-              //disabled={!state.isfetched}
-            >
-              <AddCircleRoundedIcon />
-            </Button>
+        
+            <Button variant="contained" color="success"  onClick={openForm}>Crear<AddIcon/></Button>
           </Stack>
           <Box
             sx={{
@@ -220,6 +215,7 @@ export default function NotaVentaDataGrid({ jwt }) {
           >
             <DataGrid
               rows={state.notasventa}
+              autoHeight
               columns={columns}
               onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
               pageSize={pageSize}

@@ -3,6 +3,7 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
+import AddIcon from '@mui/icons-material/Add';
 import Box from "@mui/system/Box";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
@@ -191,14 +192,8 @@ export default function NotaCompraDataGrid({ jwt }) {
         <div>
           <h2>Notas de Compra</h2>
           <Stack sx={{ "& button": { m: 1 } }} direction="row">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={openForm}
-              //disabled={!state.isfetched}
-            >
-              <AddCircleRoundedIcon />
-            </Button>
+  
+            <Button variant="contained" color="success"  onClick={openForm}>Crear<AddIcon/></Button>
           </Stack>
           <Box
             sx={{
@@ -218,6 +213,7 @@ export default function NotaCompraDataGrid({ jwt }) {
           >
             <DataGrid
               rows={state.notascompra}
+              autoHeight
               columns={columns}
               onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
               pageSize={pageSize}

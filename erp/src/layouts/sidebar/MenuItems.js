@@ -23,22 +23,22 @@ export const Contabilidaditems = [
 export const Inventarioitems = [
   {
     title: "Categorías",
-    icon: "tag",
+    icon: "arrow-right",
     href: "/categorias",
   },
   {
     title: "Artículos",
-    icon: "award",
+    icon: "arrow-right",
     href: "/articulos",
   },
   {
     title: "Nota de Compra",
-    icon: "shopping-bag",
+    icon: "arrow-right",
     href: "/notacompra",
   },
   {
     title: "Nota de Venta",
-    icon: "shopping-cart",
+    icon: "arrow-right",
     href: "/notaventa",
   }
  ];
@@ -56,7 +56,7 @@ export const Inventarioitems = [
   },
   {
     title: "Cuentas de Integración",
-    icon: "settings",
+    icon: "arrow-right",
     href: "/integracion",
   }
  ];

@@ -14,10 +14,10 @@ export default function Categoria() {
   return (
     <>
         <Head>
-            <title>Categorías | ERP</title>
+            <title>Categorías</title>
         </Head>
-        <h2>Categorías</h2>
-        <CategoriasTreeView jwt={jwt} />
+        <div style={{padding:'0 100px'}}>   <h2>Categorías</h2>
+        <CategoriasTreeView jwt={jwt} /></div>
     </>
   );
 }

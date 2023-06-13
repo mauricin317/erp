@@ -13,9 +13,11 @@ export default function NotaVenta() {
   return (
     <>
       <Head>
-        <title>Notas de Venta | ERP</title>
+        <title>Notas de Venta</title>
       </Head>
+      <div  style={{padding:'0 100px'}}>
       <NotaVentaDataGrid jwt={jwt} />
+      </div>
     </>
   );
 }

@@ -35,7 +35,7 @@ export default function Dashboard() {
   return (
     <>
         <Head>
-            <title>Dashboard | ERP</title>
+            <title>Dashboard</title>
         </Head>
           <h2>Dashboard - Bienvenido {usuario?.nombre}</h2>
           {/* <DashboarGrid /> */}

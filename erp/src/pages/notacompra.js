@@ -13,9 +13,11 @@ export default function NotaCompra() {
   return (
     <>
       <Head>
-        <title>Notas de Compra | ERP</title>
+        <title>Notas de Compra</title>
       </Head>
+      <div  style={{padding:'0 100px'}}>
       <NotaCompraDataGrid jwt={jwt} />
+      </div>
     </>
   );
 }

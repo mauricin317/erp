@@ -79,11 +79,14 @@ export default function FormCategoria(props) {
         </Box>
         <Grid container spacing={2}>
           <Grid item md={12} xs={12}>
+          <Typography>
+              Nombre de Categoria
+            </Typography>
             <TextField
               error={Boolean(formik.touched.nombre && formik.errors.nombre)}
               fullWidth
               helperText={formik.touched.nombre && formik.errors.nombre}
-              label="Nombre"
+             
               margin="normal"
               name="nombre"
               onBlur={formik.handleBlur}
@@ -95,6 +98,9 @@ export default function FormCategoria(props) {
             />
           </Grid>
           <Grid item md={12} xs={12}>
+          <Typography>
+              Descripcion
+            </Typography>
             <TextField
               error={Boolean(
                 formik.touched.descripcion && formik.errors.descripcion
@@ -103,7 +109,7 @@ export default function FormCategoria(props) {
               helperText={
                 formik.touched.descripcion && formik.errors.descripcion
               }
-              label="Descripcion"
+           
               margin="normal"
               name="descripcion"
               onBlur={formik.handleBlur}
@@ -118,8 +124,7 @@ export default function FormCategoria(props) {
         <Box sx={{ py: 2, display: "flex", justifyContent: "end" }}>
           <Button
             sx={{ mx: 3 }}
-            size="large"
-            color="primary"
+            size="large" color="success"
             disabled={formik.isSubmitting}
             type="submit"
             variant="contained"

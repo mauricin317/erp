@@ -130,21 +130,17 @@ export default function FormDetalleNotaVenta(props) {
           <Typography align="center" color="textSecondary" variant="h5">
             {props.tipo === "nuevo" ? "Agregar" : "Editar"} Articulo
           </Typography>
-          <Button
-            size="large"
-            color="error"
-            variant="contained"
-            disabled={formik.isSubmitting}
-            onClick={props.close}
-          >
-            X
-          </Button>
+     
         </Box>
         <Grid container spacing={2}>
           <Grid item md={4} xs={12}>
+          <Typography>
+           Articulo
+            </Typography>
             <Autocomplete
               id="combo-box-demo"
               name="articulo"
+              size="small"
               options={props.articulos}
               value={articulo}
               getOptionLabel={(option) => option.nombre}
@@ -153,7 +149,7 @@ export default function FormDetalleNotaVenta(props) {
               renderInput={(params) => (
                 <TextField
                   fullWidth
-                  label="Articulo"
+                 
                   margin="normal"
                   type="text"
                   disabled={props.tipo == "editar"}
@@ -165,9 +161,13 @@ export default function FormDetalleNotaVenta(props) {
             />
           </Grid>
           <Grid item md={2} xs={12}>
+          <Typography>
+              Lote
+            </Typography>
             <Autocomplete
               id="combo-box-demo"
               name="nrolote"
+              size="small"
               options={articulo != null ? articulo.lotes : []}
               value={formik.values.nrolote}
               getOptionLabel={(option) => option.toString()}
@@ -180,7 +180,7 @@ export default function FormDetalleNotaVenta(props) {
                   )}
                   fullWidth
                   helperText={formik.touched.cantidad && formik.errors.nrolote}
-                  label="# Lote"
+                 
                   onBlur={formik.handleBlur}
                   margin="normal"
                   type="number"
@@ -192,12 +192,15 @@ export default function FormDetalleNotaVenta(props) {
             />
           </Grid>
           <Grid item md={2} xs={12}>
+          <Typography>
+              Cantidad
+            </Typography>
             <TextField
               sx={{ textAlign: "right" }}
               error={Boolean(formik.touched.cantidad && formik.errors.cantidad)}
               fullWidth
               helperText={formik.touched.cantidad && formik.errors.cantidad}
-              label="Cantidad"
+              size="small"
               margin="normal"
               name="cantidad"
               onBlur={formik.handleBlur}
@@ -217,6 +220,9 @@ export default function FormDetalleNotaVenta(props) {
             />
           </Grid>
           <Grid item md={2} xs={12}>
+          <Typography>
+            Precio
+            </Typography>
             <TextField
               sx={{ textAlign: "right" }}
               error={Boolean(
@@ -226,7 +232,7 @@ export default function FormDetalleNotaVenta(props) {
               helperText={
                 formik.touched.precioventa && formik.errors.precioventa
               }
-              label="Precio"
+              size="small"
               margin="normal"
               name="precioventa"
               onBlur={formik.handleBlur}
@@ -244,10 +250,13 @@ export default function FormDetalleNotaVenta(props) {
             />
           </Grid>
           <Grid item md={2} xs={12}>
+          <Typography>
+            Subtotal
+            </Typography>
             <TextField
               sx={{ textAlign: "right" }}
               fullWidth
-              label="Subtotal"
+              size="small"
               margin="normal"
               name="subtotal"
               type="number"

@@ -80,15 +80,18 @@ export default function Integracion() {
   return (
     <>
         <Head>
-            <title>Cuentas de Integración | ERP</title>
+            <title>Integración</title>
         </Head>
-          <h2>Configuracion de Cuentas de Integracion</h2>
+        <div  style={{padding:'0 100px'}}>
+          <h2>Integracion</h2>
           {state?.error 
             ? "Error" 
             : !state.cuentas 
               ? <CircularProgress sx={{ml:'50%', mt:'100px'}} color="primary" /> 
               :  <IntegracionForm jwt={jwt} integracion={state.formData} cuentas={state.cuentas} submit={handleSubmit} /> }
           <ToastContainer position="top-right" autoClose={2500} hideProgressBar newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover />
+   
+          </div>
     </>
   );
 }

@@ -5,6 +5,8 @@ import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import AlertDialog from "./AlertDialog";
 import CustomTreeItem from "./CustomTreeItem";
+import AddIcon from "@mui/icons-material/Add";
+import BorderColorSharpIcon from "@mui/icons-material/BorderColorSharp";
 import Box from "@mui/system/Box";
 import TreeView from "@mui/lab/TreeView";
 import _ from "lodash";
@@ -160,52 +162,42 @@ export default function CategoriasTreeView({ jwt }) {
         alignItems="center"
       >
         <Stack direction="row" spacing={1}>
-          <Button
+        <Button
             disabled={disabled.new}
+            color="success"
+            size="large"
             variant="contained"
-            color="primary"
             onClick={handleNuevo}
           >
-            <AddCircleRoundedIcon />
+            Crear
+            <AddIcon />
           </Button>
+          
           <Button
-            disabled={disabled.edit}
+            color="secondary"
+            size="large"
             variant="contained"
-            color="info"
+            disabled={disabled.edit}
             onClick={handleEditar}
           >
-            <EditRoundedIcon sx={{ color: "white" }} />
+            Editar
+            <BorderColorSharpIcon />
           </Button>
+           
           <Button
-            disabled={disabled.delete}
+         disabled={disabled.delete}
             variant="contained"
             color="error"
             onClick={() => setOpenDialog(true)}
           >
+            Borrar
             <DeleteIcon />
           </Button>
+        
+    
         </Stack>
       </Stack>
-      <Button
-        sx={{ m: 1 }}
-        variant="outlined"
-        size="small"
-        color="secondary"
-        disabled={state.categorias.length <= 0}
-        onClick={handleExpandClick}
-      >
-        {expanded.length === 1 ? (
-          <>
-            <AddBoxOutlinedIcon />
-            Expandir Todos
-          </>
-        ) : (
-          <>
-            <IndeterminateCheckBoxOutlinedIcon />
-            Cerrar todos
-          </>
-        )}
-      </Button>
+   
       <TreeView
         aria-label="file system navigator"
         selected={selected}

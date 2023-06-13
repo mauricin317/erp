@@ -35,7 +35,7 @@ async function generarComprobante(params) {
   const crearComprobante = prisma.comprobante.create({
     data: {
       serie: nueva_serie,
-      glosa: "Compra de Mercaderías",
+      glosa: "Venta de Mercaderías",
       fecha: new Date(fecha),
       tc: tipocambio,
       estado: 1,

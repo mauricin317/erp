@@ -3,7 +3,11 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
+import AddIcon from '@mui/icons-material/Add';
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import BorderColorSharpIcon from '@mui/icons-material/BorderColorSharp';
 import BatchPredictionSharp from "@mui/icons-material/BatchPredictionSharp";
 import Box from "@mui/system/Box";
 import AlertDialog from "./AlertDialog";
@@ -122,7 +126,7 @@ export default function ArticulosDataGrid({ jwt }) {
         return [
           <GridActionsCellItem
             key={params.id}
-            icon={<BatchPredictionSharp color={"secondary"} />}
+            icon={<RemoveRedEyeIcon color={"secondary"} />}
             label="Lotes"
             onClick={() => {
               handleLotes(params.row);
@@ -130,7 +134,7 @@ export default function ArticulosDataGrid({ jwt }) {
           />,
           <GridActionsCellItem
             key={params.id}
-            icon={<EditRoundedIcon color={"info"} />}
+            icon={<BorderColorSharpIcon color={"info"} />}
             label="Editar"
             onClick={() => {
               handleEditar(params.row);
@@ -138,7 +142,7 @@ export default function ArticulosDataGrid({ jwt }) {
           />,
           <GridActionsCellItem
             key={params.id}
-            icon={<DeleteIcon color={"error"} />}
+            icon={<DeleteSharpIcon color={"error"} />}
             label="Eliminar"
             onClick={() => {
               setOpenDialog({ state: true, id: params.id });
@@ -152,14 +156,9 @@ export default function ArticulosDataGrid({ jwt }) {
   return (
     <Box sx={{ height: 400, width: 1 }}>
       <Stack sx={{ "& button": { m: 1 } }} direction="row">
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={state.disabledNuevo}
-          onClick={handleNuevo}
-        >
-          <AddCircleRoundedIcon />
-        </Button>
+
+
+        <Button variant="contained" color="success" disabled={state.disabledNuevo} onClick={handleNuevo}>Crear<AddIcon/></Button>
       </Stack>
       <DataGrid
         localeText={esES.components.MuiDataGrid.defaultProps.localeText}

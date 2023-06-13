@@ -7,7 +7,11 @@ import {
 import _ from "lodash";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import Typography from '@mui/material/Typography';
+import AddIcon from '@mui/icons-material/Add';
+import CancelIcon from '@mui/icons-material/Cancel';
 import Grid from "@mui/material/Grid";
+import AssessmentSharpIcon from '@mui/icons-material/AssessmentSharp';
 import TextField from "@mui/material/TextField";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import AddToPhotosRoundedIcon from "@mui/icons-material/AddToPhotosRounded";
@@ -278,7 +282,7 @@ export default function FormNotaVenta(props) {
                   : setOpenDialog({ state: true });
               }}
             >
-              <ArrowBackRoundedIcon />
+             <ArrowBackRoundedIcon />Atras
             </Button>
             {props.readOnly == false ? (
               <Button
@@ -287,7 +291,7 @@ export default function FormNotaVenta(props) {
                 disabled={formik.isSubmitting || props.readOnly}
                 type="submit"
               >
-                <SaveRoundedIcon />
+             <AddIcon />Guardar
               </Button>
             ) : (
               <>
@@ -299,7 +303,7 @@ export default function FormNotaVenta(props) {
                   sx={{ color: "white" }}
                   onClick={openReport}
                 >
-                  <AssignmentRoundedIcon />
+               <AssessmentSharpIcon />Reporte
                 </Button>
               </>
             )}
@@ -314,17 +318,19 @@ export default function FormNotaVenta(props) {
               sx={{ color: "white" }}
               onClick={() => setOpenDialogAnular({ state: true })}
             >
-              <DoDisturbOnRoundedIcon />
+               <CancelIcon />Anular
             </Button>
           </Stack>
         </Stack>
         <Grid container spacing={1}>
           <Grid item md={1} xs={12}>
+          <Typography>Nota
+            </Typography>
             <TextField
               error={Boolean(formik.touched.nronota && formik.errors.nronota)}
               fullWidth
               helperText={formik.touched.nronota && formik.errors.nronota}
-              label="# Nota"
+              size="small"
               margin="normal"
               name="nronota"
               onBlur={formik.handleBlur}
@@ -339,11 +345,13 @@ export default function FormNotaVenta(props) {
             />
           </Grid>
           <Grid item md={2} xs={12}>
+          <Typography>Fecha
+            </Typography>
             <TextField
               error={Boolean(formik.touched.fecha && formik.errors.fecha)}
               fullWidth
               helperText={formik.touched.fecha && formik.errors.fecha}
-              label="Fecha"
+              size="small"
               margin="normal"
               name="fecha"
               onBlur={formik.handleBlur}
@@ -356,9 +364,11 @@ export default function FormNotaVenta(props) {
             />
           </Grid>
           <Grid item md={2} xs={12}>
+          <Typography>Estado
+            </Typography>
             <TextField
               fullWidth
-              label="Estado"
+              size="small"
               margin="normal"
               name="estado1"
               type="text"
@@ -373,6 +383,8 @@ export default function FormNotaVenta(props) {
         </Grid>
         <Grid container spacing={2}>
           <Grid item md={11} xs={12}>
+          <Typography>Descripción
+            </Typography>
             <TextField
               error={Boolean(
                 formik.touched.descripcion && formik.errors.descripcion
@@ -381,7 +393,7 @@ export default function FormNotaVenta(props) {
               helperText={
                 formik.touched.descripcion && formik.errors.descripcion
               }
-              label="Descripción"
+              size="small"
               margin="normal"
               name="descripcion"
               onBlur={formik.handleBlur}
@@ -406,14 +418,15 @@ export default function FormNotaVenta(props) {
               alignItems: "center",
             }}
           >
+        
             <Button
-              sx={{ height: "56px", marginTop: "7px", width: "100%" }}
-              variant="contained"
-              color="primary"
+             sx={{marginTop: "28px"}} size="medium" variant="contained" 
+             
+             color="success"
               disabled={formik.isSubmitting || props.readOnly}
               onClick={handleNuevo}
             >
-              <AddToPhotosRoundedIcon />
+         <AddIcon/>Detalle
             </Button>
           </Grid>
         </Grid>
@@ -422,6 +435,7 @@ export default function FormNotaVenta(props) {
         <DataGrid
           rows={detalles}
           columns={columns}
+          autoHeight
           localeText={esES.components.MuiDataGrid.defaultProps.localeText}
           hideFooterPagination
           hideFooterSelectedRowCount

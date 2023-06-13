@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Autocomplete from '@mui/material/Autocomplete';
 import { formatInTimeZone } from 'date-fns-tz';
+import AddIcon from '@mui/icons-material/Add';
 import Grid from '@mui/material/Grid';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -70,13 +71,16 @@ export default function FormDetalleNotaCompra(props){
               <Typography align="center" color="textSecondary" variant="h5">
                 {props.tipo === "nuevo" ? "Agregar" : "Editar"} Articulo
               </Typography>
-              <Button size="large" color="error" variant="contained" disabled={formik.isSubmitting}  onClick={props.close}>X</Button>
             </Box>
             <Grid container spacing={2}>
               <Grid item md={4} xs={12}>
+              <Typography>
+           Articulo
+            </Typography>
                 <Autocomplete
                     id="combo-box-demo"
                     name="articulo"
+                    size="small"
                     options={props.articulos}
                     value={articulo}
                     getOptionLabel={(option) => option.nombre}
@@ -85,7 +89,7 @@ export default function FormDetalleNotaCompra(props){
                     }}
                     renderInput={(params) => <TextField
                         fullWidth
-                        label="Articulo"
+                    
                         margin="normal"
                         type="text"
                         variant="outlined"
@@ -94,11 +98,14 @@ export default function FormDetalleNotaCompra(props){
                 />
               </Grid>
               <Grid item md={2} xs={12}>
+              <Typography>
+              Fecha
+            </Typography>
                 <TextField
                   error={Boolean(formik.touched.fechavencimiento && formik.errors.fechavencimiento)}
                   fullWidth
                   helperText={formik.touched.fechavencimiento && formik.errors.fechavencimiento}
-                  label="Fecha Vencimiento"
+                  size="small"
                   margin="normal"
                   name="fechavencimiento"
                   onBlur={formik.handleBlur}
@@ -110,11 +117,14 @@ export default function FormDetalleNotaCompra(props){
                 />
               </Grid>
               <Grid item md={2} xs={12}>
+              <Typography>
+              Cantidad
+            </Typography>
                 <TextField sx={{textAlign:'right'}}
                   error={Boolean(formik.touched.cantidad && formik.errors.cantidad)}
                   fullWidth
                   helperText={formik.touched.cantidad && formik.errors.cantidad}
-                  label="Cantidad"
+                  size="small"
                   margin="normal"
                   name="cantidad"
                   onBlur={formik.handleBlur}
@@ -132,11 +142,14 @@ export default function FormDetalleNotaCompra(props){
                 />
               </Grid>
               <Grid item md={2} xs={12}>
+              <Typography>
+              Precio
+            </Typography>
                 <TextField sx={{textAlign:'right'}}
                   error={Boolean(formik.touched.preciocompra && formik.errors.preciocompra)}
                   fullWidth
                   helperText={formik.touched.preciocompra && formik.errors.preciocompra}
-                  label="Precio"
+                  size="small"
                   margin="normal"
                   name="preciocompra"
                   onBlur={formik.handleBlur}
@@ -154,9 +167,12 @@ export default function FormDetalleNotaCompra(props){
                 />
               </Grid>
               <Grid item md={2} xs={12}>
+              <Typography>
+              Subtotal
+            </Typography>
                 <TextField sx={{textAlign:'right'}}
                   fullWidth
-                  label="Subtotal"
+                  size="small"
                   margin="normal"
                   name="subtotal"
                   type="number"
@@ -174,7 +190,7 @@ export default function FormDetalleNotaCompra(props){
             </Grid>
             <Box sx={{ py: 1,display:'flex',justifyContent:'end' }}>
               <Button size="large" color="primary" disabled={formik.isSubmitting} type="submit" variant="contained">
-                Guardar
+              <AddIcon/>Guardar
               </Button>
               
             </Box>

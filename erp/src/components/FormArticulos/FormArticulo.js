@@ -103,11 +103,14 @@ export default function FormArticulo(props) {
         </Box>
         <Grid container spacing={2}>
           <Grid item md={12} xs={12}>
+          <Typography>
+              Nombre de Articulo
+            </Typography>
             <TextField
               error={Boolean(formik.touched.nombre && formik.errors.nombre)}
               fullWidth
               helperText={formik.touched.nombre && formik.errors.nombre}
-              label="Nombre"
+            
               margin="normal"
               name="nombre"
               onBlur={formik.handleBlur}
@@ -122,6 +125,9 @@ export default function FormArticulo(props) {
             />
           </Grid>
           <Grid item md={12} xs={12}>
+          <Typography>
+          Descripcion
+            </Typography>
             <TextField
               error={Boolean(
                 formik.touched.descripcion && formik.errors.descripcion
@@ -130,7 +136,7 @@ export default function FormArticulo(props) {
               helperText={
                 formik.touched.descripcion && formik.errors.descripcion
               }
-              label="Descripcion"
+             
               margin="normal"
               name="descripcion"
               onBlur={formik.handleBlur}
@@ -144,7 +150,10 @@ export default function FormArticulo(props) {
               }}
             />
           </Grid>
-          <Grid item md={3} xs={12}>
+          <Grid item md={12} xs={12}>
+          <Typography>
+          Precio
+            </Typography>
             <TextField
               error={Boolean(
                 formik.touched.precioventa && formik.errors.precioventa
@@ -153,7 +162,7 @@ export default function FormArticulo(props) {
               helperText={
                 formik.touched.precioventa && formik.errors.precioventa
               }
-              label="Precio de Venta"
+             
               margin="normal"
               name="precioventa"
               onBlur={formik.handleBlur}
@@ -170,7 +179,10 @@ export default function FormArticulo(props) {
               }}
             />
           </Grid>
-          <Grid item md={9} xs={12}>
+          <Grid item md={12} xs={12}>
+          <Typography>
+        Categoria
+            </Typography>
             <Autocomplete
               sx={{ mt: "16px", mb: "8px", width: "100%" }}
               multiple
@@ -193,7 +205,7 @@ export default function FormArticulo(props) {
                 ))
               }
               renderInput={(params) => (
-                <TextField {...params} focused label="Categorias" />
+                <TextField {...params} focused label="" />
               )}
             />
           </Grid>
@@ -205,8 +217,7 @@ export default function FormArticulo(props) {
           spacing={2}
         >
           <Button
-            size="large"
-            color="primary"
+          size="large" color="success"
             disabled={formik.isSubmitting}
             type="submit"
             variant="contained"

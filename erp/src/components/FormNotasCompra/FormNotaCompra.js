@@ -6,10 +6,14 @@ import {
 } from "@mui/x-data-grid";
 import _ from "lodash";
 import Stack from "@mui/material/Stack";
+import AddIcon from '@mui/icons-material/Add';
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
+import CancelIcon from '@mui/icons-material/Cancel';
 import TextField from "@mui/material/TextField";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import Typography from '@mui/material/Typography';
+import AssessmentSharpIcon from '@mui/icons-material/AssessmentSharp';
 import AddToPhotosRoundedIcon from "@mui/icons-material/AddToPhotosRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
@@ -286,7 +290,7 @@ export default function FormNotaCompra(props) {
                   : setOpenDialog({ state: true });
               }}
             >
-              <ArrowBackRoundedIcon />
+              <ArrowBackRoundedIcon />Atras
             </Button>
             {props.readOnly == false ? (
               <Button
@@ -295,7 +299,7 @@ export default function FormNotaCompra(props) {
                 disabled={formik.isSubmitting || props.readOnly}
                 type="submit"
               >
-                <SaveRoundedIcon />
+                <AddIcon />Guardar
               </Button>
             ) : (
               <>
@@ -307,7 +311,7 @@ export default function FormNotaCompra(props) {
                   sx={{ color: "white" }}
                   onClick={openReport}
                 >
-                  <AssignmentRoundedIcon />
+                  <AssessmentSharpIcon />Reporte
                 </Button>
               </>
             )}
@@ -322,17 +326,19 @@ export default function FormNotaCompra(props) {
               sx={{ color: "white" }}
               onClick={() => setOpenDialogAnular({ state: true })}
             >
-              <DoDisturbOnRoundedIcon />
+              <CancelIcon />Anular
             </Button>
           </Stack>
         </Stack>
         <Grid container spacing={1}>
           <Grid item md={1} xs={12}>
+          <Typography>Nota
+            </Typography>
             <TextField
               error={Boolean(formik.touched.nronota && formik.errors.nronota)}
               fullWidth
               helperText={formik.touched.nronota && formik.errors.nronota}
-              label="# Nota"
+              size="small"
               margin="normal"
               name="nronota"
               onBlur={formik.handleBlur}
@@ -347,11 +353,13 @@ export default function FormNotaCompra(props) {
             />
           </Grid>
           <Grid item md={2} xs={12}>
+          <Typography>Fecha
+            </Typography>
             <TextField
               error={Boolean(formik.touched.fecha && formik.errors.fecha)}
               fullWidth
               helperText={formik.touched.fecha && formik.errors.fecha}
-              label="Fecha"
+              size="small"
               margin="normal"
               name="fecha"
               onBlur={formik.handleBlur}
@@ -364,9 +372,11 @@ export default function FormNotaCompra(props) {
             />
           </Grid>
           <Grid item md={2} xs={12}>
+          <Typography>Estado
+            </Typography>
             <TextField
               fullWidth
-              label="Estado"
+              size="small"
               margin="normal"
               name="estado1"
               type="text"
@@ -381,6 +391,8 @@ export default function FormNotaCompra(props) {
         </Grid>
         <Grid container spacing={2}>
           <Grid item md={11} xs={12}>
+          <Typography>Descripción
+            </Typography>
             <TextField
               error={Boolean(
                 formik.touched.descripcion && formik.errors.descripcion
@@ -389,7 +401,7 @@ export default function FormNotaCompra(props) {
               helperText={
                 formik.touched.descripcion && formik.errors.descripcion
               }
-              label="Descripción"
+              size="small"
               margin="normal"
               name="descripcion"
               onBlur={formik.handleBlur}
@@ -415,13 +427,13 @@ export default function FormNotaCompra(props) {
             }}
           >
             <Button
-              sx={{ height: "56px", marginTop: "7px", width: "100%" }}
-              variant="contained"
-              color="primary"
+             sx={{marginTop: "28px"}} size="medium" variant="contained" 
+             
+             color="success"
               disabled={formik.isSubmitting || props.readOnly}
               onClick={handleNuevo}
             >
-              <AddToPhotosRoundedIcon />
+         <AddIcon/>Detalle
             </Button>
           </Grid>
         </Grid>
@@ -429,6 +441,7 @@ export default function FormNotaCompra(props) {
       <Box sx={{ height: 370, width: 1 }}>
         <DataGrid
           rows={detalles}
+          autoHeight
           columns={columns}
           localeText={esES.components.MuiDataGrid.defaultProps.localeText}
           hideFooterPagination
