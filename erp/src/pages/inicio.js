@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import FullLayout from "../layouts/FullLayout";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-//import DashboarGrid from '../components/DashboardGrid';
+import DashboarGrid from '../components/DashboardGrid';
 import { useRouter } from "next/router";
 import useStorage from '../utils/storageHook';
 import { obtenerSesion } from '../services/Usuarios';
@@ -37,8 +37,7 @@ export default function Dashboard() {
         <Head>
             <title>Inicio</title>
         </Head>
-          <h2>Inicio </h2>
-          {/* <DashboarGrid /> */}
+          <DashboarGrid jwt={jwt} />
     </>
   );
 }

@@ -221,7 +221,6 @@ export default function CuentasTreeView(props) {
         </Stack>
       </Stack>
       <TreeView
-        aria-label="file system navigator"
         selected={selected}
         onNodeSelect={handleSelect}
         defaultCollapseIcon={<DoDisturbOnTwoToneIcon color="error" />}
@@ -229,7 +228,7 @@ export default function CuentasTreeView(props) {
         onNodeToggle={handleToggle}
         defaultExpandIcon={<AddCircleTwoToneIcon color="secondary" />}
         sx={{
-          maxHeight: 680,
+          maxHeight: 500,
           marginLeft: "50px",
           flexGrow: 1,
           maxWidth: "100%",
