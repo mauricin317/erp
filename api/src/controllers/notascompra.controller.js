@@ -275,18 +275,11 @@ module.exports = {
   anularNotaCompra: async (req, res) => {
     try {
       let { idnota, estado } = req.body;
-      const validarVentas = await prisma.detalle.findFirst({
-        where: {
-          idnota: Number(idnota),
-        },
-        include: {
-          articulo: {
-            include: {
-              lote: true,
-            },
-          },
-        },
-      });
+      const validarVentas = await prisma.$queryRaw`
+          SELECT * FROM detalle d LEFT JOIN lote l ON d.idarticulo=l.idarticulo AND d.nrolote=l.nrolote WHERE l.idnota=${Number(
+            idnota
+          )}
+          `;
       if (validarVentas) {
         res.json({
           ok: false,
