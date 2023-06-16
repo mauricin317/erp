@@ -1,5 +1,6 @@
 import { TextField, Box, Grid, Button, Autocomplete } from "@mui/material";
 import _ from "lodash";
+import Typography from '@mui/material/Typography';
 import { useEffect, useState } from "react";
 import {
   BarChart,
@@ -94,7 +95,7 @@ export default function LowStockChart({ jwt }) {
             dataKey="cantidad"
             name="Cantidad"
             legendType="rect"
-            fill="#00c292"
+            fill="#d60404"
           >
             <LabelList dataKey="cantidad" position="top" />
           </Bar>
@@ -187,6 +188,9 @@ function FormLowStock(props) {
         sx={{ height: "20%" }}
       >
         <Grid item md={4} xs={6}>
+        <Typography>
+              Categoria
+            </Typography>
           <Autocomplete
             id="combo-box-demo"
             name="categoria"
@@ -198,7 +202,7 @@ function FormLowStock(props) {
             renderInput={(params) => (
               <TextField
                 fullWidth
-                label="Categoria"
+             
                 margin="normal"
                 type="text"
                 variant="outlined"
@@ -210,9 +214,12 @@ function FormLowStock(props) {
           />
         </Grid>
         <Grid item md={2} xs={3}>
+        <Typography>
+           Cantidad
+            </Typography>
           <TextField
             fullWidth
-            label="Cantidad Max."
+         
             margin="normal"
             name="cantidad"
             type="number"
@@ -229,18 +236,18 @@ function FormLowStock(props) {
         </Grid>
         <Grid item md={1} xs={1}>
           <Button
-            sx={{ marginTop: "7px"}}
+            sx={{ marginTop: "30px"}}
             variant="contained"
-            color="primary"
+            color="success"
             type="submit"
           >
-            <SearchRoundedIcon />
+            <SearchRoundedIcon />Buscar
           </Button>
         </Grid>
         <Grid item md={1} xs={1}>
           <Button
             sx={{
-              marginTop: "7px",
+              marginTop: "30px",
               color: "white",
             }}
             variant="contained"
@@ -248,7 +255,7 @@ function FormLowStock(props) {
             type="button"
             onClick={handleCancelar}
           >
-            <CancelRoundedIcon />
+            <CancelRoundedIcon />  Limpiar
           </Button>
         </Grid>
       </Grid>
