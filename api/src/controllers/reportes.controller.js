@@ -485,7 +485,7 @@ module.exports = {
   },
   getReporteArticulosBajoStock: async (req, res) => {
     try {
-      let { idcategoria, cantidad } = req.query;
+      let { idcategoria, cantidad, idempresa } = req.query;
       const findDatos = await prisma.$queryRaw`
         SELECT a2.*, u.usuario 
         FROM articulos_bajo_stock_chart(${idempresa}::int, ${idcategoria}::int, ${cantidad}::int) as a 

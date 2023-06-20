@@ -21,13 +21,13 @@ function FormArticulosBajoStock(props) {
       cantidad: Yup.number().required("Requerido"),
     }),
     onSubmit: async (values) => {
-      openReport(values.idcategoria, values.cantidad);
+      openReport(values.idcategoria, values.cantidad, props.idempresa);
     },
   });
 
-  const openReport = (idcategoria, cantidad) => {
+  const openReport = (idcategoria, cantidad, idempresa) => {
     window.open(
-      `http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=%2Freports&reportUnit=%2Freports%2FLibroDiario&standAlone=true&id_periodo=${idcategoria}&id_moneda=${cantidad}&j_username=joeuser&j_password=123&sessionDecorator=no`,
+      `http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=%2Freports&reportUnit=%2Freports%2FLibroDiario&standAlone=true&idcategoria=${idcategoria}&cantidad=${cantidad}&idempresa=${idempresa}&j_username=joeuser&j_password=123&sessionDecorator=no`,
       "_blank"
     );
   };

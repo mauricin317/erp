@@ -16,6 +16,7 @@ export default function Reportes() {
 
   const [state, setState] = useState({
     categorias: [],
+    idempresa: null,
   });
 
   const cargarDatos = async () => {
@@ -23,11 +24,13 @@ export default function Reportes() {
     if (datos.ok) {
       setState({
         categorias: datos.categorias,
+        idempresa: datos.idempresa,
       });
     } else {
       toast.warn(datos.mensaje, { theme: "colored" });
       setState({
         categorias: [],
+        idempresa: null
       });
     }
   };
@@ -42,7 +45,7 @@ export default function Reportes() {
         <title>Reporte Articulos con Bajo Stock</title>
       </Head>
       <h2>Reporte Articulos con Bajo Stock</h2>
-      <FormArticulosBajoStock categorias={state.categorias} />
+      <FormArticulosBajoStock categorias={state.categorias} idempresa={state.idempresa} />
       <ToastContainer
         position="top-right"
         autoClose={5000}

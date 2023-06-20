@@ -23,15 +23,22 @@ module.exports = {
             ok: true,
             data: findDatos,
             categorias: findCategorias,
+            idempresa: idempresa,
           });
         } else {
-          return res.json({ ok: true, data: [], categorias: findCategorias });
+          return res.json({
+            ok: true,
+            data: [],
+            categorias: findCategorias,
+            idempresa: idempresa,
+          });
         }
       } else {
         return res.json({
           ok: false,
           data: [],
           categorias: [],
+          idempresa: idempresa,
           mensaje: "No existen Categorias",
         });
       }
@@ -48,11 +55,12 @@ module.exports = {
         SELECT a.idarticulo as id, a.*, ARRAY_AGG (ac.idcategoria) categorias FROM articulos_bajo_stock_chart(${idempresa}::int, ${idcategoria}::int, ${cantidad}::int) as a left JOIN articulocategoria ac USING (idarticulo) GROUP BY a.idarticulo, a.nombre, a.cantidad order by a.cantidad
         `;
       if (findDatos) {
-        return res.json({ ok: true, data: findDatos });
+        return res.json({ ok: true, data: findDatos, idempresa: idempresa });
       } else {
         return res.json({
           ok: true,
           data: [],
+          idempresa: idempresa,
           mensaje: "Error al cargar datos",
         });
       }
