@@ -4,7 +4,6 @@ export const Menuitems = [
     icon: "arrow-right",
     href: "/inicio",
   },
-  
 ];
 
 export const Contabilidaditems = [
@@ -17,7 +16,7 @@ export const Contabilidaditems = [
     title: "Comprobantes",
     icon: "arrow-right",
     href: "/comprobantes",
-  }
+  },
 ];
 
 export const Inventarioitems = [
@@ -40,10 +39,10 @@ export const Inventarioitems = [
     title: "Nota de Venta",
     icon: "arrow-right",
     href: "/notaventa",
-  }
- ];
+  },
+];
 
- export const Configuracionitems = [
+export const Configuracionitems = [
   {
     title: "Gestiones",
     icon: "arrow-right",
@@ -58,10 +57,10 @@ export const Inventarioitems = [
     title: "Cuentas de Integración",
     icon: "arrow-right",
     href: "/integracion",
-  }
- ];
+  },
+];
 
- export const Reportesitems = [
+export const Reportesitems = [
   {
     title: "Balance Inicial",
     icon: "arrow-right",
@@ -81,6 +80,10 @@ export const Inventarioitems = [
     title: "Comprobacion Sumas y Saldos",
     icon: "arrow-right",
     href: "/reportes/sumas-saldos",
-  }
- ];
-
+  },
+  {
+    title: "Articulos Bajo Stock",
+    icon: "arrow-right",
+    href: "/reportes/articulos-bajo-stock",
+  },
+];

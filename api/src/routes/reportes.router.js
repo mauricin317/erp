@@ -17,5 +17,6 @@ router.get("/libro-diario", controller.getReporteLibroDiario); // api/reportes/l
 router.get("/sumas-saldos", controller.getReporteSumasSaldos); // api/reportes/sumas-saldos
 router.get("/libro-mayor-todos", controller.getReporteLibroMayorTodos); // api/reportes/libro-mayor-todos
 router.get("/libro-mayor-periodo", controller.getReporteLibroMayorPeriodo); // api/reportes/libro-mayor-periodo
+router.get("/articulos-bajo-stock", controller.getReporteArticulosBajoStock); // api/reportes/articulos-bajo-stock
 
 module.exports = router;

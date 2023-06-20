@@ -483,4 +483,30 @@ module.exports = {
       res.status(400).json({ ok: false, mensaje: "Bad Request" });
     }
   },
+  getReporteArticulosBajoStock: async (req, res) => {
+    try {
+      let { idcategoria, cantidad } = req.query;
+      const findDatos = await prisma.$queryRaw`
+        SELECT a2.*, u.usuario 
+        FROM articulos_bajo_stock_chart(${idempresa}::int, ${idcategoria}::int, ${cantidad}::int) as a 
+        LEFT JOIN articulo a2 ON a.idarticulo  = a2.idarticulo 
+        LEFT JOIN usuario u ON u.idusuario  = a2.idusuario
+        order by a.cantidad;
+      `;
+      if (findDatos) {
+        let formatedDatos = findDatos.map((data) => {
+          return {
+            ...data,
+            fecha: format_date(data?.fecha),
+          };
+        });
+        return res.json(formatedDatos);
+      } else {
+        res.status(400).json("No se encontraron resultados");
+      }
+    } catch (error) {
+      console.log("Error: ", error.message);
+      res.status(400).json({ ok: false, mensaje: "Bad Request" });
+    }
+  },
 };
